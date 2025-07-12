@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">PixelForge</string>
+
+    <string name="default_web_client_id">843047038985-daakmf8s570kaq7jtuokjdvip8mph8je.apps.googleusercontent.com</string>
+
+    <!-- Content screen welcome -->
+    <string name="lb_title_1">Welcome to App Editor!</string>
+    <string name="lb_desc_1">Discover a powerful creative tool that helps you turn ideas into reality.</string>
+    <string name="lb_title_2">The Power of App Editor</string>
+    <string name="lb_desc_2">Create, edit, and manage your projects with an intuitive interface.</string>
+    <string name="lb_title_3">Collaborate and Share</string>
+    <string name="lb_desc_3">Work effectively with your team, share your creations, and get instant feedback.</string>
+    <string name="lb_next">Next</string>
+    <string name="lb_skip">Skip</string>
+    <string name="lb_start">Get Started</string>
+
+    <!-- Content screen login and sign up -->
+    <string name="lb_login">Log in</string>
+    <string name="lb_sign_up_desc">Sign Up and Start awesome edits!</string>
+    <string name="lb_sign_up">Sign Up</string>
+    <string name="lb_email">Your email</string>
+    <string name="lb_enter_email">Enter your email</string>
+    <string name="lb_welcome">Welcome back!</string>
+    <string name="lb_option">Or Sign In With</string>
+    <string name="lb_continue">Continue</string>
+    <string name="lb_desc_service">By continuing, you agree to our Terms of Service.</string>
+    <string name="lb_forgot_password">Forgot password?</string>
+    <string name="lb_made_by">Made by&#160;</string>
+    <string name="lb_made_author">Phu Nhuan.</string>
+
+    <!-- Content Toasts -->
+    <string name="toast_login_success">Login success</string>
+    <string name="toast_login_failed">Login failed</string>
+    <string name="toast_signup_success">Sign up success</string>
+    <string name="toast_signup_failed">Sign up failed</string>
+    <string name="toast_google_login_success">Google login success %1$s</string>
+    <string name="toast_google_login_failed">Google login failed: %1$s</string>
+    <string name="toast_google_logout_success">Google logout success</string>
+    <string name="toast_google_logout_failed">Google logout failed</string>
+
+    <!--Content fragment home-->
+    <string name="lb_features">Features</string>
+    <string name="feature_edited_photos">Edited Photos</string>
+    <string name="lb_view_all">View all</string>
+
+    <!--String layout permission-->
+    <string name="lb_permission_granted">Permission Granted</string>
+    <string name="lb_storage_permission">Storage Permission</string>
+    <string name="lb_camera_permission">Camera Permission</string>
+    <string name="lb_message_permission_gallery">This app requires storage permission to access your photos and videos.</string>
+    <string name="lb_message_permission_camera">This app requires camera permission to take photos.</string>
+    <string name="lb_allow">Allow</string>
+    <string name="lb_cancel">Cancel</string>
+    <string name="lb_permission_denied">Permission Denied. Please enable it in settings.</string>
+    <string name="lb_setting">Settings</string>
+</resources>
