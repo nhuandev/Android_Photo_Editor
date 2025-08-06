@@ -1,40 +1,66 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/dimen_164"
-    android:layout_height="wrap_content"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_136"
     android:layout_marginHorizontal="@dimen/dimen_4"
-    android:layout_marginVertical="@dimen/dimen_8"
-    app:cardCornerRadius="@dimen/dimen_12">
+    android:layout_marginTop="@dimen/dimen_2"
+    android:layout_marginEnd="@dimen/dimen_2"
+    app:cardCornerRadius="@dimen/dimen_8">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_80"
-        android:padding="@dimen/dimen_12">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/bg_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_fea_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/overlay_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#AA0088CC"
+            android:alpha="0.7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/btn_edit_photo"
             android:layout_width="@dimen/dimen_32"
             android:layout_height="@dimen/dimen_32"
-            android:src="@drawable/ic_photo"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@mipmap/ic_photo"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/tv_feature_name"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,MissingConstraints,UseAppTint" />
 
         <TextView
             android:id="@+id/tv_feature_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/dimen_8"
-            android:text="@string/feature_edited_photos"
+            android:text="@string/lb_edit"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/font_14"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btn_edit_photo"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_edit_photo"
-            app:layout_constraintTop_toTopOf="@id/btn_edit_photo"
-            tools:ignore="RtlSymmetry,SpUsage" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_edit_photo"
+            tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

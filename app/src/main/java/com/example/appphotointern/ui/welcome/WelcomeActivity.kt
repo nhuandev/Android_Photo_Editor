@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.example.appphotointern.R
+import com.example.appphotointern.repository.impl.WelcomeRepository
 import com.example.appphotointern.databinding.ActivityWelcomeBinding
 import com.example.appphotointern.ui.splash.SplashActivity
 import kotlin.getValue
@@ -30,14 +31,14 @@ class WelcomeActivity : AppCompatActivity() {
                 WelcomeFragment.newInstance(
                     getString(R.string.lb_title_1),
                     getString(R.string.lb_desc_1),
-                    R.drawable.img_sign_up
+                    R.drawable.img_welcome_2
                 )
             )
             pagerAdapter.addFragment(
                 WelcomeFragment.newInstance(
                     getString(R.string.lb_title_2),
                     getString(R.string.lb_desc_2),
-                    R.drawable.img_login
+                    R.drawable.img_welcome_1
                 )
             )
             pagerAdapter.addFragment(

@@ -1,9 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("dagger.hilt.android.plugin")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -60,11 +62,34 @@ dependencies {
     val material_version = "1.11.0"
     val compose_material_icons_version = "1.6.0"
     val coroutine_play_services_version = "1.6.4"
+    val camerax_version = "1.4.2"
+
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
+    implementation("androidx.camera:camera-extensions:${camerax_version}")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.firebaseui:firebase-ui-storage:8.0.2")
+
+    // Firebase Core
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.firebase:firebase-appcheck:17.0.1")
+    implementation("com.google.firebase:firebase-appcheck-interop:17.0.0")
+
+    // AppCheck Providers
+    implementation("com.google.firebase:firebase-appcheck-debug:17.0.1")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity:17.0.1")
 
     // --- Dependency Injection (Hilt) ---
     implementation("com.google.dagger:hilt-android:$hilt_version")
     ksp("com.google.dagger:hilt-compiler:$hilt_version")
     implementation("androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version")
+
+    // --- ViewModel ---
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
     // --- UI Components ---
     implementation("androidx.compose.material:material-icons-extended:$compose_material_icons_version")
@@ -74,13 +99,21 @@ dependencies {
     // --- Kotlin Extensions (KTX) ---
     implementation("androidx.core:core-ktx:$core_ktx_version")
 
-    // --- Firebase Authentication ---
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-
     // --- Coroutines ---
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_play_services_version")
 
     // On-device Face Detection
     implementation("com.google.mlkit:face-detection:16.1.7")
+
+    // --- Lottie ---
+    implementation("com.airbnb.android:lottie:6.4.0")
+
+    // --- Cropper ---
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
+
+    // --- Color Picker ---
+    implementation("com.github.Dhaval2404:ColorPicker:2.3")
+
+    // --- Gson ---
+    implementation("com.google.code.gson:gson:2.13.1")
 }

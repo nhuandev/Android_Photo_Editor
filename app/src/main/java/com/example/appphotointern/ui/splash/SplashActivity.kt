@@ -6,11 +6,10 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Handler
-import com.example.appphotointern.MainActivity
+import com.example.appphotointern.ui.main.MainActivity
 import com.example.appphotointern.R
-import com.example.appphotointern.ui.auth.SignInActivity
+import com.example.appphotointern.repository.impl.SplashRepository
 import com.example.appphotointern.ui.welcome.WelcomeActivity
-import com.example.appphotointern.utils.ARG_EMAIL
 import com.example.appphotointern.utils.SPLASH_DELAY
 
 @SuppressLint("CustomSplashScreen")
@@ -31,14 +30,8 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(Intent(this, WelcomeActivity::class.java))
                 }
 
-                !viewModel.getSaveEdEmail().isNullOrEmpty() -> {
-                    startActivity(Intent(this, MainActivity::class.java).apply {
-                        putExtra(ARG_EMAIL, viewModel.getSaveEdEmail())
-                    })
-                }
-
                 else -> {
-                    startActivity(Intent(this, SignInActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
             }
             finish()

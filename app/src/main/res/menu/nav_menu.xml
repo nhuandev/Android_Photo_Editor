@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_menu_photo"
+        android:icon="@mipmap/ic_photo"
+        android:title="@string/lb_edit_photo" />
+
+    <item
+        android:id="@+id/nav_menu_bgr"
+        android:icon="@mipmap/ic_background"
+        android:title="@string/lb_background" />
+
+    <item
+        android:id="@+id/nav_menu_collage"
+        android:icon="@mipmap/ic_collage"
+        android:title="@string/lb_make_collage" />
+
+    <item
+        android:id="@+id/nav_menu_album"
+        android:icon="@mipmap/ic_album"
+        android:title="@string/lb_album" />
+
+    <item
+        android:id="@+id/nav_menu_dev"
+        android:icon="@mipmap/ic_dev"
+        android:title="@string/lb_dev" />
+</menu>

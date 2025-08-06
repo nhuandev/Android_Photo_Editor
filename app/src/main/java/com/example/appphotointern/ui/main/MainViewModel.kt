@@ -1,0 +1,69 @@
+package com.example.appphotointern.ui.main
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.application
+import androidx.lifecycle.viewModelScope
+import com.example.appphotointern.R
+import com.example.appphotointern.models.Feature
+import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
+import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
+import com.example.appphotointern.utils.TAG_FEATURE_COLLAGE
+import com.example.appphotointern.utils.TAG_FEATURE_EDIT
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    private val _features = MutableLiveData<List<Feature>>()
+    val features: LiveData<List<Feature>> = _features
+
+    init {
+        loadFeatures()
+    }
+
+    fun loadFeatures() {
+        _loading.postValue(true)
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                val listFeature = listOf(
+                    Feature(
+                        application.getString(R.string.lb_edit_photo),
+                        R.mipmap.ic_photo,
+                        TAG_FEATURE_EDIT,
+                        R.drawable.img_fea_1
+                    ),
+                    Feature(
+                        application.getString(R.string.lb_camera),
+                        R.mipmap.ic_camera,
+                        TAG_FEATURE_CAMERA,
+                        R.drawable.img_fea_3
+                    ),
+                    Feature(
+                        application.getString(R.string.lb_make_collage),
+                        R.mipmap.ic_collage,
+                        TAG_FEATURE_COLLAGE,
+                        R.drawable.img_fea_2
+                    ),
+                    Feature(
+                        application.getString(R.string.lb_background),
+                        R.mipmap.ic_background,
+                        TAG_FEATURE_BACKGROUND,
+                        R.drawable.img_fea_3
+                    )
+                )
+                withContext(Dispatchers.Main) {
+                    _features.postValue(listFeature)
+                    _loading.postValue(false)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}

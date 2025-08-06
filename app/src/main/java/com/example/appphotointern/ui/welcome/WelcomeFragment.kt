@@ -11,9 +11,7 @@ import com.example.appphotointern.utils.ARG_IMAGE_RESOURCE
 import com.example.appphotointern.utils.ARG_TITLE
 
 class WelcomeFragment : Fragment() {
-//    private var _binding: FragmentWelcomePageBinding? = null
     private lateinit var binding : FragmentWelcomePageBinding
-//    private val binding get() = _binding!!
 
     private var title: String? = null
     private var description: String? = null

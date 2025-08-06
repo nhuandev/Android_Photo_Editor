@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UselessLeaf">
+
+        <GridLayout
+            android:id="@+id/colorGrid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="6"
+            android:rowCount="2">
+
+            <View
+                android:id="@+id/colorRed"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#F44336" />
+
+            <View
+                android:id="@+id/colorPink"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#E91E63" />
+
+            <View
+                android:id="@+id/colorBlue"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#2196F3" />
+
+            <View
+                android:id="@+id/colorGreen"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#4CAF50" />
+
+            <View
+                android:id="@+id/colorOrange"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#FF9800" />
+
+            <View
+                android:id="@+id/colorYellow"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#FFEB3B" />
+
+            <View
+                android:id="@+id/colorPurple"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#9C27B0" />
+
+            <View
+                android:id="@+id/colorBrown"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#795548" />
+
+            <View
+                android:id="@+id/colorGrey"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#607D8B" />
+
+            <View
+                android:id="@+id/colorTeal"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#00BCD4" />
+
+            <View
+                android:id="@+id/colorIndigo"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#3F51B5" />
+
+            <View
+                android:id="@+id/colorLime"
+                android:layout_width="@dimen/dimen_48"
+                android:layout_height="@dimen/dimen_48"
+                android:layout_margin="@dimen/dimen_8"
+                android:background="#CDDC39" />
+
+        </GridLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="@dimen/dimen_24">
+
+    <FrameLayout
+        android:id="@+id/box"
+        android:layout_width="@dimen/dimen_128"
+        android:layout_height="@dimen/dimen_128"
+        android:layout_centerInParent="true"
+        android:clipChildren="false">
+
+        <ImageView
+            android:id="@+id/sticker_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimen_12"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_data_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/font_18"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:ignore="SpUsage,TextViewEdits" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="@dimen/dimen_24"
+        android:layout_height="@dimen/dimen_24"
+        android:layout_alignStart="@id/box"
+        android:layout_alignTop="@id/box"
+        android:background="@drawable/bg_icon_view"
+        android:padding="@dimen/dimen_4"
+        android:src="@mipmap/ic_close"
+        android:translationX="-12dp"
+        android:translationY="-12dp"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/btn_rotation"
+        android:layout_width="@dimen/dimen_24"
+        android:layout_height="@dimen/dimen_24"
+        android:layout_alignStart="@id/box"
+        android:layout_alignBottom="@id/box"
+        android:background="@drawable/bg_icon_view"
+        android:padding="@dimen/dimen_4"
+        android:src="@mipmap/ic_rotation"
+        android:translationX="-12dp"
+        android:translationY="12dp"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/btn_edit"
+        android:layout_width="@dimen/dimen_24"
+        android:layout_height="@dimen/dimen_24"
+        android:layout_alignTop="@id/box"
+        android:layout_alignEnd="@id/box"
+        android:background="@drawable/bg_icon_view"
+        android:padding="@dimen/dimen_4"
+        android:src="@mipmap/ic_edit"
+        android:translationX="12dp"
+        android:translationY="-12dp"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/btn_scale"
+        android:layout_width="@dimen/dimen_24"
+        android:layout_height="@dimen/dimen_24"
+        android:layout_alignEnd="@id/box"
+        android:layout_alignBottom="@id/box"
+        android:background="@drawable/bg_icon_view"
+        android:padding="@dimen/dimen_4"
+        android:src="@mipmap/ic_zoom"
+        android:translationX="12dp"
+        android:translationY="12dp"
+        tools:ignore="ContentDescription" />
+</RelativeLayout>
+
