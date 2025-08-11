@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityAlbumBinding
 import com.example.appphotointern.ui.main.MainAdapter
 import com.example.appphotointern.ui.preview.PreviewFragment
@@ -32,8 +33,11 @@ class AlbumActivity : AppCompatActivity() {
             adapterGallery = AlbumAdapter(
                 emptyList(),
                 onClick = { uri ->
-                    val dialog = PreviewFragment.Companion.newInstance(uri.toString())
-                    dialog.show(supportFragmentManager, "PreviewFragment")
+                    val previewFragment = PreviewFragment.newInstance(uri.toString())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentNavHost, previewFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             )
             addItemDecoration(MainAdapter.SpaceItemDecoration(10))

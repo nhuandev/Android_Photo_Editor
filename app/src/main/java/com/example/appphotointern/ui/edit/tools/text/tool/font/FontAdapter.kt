@@ -11,7 +11,8 @@ class FontAdapter(
     private var fonts: List<String>,
     private val onFontSelected: (String) -> Unit
 ) : RecyclerView.Adapter<FontAdapter.FontViewHolder>() {
-    inner class FontViewHolder(private val binding: ItemTextFontBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class FontViewHolder(private val binding: ItemTextFontBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(font: String) {
             binding.apply {
                 tvFont.text = font.substringBeforeLast(".")
@@ -25,7 +26,8 @@ class FontAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FontViewHolder {
-        val binding = ItemTextFontBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemTextFontBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FontViewHolder(binding)
     }
 

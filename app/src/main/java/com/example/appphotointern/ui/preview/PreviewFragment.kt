@@ -1,6 +1,5 @@
 package com.example.appphotointern.ui.preview
 
-import android.R
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.IMAGE_URI
+import kotlinx.coroutines.launch
 
-class PreviewFragment : DialogFragment() {
+class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
     private val binding get() = _binding!!
     var imageUri: String? = null
@@ -45,18 +46,9 @@ class PreviewFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.Theme_NoTitleBar_Fullscreen)
 
         initUI()
         initEvent()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
     }
 
     private fun initUI() {
@@ -70,7 +62,9 @@ class PreviewFragment : DialogFragment() {
                 val intent = Intent(requireContext(), EditActivity::class.java)
                 intent.putExtra(IMAGE_URI, imageUri)
                 startActivity(intent)
-                dialog?.dismiss()
+                parentFragmentManager.beginTransaction()
+                    .remove(this@PreviewFragment)
+                    .commitNow()
             }
 
             imgPreview.setOnClickListener {

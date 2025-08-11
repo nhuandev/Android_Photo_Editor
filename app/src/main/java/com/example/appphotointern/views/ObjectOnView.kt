@@ -88,30 +88,31 @@ class ObjectOnView @JvmOverloads constructor(
         }
 
         btnRotation.setOnTouchListener(object : OnTouchListener {
-            var initialX = 0f
-            var initialY = 0f
-            var initialRotation = 0f
+            private var lastAngle = 0f
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
-                val centerX = objectView.width / 2f
-                val centerY = objectView.height / 2f
+                val centerX = objectView.x + objectView.width / 2f
+                val centerY = objectView.y + objectView.height / 2f
+
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
-                        initialX = event.rawX
-                        initialY = event.rawY
-                        initialRotation = rotation
+                        val dx = event.rawX - centerX
+                        val dy = event.rawY - centerY
+                        lastAngle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        val dx = event.rawX - (objectView.x + centerX)
-                        val dy = event.rawY - (objectView.y + centerY)
-                        val angle = atan2(dy, dx)
-                        val startAngle = atan2(
-                            initialY - (objectView.y + centerY),
-                            initialX - (objectView.x + centerX)
-                        )
-                        val deltaAngle = Math.toDegrees((angle - startAngle).toDouble()).toFloat()
-                        objectView.rotation = initialRotation + deltaAngle
+                        val dx = event.rawX - centerX
+                        val dy = event.rawY - centerY
+                        val currentAngle =
+                            Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
+
+                        var angleDiff = currentAngle - lastAngle
+                        if (angleDiff > 180f) angleDiff -= 360f
+                        if (angleDiff < -180f) angleDiff += 360f
+
+                        objectView.rotation += angleDiff
+                        lastAngle = currentAngle
                     }
                 }
                 return true
@@ -123,7 +124,8 @@ class ObjectOnView @JvmOverloads constructor(
             var initialY = 0f
             var initialDistance = 0f
             var initialScale = 1f
-
+            val MIN_SCALE = 0.5f
+            val MAX_SCALE = 1.8f
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
                 val centerX = objectView.width / 2f
@@ -144,13 +146,14 @@ class ObjectOnView @JvmOverloads constructor(
                         val dx = event.rawX - (objectView.x + centerX)
                         val dy = event.rawY - (objectView.y + centerY)
                         val newDistance = hypot(dx, dy)
-                        val scaleFactor = (newDistance / initialDistance).coerceIn(0.5f, 3.0f)
-                        val newScale = initialScale * scaleFactor
 
+                        val scaleFactor = newDistance / initialDistance
+                        var newScale = initialScale * scaleFactor
+
+                        newScale = newScale.coerceIn(MIN_SCALE, MAX_SCALE)
                         objectView.scaleX = newScale
                         objectView.scaleY = newScale
 
-                        // Inverse scale icon
                         val iconScale = (1f / newScale).coerceIn(0.7f, 1.5f)
                         btnEdit.scaleX = iconScale
                         btnEdit.scaleY = iconScale
@@ -166,7 +169,6 @@ class ObjectOnView @JvmOverloads constructor(
             }
         })
 
-
         btnEdit.setOnClickListener {
             if (tvDataText.visibility == VISIBLE) {
                 (context as? EditActivity)?.editTextObject(this)
@@ -175,13 +177,11 @@ class ObjectOnView @JvmOverloads constructor(
         deselect()
     }
 
-    // Method of sticker on image
     fun setImage(bitmap: Bitmap) {
         stickerImage.visibility = VISIBLE
         stickerImage.setImageBitmap(bitmap)
     }
 
-    // Method of text on image
     fun setText(text: String) {
         tvDataText.visibility = VISIBLE
         tvDataText.text = text
@@ -210,7 +210,7 @@ class ObjectOnView @JvmOverloads constructor(
 
     fun select() {
         box.setBackgroundResource(R.drawable.border_view)
-        if(tvDataText.visibility == VISIBLE){
+        if (tvDataText.visibility == VISIBLE) {
             btnEdit.visibility = VISIBLE
         } else {
             btnEdit.visibility = GONE

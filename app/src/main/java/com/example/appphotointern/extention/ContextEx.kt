@@ -11,6 +11,12 @@ fun Context.isHasPermission(permission: String): Boolean {
     ) == PackageManager.PERMISSION_GRANTED
 }
 
+fun Context.hasRequiredPermissions(permissions: Array<String>): Boolean {
+    return permissions.all { permission ->
+        ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+    }
+}
+
 fun Context?.toast(mesId: Int, duration: Int = Toast.LENGTH_SHORT) {
     this?.let {
         Toast.makeText(this, getString(mesId), duration).show()

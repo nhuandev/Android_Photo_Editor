@@ -58,17 +58,90 @@ object FilterManager {
     }
 
     fun applyContrast(bitmap: Bitmap, contrast: Float): Bitmap {
+        val scale = contrast
+        val translate = (-0.5f * scale + 0.5f) * 255f
         val contrastMatrix = ColorMatrix().apply {
             set(
                 floatArrayOf(
-                    contrast, 0f, 0f, 0f, 0f,
-                    0f, contrast, 0f,
-                    0f, 0f, contrast, 0f, 0f,
+                    scale, 0f, 0f, 0f, translate,
+                    0f, scale, 0f, 0f, translate,
+                    0f, 0f, scale, 0f, translate,
                     0f, 0f, 0f, 1f, 0f
                 )
             )
         }
         return applyColorMatrix(bitmap, contrastMatrix)
+    }
+
+    fun applyVintage(bitmap: Bitmap): Bitmap {
+        val vintageMatrix = ColorMatrix().apply {
+            set(
+                floatArrayOf(
+                    0.9f, 0.5f, 0.1f, 0f, 0f,
+                    0.3f, 0.8f, 0.2f, 0f, 0f,
+                    0.2f, 0.3f, 0.7f, 0f, 0f,
+                    0f,   0f,   0f,   1f, 0f
+                )
+            )
+        }
+        return applyColorMatrix(bitmap, vintageMatrix)
+    }
+
+    fun applyCool(bitmap: Bitmap): Bitmap {
+        val coolMatrix = ColorMatrix().apply {
+            set(
+                floatArrayOf(
+                    1f, 0f, 0f, 0f, 0f,
+                    0f, 1f, 0f, 0f, 0f,
+                    0f, 0f, 1.2f, 0f, 0f,
+                    0f, 0f, 0f, 1f, 0f
+                )
+            )
+        }
+        return applyColorMatrix(bitmap, coolMatrix)
+    }
+
+    fun applyWarm(bitmap: Bitmap): Bitmap {
+        val warmMatrix = ColorMatrix().apply {
+            set(
+                floatArrayOf(
+                    1.2f, 0f, 0f, 0f, 0f,
+                    0f, 1f, 0f, 0f, 0f,
+                    0f, 0f, 1f, 0f, 0f,
+                    0f, 0f, 0f, 1f, 0f
+                )
+            )
+        }
+        return applyColorMatrix(bitmap, warmMatrix)
+    }
+
+    fun applyPosterize(bitmap: Bitmap): Bitmap {
+        val posterizeMatrix = ColorMatrix().apply {
+            set(
+                floatArrayOf(
+                    1.5f, 0f, 0f, 0f, -100f,
+                    0f, 1.5f, 0f, 0f, -100f,
+                    0f, 0f, 1.5f, 0f, -100f,
+                    0f, 0f, 0f, 1f, 0f
+                )
+            )
+        }
+        return applyColorMatrix(bitmap, posterizeMatrix)
+    }
+
+    fun applyBlackWhite(bitmap: Bitmap): Bitmap {
+        val bwMatrix = ColorMatrix().apply {
+            setSaturation(0f)
+            val contrast = 1.5f
+            val translate = (-0.5f * contrast + 0.5f) * 255f
+            postConcat(ColorMatrix(floatArrayOf(
+                contrast, 0f, 0f, 0f, translate,
+                0f, contrast, 0f, 0f, translate,
+                0f, 0f, contrast, 0f, translate,
+                0f, 0f, 0f, 1f, 0f
+            )))
+        }
+        return applyColorMatrix(bitmap, bwMatrix)
     }
 
     @SuppressLint("UseKtx")

@@ -5,28 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.appphotointern.databinding.FragmentToolFilterBinding
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.ui.edit.EditViewModel
-import com.example.appphotointern.utils.FilterManager
 import com.example.appphotointern.views.DrawOnImageView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.getValue
+import com.google.android.material.slider.Slider
 
 class FilterToolFragment(
-    private val drawImageView: DrawOnImageView
+    private val drawImageView: DrawOnImageView,
+    private val editViewModel: EditViewModel
 ) : Fragment() {
     private var _binding: FragmentToolFilterBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var filterAdapter: FilterAdapter
-    private val editViewModel: EditViewModel by viewModels()
     private lateinit var originalBitmap: Bitmap
+
+    private var currentFilterType: FilterType = FilterType.NONE
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,41 +45,54 @@ class FilterToolFragment(
             drawImageView.post {
                 originalBitmap = drawImageView.getInitBmp() ?: return@post
             }
-
             filterAdapter = FilterAdapter(emptyList()) { filter ->
                 applyFilter(filter.type)
             }
             rvFilter.adapter = filterAdapter
-        }
-    }
+            seekbarFilter.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    if (!fromUser) return
+                    when (currentFilterType) {
+                        FilterType.BRIGHTNESS -> {
+                            val brightnessValue = progress - 100f // range: -100 -> 100
+                            editViewModel.applyFilter(
+                                originalBitmap,
+                                FilterType.BRIGHTNESS,
+                                brightnessValue
+                            )
+                        }
 
-    private fun applyFilter(filterType: FilterType?) {
-        if (!::originalBitmap.isInitialized || filterType == null) return
+                        FilterType.CONTRAST -> {
+                            val contrastValue = progress / 50f // range: 0.0 -> 2.0
+                            editViewModel.applyFilter(
+                                originalBitmap,
+                                FilterType.CONTRAST,
+                                contrastValue
+                            )
+                        }
 
-        if (filterType == FilterType.NONE) {
-            drawImageView.applyFilter {
-                originalBitmap
-            }
-            return
-        }
-
-        binding.progressFilter.visibility = View.VISIBLE
-        lifecycleScope.launch {
-            val filteredBitmap = withContext(Dispatchers.Default) {
-                when (filterType) {
-                    FilterType.GRAYSCALE -> FilterManager.applyGrayscale(originalBitmap)
-                    FilterType.SEPIA -> FilterManager.applySepia(originalBitmap)
-                    FilterType.INVERT -> FilterManager.applyInvert(originalBitmap)
-                    FilterType.BRIGHTNESS -> FilterManager.applyBrightness(originalBitmap, 100f)
-                    FilterType.CONTRAST -> FilterManager.applyContrast(originalBitmap, 1.5f)
-                    else -> originalBitmap
+                        else -> {
+                        }
+                    }
                 }
-            }
 
-            drawImageView.applyFilter {
-                filteredBitmap
-            }
-            binding.progressFilter.visibility = View.GONE
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+//            seekbarFilter.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+//                override fun onStartTrackingTouch(slider: Slider) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun onStopTrackingTouch(slider: Slider) {
+//                    TODO("Not yet implemented")
+//                }
+//            })
         }
     }
 
@@ -90,6 +100,27 @@ class FilterToolFragment(
         editViewModel.filters.observe(viewLifecycleOwner) { filters ->
             filterAdapter.updateFilters(filters)
         }
+
+        editViewModel.filteredBitmap.observe(viewLifecycleOwner) { filteredBitmap ->
+            drawImageView.applyFilterOnImage { filteredBitmap }
+        }
+    }
+
+    private fun applyFilter(filterType: FilterType?) {
+        if (!::originalBitmap.isInitialized || filterType == null) return
+        currentFilterType = filterType
+
+        binding.seekbarFilter.progress = when (filterType) {
+            FilterType.BRIGHTNESS -> 100 // 0 brightness
+            FilterType.CONTRAST -> 100 // scale 1.0
+            else -> 0
+        }
+
+        if (filterType == FilterType.NONE) {
+            drawImageView.applyFilterOnImage { originalBitmap }
+            return
+        }
+        editViewModel.applyFilter(originalBitmap, filterType)
     }
 
     override fun onDestroy() {

@@ -38,6 +38,8 @@ class FrameAdapter(
                         if (localFile.exists()) {
                             Glide.with(root)
                                 .load(localFile)
+                                .placeholder(R.drawable.ic_launcher_foreground)
+                                .error(R.drawable.ic_launcher_foreground)
                                 .into(imgFrame)
                         } else {
                             val path = "${URL_STORAGE}/${frame.folder}/${frame.name}.webp"
@@ -46,6 +48,7 @@ class FrameAdapter(
                                 Glide.with(root)
                                     .load(uri)
                                     .placeholder(lottieDrawable)
+                                    .error(R.drawable.ic_launcher_foreground)
                                     .into(imgFrame)
                             }
                         }

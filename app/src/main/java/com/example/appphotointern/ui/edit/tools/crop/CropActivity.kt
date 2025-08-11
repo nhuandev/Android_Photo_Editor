@@ -1,15 +1,11 @@
 package com.example.appphotointern.ui.edit.tools.crop
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.scale
-import androidx.lifecycle.lifecycleScope
 import com.canhub.cropper.CropImageView
 import com.example.appphotointern.databinding.ActivityCropBinding
 import com.example.appphotointern.utils.CROP_16_9
@@ -17,10 +13,7 @@ import com.example.appphotointern.utils.CROP_1_1
 import com.example.appphotointern.utils.CROP_3_4
 import com.example.appphotointern.utils.CROP_4_3
 import com.example.appphotointern.utils.CROP_9_16
-import com.example.appphotointern.utils.IMAGE_CROP
 import com.example.appphotointern.utils.IMAGE_URI
-import com.example.appphotointern.utils.RESULT_CROPPED
-import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class CropActivity : AppCompatActivity() {

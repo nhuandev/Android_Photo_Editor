@@ -12,6 +12,7 @@ const val ARG_IMAGE_RESOURCE = "imageResource"
 // Uri image
 const val IMAGE_URI = "imageUri"
 const val IMAGE_CROP = "imageCrop"
+const val outputDirectory = "/PhotoIntern"
 
 // Url firebase storage
 const val URL_STORAGE = "app_editor"
@@ -25,7 +26,7 @@ const val CROP_9_16 = "9:16"
 
 // Tag feature
 const val TAG_FEATURE_EDIT = 1
-const val TAG_FEATURE_COLLAGE = 2
+const val TAG_FEATURE_ALBUM = 2
 const val TAG_FEATURE_BACKGROUND = 3
 const val TAG_FEATURE_CAMERA = 4
 const val FEATURE_CROP = "Crop"
@@ -45,4 +46,8 @@ const val TEXT_COLOR = 0
 const val TEXT_FONT = 1
 const val TEXT_DATA_COLOR = "Color"
 const val TEXT_DATA_FONT = "Font"
+
+// Ratio came
+const val RATIO_1_1 = 2
+
 

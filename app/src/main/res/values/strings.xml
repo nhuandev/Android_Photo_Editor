@@ -38,8 +38,7 @@
 
     <!--String preview-->
     <string name="lb_edit">Edit</string>
-    <string name="lb_share">Share</string>
-    <string name="lb_delete">Delete</string>
+    <string name="lb_preview">Preview</string>
 
     <!--String tools-->
     <string name="lb_edit_photo">Edit Photo</string>

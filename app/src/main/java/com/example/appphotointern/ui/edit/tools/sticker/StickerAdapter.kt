@@ -40,6 +40,8 @@ class StickerAdapter(
                         if (localFile.exists()) {
                             Glide.with(root)
                                 .load(localFile)
+                                .placeholder(R.drawable.ic_launcher_foreground)
+                                .error(R.drawable.ic_launcher_foreground)
                                 .into(imgSticker)
                         } else {
                             val path = "${URL_STORAGE}/${sticker.folder}/${sticker.name}.webp"
@@ -48,6 +50,7 @@ class StickerAdapter(
                                 Glide.with(root)
                                     .load(uri)
                                     .placeholder(lottieDrawable)
+                                    .error(R.drawable.ic_launcher_foreground)
                                     .into(imgSticker)
                             }
                         }

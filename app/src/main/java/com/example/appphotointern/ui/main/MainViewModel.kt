@@ -8,9 +8,9 @@ import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.appphotointern.R
 import com.example.appphotointern.models.Feature
+import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
 import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
-import com.example.appphotointern.utils.TAG_FEATURE_COLLAGE
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,9 +45,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         R.drawable.img_fea_3
                     ),
                     Feature(
-                        application.getString(R.string.lb_make_collage),
-                        R.mipmap.ic_collage,
-                        TAG_FEATURE_COLLAGE,
+                        application.getString(R.string.lb_album),
+                        R.mipmap.ic_album,
+                        TAG_FEATURE_ALBUM,
                         R.drawable.img_fea_2
                     ),
                     Feature(

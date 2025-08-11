@@ -116,4 +116,8 @@ dependencies {
 
     // --- Gson ---
     implementation("com.google.code.gson:gson:2.13.1")
+
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
 }

@@ -4,19 +4,21 @@
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:padding="@dimen/dimen_24">
+    android:padding="@dimen/font_18">
 
     <FrameLayout
         android:id="@+id/box"
-        android:layout_width="@dimen/dimen_128"
-        android:layout_height="@dimen/dimen_128"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:clipChildren="false">
+        android:clipChildren="false"
+        android:minWidth="@dimen/dimen_96"
+        android:minHeight="@dimen/font_56">
 
         <ImageView
             android:id="@+id/sticker_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/dimen_80"
+            android:layout_height="@dimen/dimen_80"
             android:layout_margin="@dimen/dimen_12"
             android:scaleType="fitCenter"
             android:visibility="gone"
@@ -24,9 +26,14 @@
 
         <TextView
             android:id="@+id/tv_data_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:breakStrategy="balanced"
             android:gravity="center"
+            android:maxLength="100"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
             android:textSize="@dimen/font_18"
             android:textStyle="bold"
             android:visibility="gone"
@@ -86,4 +93,3 @@
         android:translationY="12dp"
         tools:ignore="ContentDescription" />
 </RelativeLayout>
-

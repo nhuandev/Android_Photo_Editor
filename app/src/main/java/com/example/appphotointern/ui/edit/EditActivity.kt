@@ -2,15 +2,14 @@ package com.example.appphotointern.ui.edit
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +25,7 @@ import com.example.appphotointern.ui.edit.tools.frame.FrameToolFragment
 import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.ui.edit.tools.text.TextActivity
 import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
+import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.FEATURE_TEXT
@@ -41,6 +41,7 @@ class EditActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
     private lateinit var imageLayerController: ImageLayer
     private lateinit var editAdapter: EditAdapter
+    private var uriImageSaved: String? = null
     private val editViewModel: EditViewModel by viewModels()
 
     private var objectOnView: ObjectOnView? = null
@@ -66,9 +67,7 @@ class EditActivity : AppCompatActivity() {
         binding.drawImageView.apply {
             when (result.resultCode) {
                 RESULT_CROPPED -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-                    }
                 }
 
                 RESULT_STICKER -> {
@@ -86,14 +85,11 @@ class EditActivity : AppCompatActivity() {
 
                 RESULT_TEXT -> {
                     val dataText = result.data?.getStringExtra(FEATURE_TEXT)
-                    objectOnView?.let {
-                        it.setText(dataText ?: "")
-                    } ?: run {
+                    objectOnView?.setText(dataText ?: "") ?: run {
                         val newView = ObjectOnView(this@EditActivity)
                         newView.setText(dataText ?: "")
                         binding.flMain.addView(
-                            newView,
-                            FrameLayout.LayoutParams(
+                            newView, FrameLayout.LayoutParams(
                                 FrameLayout.LayoutParams.WRAP_CONTENT,
                                 FrameLayout.LayoutParams.WRAP_CONTENT
                             )
@@ -111,14 +107,35 @@ class EditActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             binding.toolBar.setNavigationOnClickListener {
-                CustomDialog().dialogConfirmOut(
-                    this@EditActivity,
-                    onConfirm = {
-                        finish()
-                    }
-                )
+                showExitDialog()
             }
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                showExitDialog()
+            }
+        } else {
+            onBackPressedDispatcher.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        showExitDialog()
+                    }
+                }
+            )
+        }
+    }
+
+    private fun showExitDialog() {
+        CustomDialog().dialogConfirmOut(
+            this@EditActivity,
+            onConfirm = {
+                finish()
+            }
+        )
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -127,15 +144,19 @@ class EditActivity : AppCompatActivity() {
             imageLayerController = ImageLayer(flMain)
             editAdapter = EditAdapter(object : EditAdapter.OnItemSelected {
                 override fun onItemSelected(toolType: ToolType) {
+                    // Remove fragment if current tool is same
                     if (currentTool == toolType) {
                         supportFragmentManager.apply {
-                            beginTransaction().remove(findFragmentById(frameSubTools.id) ?: return)
-                                .commit()
+                            beginTransaction()
+                                .remove(findFragmentById(frameSubTools.id) ?: return)
+                                .commitNow()
                         }
                         currentTool = null
                         return
                     }
 
+                    // Case 1: visible sub fragment (frame, filter, draw)
+                    // Case 2: not visible sub fragment (text, sticker, crop)
                     val fragment = when (toolType) {
                         ToolType.FRAME -> {
                             if (!::frameTool.isInitialized) {
@@ -148,7 +169,7 @@ class EditActivity : AppCompatActivity() {
 
                         ToolType.FILTER -> {
                             if (!::filterTool.isInitialized) {
-                                filterTool = FilterToolFragment(drawImageView)
+                                filterTool = FilterToolFragment(drawImageView, editViewModel)
                             }
                             filterTool
                         }
@@ -192,6 +213,7 @@ class EditActivity : AppCompatActivity() {
                         }
                     }
 
+                    // Visible sub fragment
                     fragment?.let {
                         supportFragmentManager.beginTransaction()
                             .replace(frameSubTools.id, it)
@@ -208,18 +230,25 @@ class EditActivity : AppCompatActivity() {
     private fun initEvent() {
         binding.apply {
             btnSave.setOnClickListener {
-                val finalBitmap = captureFinalImage()
-                finalBitmap?.let {
-                    val status = editViewModel.saveBitmapToGallery(it)
-                    if (status) {
+                editViewModel.captureFinalImage(flMain, drawImageView) { bitMapSaved ->
+                    bitMapSaved?.let {
+                        uriImageSaved = editViewModel.saveBitmapToGallery(bitMapSaved)
                         toast(R.string.toast_save_success)
-                    } else {
+                        // Show preview fragment
+                        val previewFragment = PreviewFragment.newInstance(uriImageSaved.toString())
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_preview_edit, previewFragment)
+                            .addToBackStack(null)
+                            .commit()
+                        fragmentPreviewEdit.visibility = View.VISIBLE
+                    } ?: run {
                         toast(R.string.toast_save_fail)
                     }
                 }
             }
 
-            viewTouchInterceptor.setOnTouchListener { _, event ->
+            // Deselect border object when touch screen
+            drawImageView.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     for (i in 0 until flMain.childCount) {
                         val child = flMain.getChildAt(i)
@@ -283,26 +312,6 @@ class EditActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
-        }
-    }
-
-    @SuppressLint("UseKtx")
-    private fun captureFinalImage(): Bitmap? {
-        binding.apply {
-            for (i in 0 until flMain.childCount) {
-                val view = flMain.getChildAt(i)
-                if (view is ObjectOnView) {
-                    view.deselect()
-                }
-            }
-            val bitmap = Bitmap.createBitmap(
-                flMain.width,
-                flMain.height,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            flMain.draw(canvas)
-            return bitmap
         }
     }
 

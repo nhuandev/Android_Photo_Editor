@@ -26,9 +26,7 @@ class FrameToolFragment(
 ) : Fragment() {
     private var _binding: FragmentToolFrameBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var frameAdapter: FrameAdapter
-
     private var activeFrame: Frame? = null
 
     private val frameCache: LruCache<Int, Bitmap> by lazy {

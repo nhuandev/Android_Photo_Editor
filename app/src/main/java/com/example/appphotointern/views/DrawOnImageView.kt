@@ -22,6 +22,7 @@ class DrawOnImageView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    private var currentToolDraw: ToolDraw? = null
     var imgL: Float = 0f
     var imgT: Float = 0f
     var imgR: Float = 0f
@@ -34,6 +35,7 @@ class DrawOnImageView @JvmOverloads constructor(
     private var initBmp: Bitmap? = null // Create copy bitmap crop
     private var frameBmp: Bitmap? = null
 
+    // Pen and line in feature draw
     private var mPath = Path()
     private val mPaint = Paint().apply {
         isAntiAlias = true
@@ -47,7 +49,24 @@ class DrawOnImageView @JvmOverloads constructor(
     private var COLOR_PEN: Int = Color.BLACK
     private val TOUCH_TOLERANCE = 4f
 
-    private var currentToolDraw: ToolDraw? = null
+    // Grid in camera
+    private var showGrid = false
+    private val gridPaint = Paint().apply {
+        color = Color.WHITE
+        strokeWidth = 1f
+        style = Paint.Style.STROKE
+        alpha = 120
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (w > 0 && h > 0) {
+            imgL = 0f
+            imgT = 0f
+            imgR = w.toFloat()
+            imgB = h.toFloat()
+        }
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -60,6 +79,30 @@ class DrawOnImageView @JvmOverloads constructor(
         frameBmp?.let {
             canvas.drawBitmap(it, imgL, imgT, null)
         }
+        if (showGrid) {
+            drawGrid(canvas)
+        }
+    }
+
+    private fun drawGrid(canvas: Canvas) {
+        val cols = 3
+        val rows = 3
+        val cellWidth = (imgR - imgL) / cols
+        val cellHeight = (imgB - imgT) / rows
+
+        for (i in 1 until cols) {
+            val x = imgL + i * cellWidth
+            canvas.drawLine(x, imgT, x, imgB, gridPaint)
+        }
+        for (j in 1 until rows) {
+            val y = imgT + j * cellHeight
+            canvas.drawLine(imgL, y, imgR, y, gridPaint)
+        }
+    }
+
+    fun toggleGrid() {
+        showGrid = !showGrid
+        invalidate()
     }
 
     @SuppressLint("UseKtx")
@@ -92,6 +135,9 @@ class DrawOnImageView @JvmOverloads constructor(
         overlayBmp?.recycle()
         overlayBmp = createBitmap(vw, vh).apply { eraseColor(Color.TRANSPARENT) }
         overlayCanvas = Canvas(overlayBmp!!)
+        if (bmp == null) {
+            showGrid = false
+        }
         invalidate()
     }
 
@@ -135,7 +181,7 @@ class DrawOnImageView @JvmOverloads constructor(
         return true
     }
 
-    fun applyFilter(filter: (Bitmap) -> Bitmap) {
+    fun applyFilterOnImage(filter: (Bitmap) -> Bitmap) {
         bgBmp?.let {
             bgBmp = filter(it)
             invalidate()

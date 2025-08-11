@@ -63,8 +63,8 @@ object ImageOrientation {
                 }
 
                 ExifInterface.ORIENTATION_TRANSVERSE -> {
-                    matrix.postScale(-1f, 1f)
                     matrix.postRotate(270f)
+                    matrix.postScale(-1f, 1f)
                 }
             }
 

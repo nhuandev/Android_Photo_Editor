@@ -9,8 +9,9 @@
 
     <ImageView
         android:id="@+id/btn_pen"
-        android:layout_width="@dimen/dimen_32"
-        android:layout_height="@dimen/dimen_32"
+        android:layout_width="@dimen/dimen_36"
+        android:layout_height="@dimen/dimen_36"
+        android:padding="@dimen/dimen_4"
         android:src="@mipmap/ic_draw"
         android:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,8 +19,9 @@
 
     <ImageView
         android:id="@+id/btn_eraser"
-        android:layout_width="@dimen/dimen_32"
-        android:layout_height="@dimen/dimen_32"
+        android:layout_width="@dimen/dimen_36"
+        android:layout_height="@dimen/dimen_36"
+        android:padding="@dimen/dimen_4"
         android:src="@mipmap/ic_eraser"
         android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

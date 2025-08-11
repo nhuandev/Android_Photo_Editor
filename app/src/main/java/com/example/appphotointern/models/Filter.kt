@@ -7,5 +7,16 @@ data class Filter(
 )
 
 enum class FilterType {
-    NONE, GRAYSCALE, SEPIA, INVERT, BRIGHTNESS, CONTRAST
+    NONE,
+    GRAYSCALE,
+    SEPIA,
+    INVERT,
+    BRIGHTNESS,
+    CONTRAST,
+    VINTAGE,
+    COOL,
+    WARM,
+    POSTERIZE,
+    BLACKWHITE
 }
+

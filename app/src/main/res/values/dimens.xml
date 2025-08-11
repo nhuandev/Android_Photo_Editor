@@ -11,6 +11,9 @@
     <dimen name="dimen_12">12dp</dimen>
     <dimen name="dimen_14">14dp</dimen>
     <dimen name="dimen_16">16dp</dimen>
+    <dimen name="dimen_18">18dp</dimen>
+    <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_22">22dp</dimen>
     <dimen name="dimen_24">24dp</dimen>
     <dimen name="dimen_28">28dp</dimen>
     <dimen name="dimen_30">30dp</dimen>
@@ -45,6 +48,7 @@
     <dimen name="dimen_288">288dp</dimen>
     <dimen name="dimen_320">320dp</dimen>
     <dimen name="dimen_384">384dp</dimen>
+    <dimen name="dimen_400">400dp</dimen>
     <dimen name="dimen_448">448dp</dimen>
     <dimen name="dimen_512">512dp</dimen>
     <dimen name="dimen_576">576dp</dimen>
@@ -64,5 +68,14 @@
     <dimen name="font_40">40dp</dimen>
     <dimen name="font_48">48dp</dimen>
     <dimen name="font_56">56dp</dimen>
+
+    <dimen name="half_margin">4dp</dimen>
+    <dimen name="medium_margin">24dp</dimen>
+    <dimen name="double_margin">32dp</dimen>
+
+    <dimen name="button_size_shutter">100dp</dimen>
+    <dimen name="button_size_big">56dp</dimen>
+    <dimen name="button_size_small">40dp</dimen>
+    <dimen name="count_down_text_size">72sp</dimen>
 
 </resources>

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/text_secondary"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/text_secondary">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar"
@@ -18,12 +18,12 @@
 
         <TextView
             android:id="@+id/tv_edit"
-            android:layout_gravity="center"
-            android:textSize="@dimen/font_18"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/lb_edit_photo"
+            android:textSize="@dimen/font_18"
+            android:textStyle="bold"
             tools:ignore="SpUsage" />
 
         <ImageView
@@ -42,8 +42,8 @@
         android:id="@+id/fl_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/dimen_6"
         android:background="@color/white"
-        android:layout_marginVertical="@dimen/dimen_10"
         app:layout_constraintBottom_toTopOf="@+id/rec_tools"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,12 +60,6 @@
             android:layout_height="match_parent"
             android:visibility="gone"
             tools:ignore="ContentDescription" />
-
-        <View
-            android:id="@+id/viewTouchInterceptor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent" />
 
     </FrameLayout>
 
@@ -114,5 +108,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_preview_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:defaultNavHost="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

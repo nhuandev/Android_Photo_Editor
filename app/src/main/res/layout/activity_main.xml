@@ -93,8 +93,10 @@
     </com.google.android.material.navigation.NavigationView>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_camera"
+        android:id="@+id/fragmentNavHost"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:defaultNavHost="true" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

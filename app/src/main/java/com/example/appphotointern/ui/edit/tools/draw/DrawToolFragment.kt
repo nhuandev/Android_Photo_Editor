@@ -45,8 +45,9 @@ class DrawToolFragment(
                 btnPen.setBackgroundResource(R.drawable.border_view)
                 btnEraser.setBackgroundResource(0)
                 drawOnImageView.setToolDraw(ToolDraw.PEN)
-                showDialogChangSize(ToolDraw.PEN)
-                openColorPicker()
+                showDialogChangSize(ToolDraw.PEN) {
+                    openColorPicker()
+                }
             }
 
             btnEraser.setOnClickListener {
@@ -79,7 +80,7 @@ class DrawToolFragment(
     }
 
     @SuppressLint("StringFormatInvalid")
-    private fun showDialogChangSize(tool: ToolDraw) {
+    private fun showDialogChangSize(tool: ToolDraw, onDone: (() -> Unit)? = null) {
         val dialog = layoutInflater.inflate(R.layout.dialog_eraser_size, null)
         val seekBar = dialog.findViewById<SeekBar>(R.id.seekBarSize)
         val tvSizeValue = dialog.findViewById<TextView>(R.id.tvSizeValue)
@@ -101,12 +102,11 @@ class DrawToolFragment(
             .setView(dialog)
             .setPositiveButton(R.string.lb_ok) { dialog, _ ->
                 if (tool == ToolDraw.ERASER) {
-                    tvSizeValue.text = getString(R.string.lb_size, seekBar.progress)
                     drawOnImageView.setSize(seekBar.progress.toFloat(), ToolDraw.ERASER)
                 } else if (tool == ToolDraw.PEN) {
-                    tvSizeValue.text = getString(R.string.lb_size, seekBar.progress)
                     drawOnImageView.setSize(seekBar.progress.toFloat(), ToolDraw.PEN)
                 }
+                onDone?.invoke()
             }
             .setNegativeButton(R.string.lb_cancel) { dialog, _ ->
                 dialog.dismiss()
