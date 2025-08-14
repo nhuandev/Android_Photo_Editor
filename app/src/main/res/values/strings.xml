@@ -69,4 +69,8 @@
     <string name="lb_choose_size">Choose size</string>
     <string name="lb_choose_color">Choose color</string>
 
+    <string name="lb_delete_image">Image Deleted</string>
+    <string name="lb_delete_fail">Image delete fail</string>
+    <string name="lb_select_text">Select outside the area or the text</string>
+
 </resources>

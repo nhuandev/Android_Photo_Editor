@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,16 +25,14 @@ import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
 import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
-import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
     private lateinit var adapterHome: MainAdapter
     private val viewModel: MainViewModel by viewModels()
 
-    private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
     private val cameraPermission: String = Manifest.permission.CAMERA
     private val storagePermission: String by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -50,10 +47,10 @@ class MainActivity : AppCompatActivity() {
             uri?.let {
                 val previewFragment = PreviewFragment.newInstance(it.toString())
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentNavHost, previewFragment)
+                    .replace(R.id.fragment_camera, previewFragment)
                     .addToBackStack(null)
                     .commit()
-                binding.fragmentNavHost.visibility = View.VISIBLE
+                binding.fragmentCamera.visibility = View.VISIBLE
             }
         }
 
@@ -62,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initPermissionLaunchers()
         initUI()
-        initEvent()
+//        initEvent()
         initObserver()
     }
 
@@ -71,10 +68,10 @@ class MainActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
                 if (isGranted) {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentNavHost, CameraFragment())
+                        .replace(R.id.fragment_camera, CameraFragment())
                         .addToBackStack(null)
                         .commit()
-                    binding.fragmentNavHost.visibility = View.VISIBLE
+                    binding.fragmentCamera.visibility = View.VISIBLE
                 } else {
                     showPermissionDeniedDialog(cameraPermission)
                 }
@@ -106,10 +103,10 @@ class MainActivity : AppCompatActivity() {
                         requestCameraPermissionLauncher.launch(cameraPermission)
                     } else {
                         supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragmentNavHost, CameraFragment())
+                            .replace(R.id.fragment_camera, CameraFragment())
                             .addToBackStack(null)
                             .commit()
-                        binding.fragmentNavHost.visibility = View.VISIBLE
+                        binding.fragmentCamera.visibility = View.VISIBLE
                     }
                 }
 
@@ -147,11 +144,12 @@ class MainActivity : AppCompatActivity() {
 
             drawerMain.setNavigationItemSelectedListener {
                 when (it.itemId) {
-                    R.id.nav_menu_photo -> {
+                    R.id.nav_menu_album -> {
                         if (!isHasPermission(storagePermission)) {
                             requestStoragePermissionLauncher.launch(storagePermission)
                         } else {
-                            pickImageLauncher.launch("image/*")
+                            val intent = Intent(this@MainActivity, AlbumActivity::class.java)
+                            startActivity(intent)
                         }
                     }
 

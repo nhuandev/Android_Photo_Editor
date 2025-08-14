@@ -4,4 +4,5 @@ enum class AspectRatioModel {
     SCREEN_1_1,
     THREE_FOUR,
     NINE_SIXTEEN,
+    SCREEN_FULL
 }

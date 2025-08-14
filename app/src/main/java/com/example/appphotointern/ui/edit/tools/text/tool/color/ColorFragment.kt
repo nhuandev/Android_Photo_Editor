@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentColorBinding
 import com.example.appphotointern.ui.edit.EditViewModel
+import com.github.dhaval2404.colorpicker.ColorPickerDialog
+import com.github.dhaval2404.colorpicker.model.ColorShape
 import kotlin.collections.iterator
 
 class ColorFragment : Fragment() {
@@ -18,13 +20,18 @@ class ColorFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: EditViewModel by activityViewModels()
+    private var selectedColor: Int = Color.BLACK
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentColorBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,7 +40,6 @@ class ColorFragment : Fragment() {
     private fun initUI() {
         binding.apply {
             val colorMap = mapOf(
-                R.id.colorRed to Color.parseColor("#F44336"),
                 R.id.colorPink to Color.parseColor("#E91E63"),
                 R.id.colorBlue to Color.parseColor("#2196F3"),
                 R.id.colorGreen to Color.parseColor("#4CAF50"),
@@ -47,11 +53,28 @@ class ColorFragment : Fragment() {
                 R.id.colorLime to Color.parseColor("#CDDC39")
             )
 
+            btnPickerColor.setOnClickListener {
+                openColorPicker()
+            }
+
             for ((viewId, color) in colorMap) {
                 view?.findViewById<View>(viewId)?.setOnClickListener {
                     viewModel.selectColor(color)
                 }
             }
         }
+    }
+
+    private fun openColorPicker() {
+        ColorPickerDialog
+            .Builder(requireContext())
+            .setTitle(R.string.lb_choose_color)
+            .setColorShape(ColorShape.CIRCLE)
+            .setDefaultColor(selectedColor.toInt())
+            .setColorListener { color, _ ->
+                selectedColor = color
+                viewModel.selectColor(color)
+            }
+            .show()
     }
 }

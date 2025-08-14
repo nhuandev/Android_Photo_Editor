@@ -18,7 +18,7 @@ import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityEditBinding
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.models.ToolType
-import com.example.appphotointern.ui.edit.tools.crop.CropActivity
+import com.example.appphotointern.ui.edit.tools.crop.CropToolFragment
 import com.example.appphotointern.ui.edit.tools.draw.DrawToolFragment
 import com.example.appphotointern.ui.edit.tools.filter.FilterToolFragment
 import com.example.appphotointern.ui.edit.tools.frame.FrameToolFragment
@@ -26,31 +26,34 @@ import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.ui.edit.tools.text.TextActivity
 import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
+import com.example.appphotointern.utils.CROP_CLOSED
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.FEATURE_TEXT
 import com.example.appphotointern.utils.IMAGE_URI
 import com.example.appphotointern.utils.ImageLayer
 import com.example.appphotointern.utils.ImageOrientation
-import com.example.appphotointern.utils.RESULT_CROPPED
 import com.example.appphotointern.utils.RESULT_STICKER
 import com.example.appphotointern.utils.RESULT_TEXT
 import com.example.appphotointern.views.ObjectOnView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class EditActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
-    private lateinit var imageLayerController: ImageLayer
-    private lateinit var editAdapter: EditAdapter
-    private var uriImageSaved: String? = null
     private val editViewModel: EditViewModel by viewModels()
+    private lateinit var editAdapter: EditAdapter
+    private lateinit var imageLayer: ImageLayer
 
     private var objectOnView: ObjectOnView? = null
+    private var uriImageSaved: String? = null
     private var currentTool: ToolType? = null
-    private lateinit var frameTool: FrameToolFragment
+
     private lateinit var filterTool: FilterToolFragment
+    private lateinit var frameTool: FrameToolFragment
     private lateinit var textTool: TextToolFragment
     private lateinit var drawTool: DrawToolFragment
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -61,39 +64,39 @@ class EditActivity : AppCompatActivity() {
         initObserver()
     }
 
+    // Register activity result
     private val activityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         binding.drawImageView.apply {
             when (result.resultCode) {
-                RESULT_CROPPED -> {
-
-                }
-
                 RESULT_STICKER -> {
                     val uri = result.data?.getStringExtra(FEATURE_STICKER)
                     val bitmap = BitmapFactory.decodeFile(uri)
                     val objetView = ObjectOnView(this@EditActivity)
                     objetView.setImage(bitmap)
-                    binding.flMain.addView(
-                        objetView, FrameLayout.LayoutParams(
-                            FrameLayout.LayoutParams.WRAP_CONTENT,
-                            FrameLayout.LayoutParams.WRAP_CONTENT
-                        )
+                    val params = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
                     )
+                    params.leftMargin = 100
+                    params.topMargin = 100
+                    binding.flMain.addView(objetView, params)
                 }
 
                 RESULT_TEXT -> {
                     val dataText = result.data?.getStringExtra(FEATURE_TEXT)
-                    objectOnView?.setText(dataText ?: "") ?: run {
-                        val newView = ObjectOnView(this@EditActivity)
-                        newView.setText(dataText ?: "")
-                        binding.flMain.addView(
-                            newView, FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT,
-                                FrameLayout.LayoutParams.WRAP_CONTENT
+                    if (!dataText.isNullOrBlank()) {
+                        objectOnView?.setText(dataText) ?: run {
+                            val newView = ObjectOnView(this@EditActivity)
+                            newView.setText(dataText)
+                            binding.flMain.addView(
+                                newView, FrameLayout.LayoutParams(
+                                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                                    FrameLayout.LayoutParams.WRAP_CONTENT
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -141,7 +144,14 @@ class EditActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initUI() {
         binding.apply {
-            imageLayerController = ImageLayer(flMain)
+            imageLayer = ImageLayer(flMain)
+            drawTool = DrawToolFragment.newInstance().apply {
+                setDependencies(drawImageView, editViewModel)
+            }
+            filterTool = FilterToolFragment.newInstance().apply {
+                setDependencies(drawImageView, editViewModel)
+            }
+
             editAdapter = EditAdapter(object : EditAdapter.OnItemSelected {
                 override fun onItemSelected(toolType: ToolType) {
                     // Remove fragment if current tool is same
@@ -155,61 +165,66 @@ class EditActivity : AppCompatActivity() {
                         return
                     }
 
-                    // Case 1: visible sub fragment (frame, filter, draw)
-                    // Case 2: not visible sub fragment (text, sticker, crop)
+                    // Case 1: visible fragment container (frame, filter, draw, crop)
+                    // Case 2: not visible fragment container (text, sticker)
                     val fragment = when (toolType) {
                         ToolType.FRAME -> {
                             if (!::frameTool.isInitialized) {
-                                frameTool = FrameToolFragment(
-                                    imageLayerController, editViewModel, drawImageView
-                                )
+                                frameTool = FrameToolFragment(imageLayer, editViewModel)
                             }
+                            currentTool = toolType
                             frameTool
                         }
 
                         ToolType.FILTER -> {
-                            if (!::filterTool.isInitialized) {
-                                filterTool = FilterToolFragment(drawImageView, editViewModel)
-                            }
                             filterTool
                         }
 
                         ToolType.DRAW -> {
-                            if (!::drawTool.isInitialized) {
-                                drawTool = DrawToolFragment(drawImageView)
-                            }
                             drawTool
+                        }
+
+                        ToolType.CROP -> {
+                            val cropTool = CropToolFragment()
+                            // Visible fragment crop full
+                            fragmentCrop.visibility = View.VISIBLE
+                            supportFragmentManager.beginTransaction()
+                                .replace(fragmentCrop.id, cropTool)
+                                .commit()
+
+                            // Remove sub fragment is showing
+                            currentTool = toolType
+                            imageLayer.removeFrame()
+                            removeSubFragment()
+                            return
                         }
 
                         ToolType.STICKER -> {
                             val intent = Intent(this@EditActivity, StickerActivity::class.java)
                             activityResultLauncher.launch(intent)
+                            currentTool = null
+                            removeSubFragment()
                             null
                         }
 
                         ToolType.TEXT -> {
                             objectOnView?.let {
-                                textTool = TextToolFragment()
-                                supportFragmentManager.beginTransaction()
-                                    .replace(binding.frameSubTools.id, textTool)
-                                    .commit()
-                                currentTool = toolType
+                                if (it.isText()) {
+                                    textTool = TextToolFragment()
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(binding.frameSubTools.id, textTool)
+                                        .commit()
+                                    currentTool = toolType
+                                } else {
+                                    toast(R.string.lb_select_text)
+                                }
                             } ?: run {
                                 val intent = Intent(this@EditActivity, TextActivity::class.java)
                                 activityResultLauncher.launch(intent)
                                 currentTool = null
                             }
+                            removeSubFragment()
                             return
-                        }
-
-                        ToolType.CROP -> {
-                            val imageUri = intent?.getStringExtra(IMAGE_URI)?.toUri()
-                            val intent = Intent(this@EditActivity, CropActivity::class.java)
-                            intent.putExtra(IMAGE_URI, imageUri.toString())
-                            activityResultLauncher.launch(intent)
-                            imageLayerController.removeFrame()
-                            drawImageView.removeFrame()
-                            null
                         }
                     }
 
@@ -226,10 +241,25 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
+    // Remove sub fragment when move to activity
+    private fun removeSubFragment() {
+        supportFragmentManager.findFragmentById(binding.frameSubTools.id)?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commit()
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun initEvent() {
         binding.apply {
             btnSave.setOnClickListener {
+                for (i in 0 until flMain.childCount) {
+                    val view = flMain.getChildAt(i)
+                    if (view is ObjectOnView) {
+                        view.deselect()
+                    }
+                }
                 editViewModel.captureFinalImage(flMain, drawImageView) { bitMapSaved ->
                     bitMapSaved?.let {
                         uriImageSaved = editViewModel.saveBitmapToGallery(bitMapSaved)
@@ -284,6 +314,11 @@ class EditActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            // Set bitmap after crop
+            editViewModel.currentBitmap.observe(this@EditActivity) { bm ->
+                drawImageView.setImageBitmap(bm)
+            }
         }
     }
 
@@ -293,20 +328,13 @@ class EditActivity : AppCompatActivity() {
             binding.drawImageView.post {
                 try {
                     val bitmap = ImageOrientation.decodeRotated(
-                        this@EditActivity.contentResolver, it
+                        this.contentResolver, it
                     )
-                    binding.apply {
-                        bitmap?.let {
-                            drawImageView.setBitmap(bitmap)
-                            if (::frameTool.isInitialized) {
-                                frameTool.preloadFrames()
-                            }
-                        } ?: run {
-                            val inputStream = this@EditActivity.contentResolver.openInputStream(it)
-                            val fallbackBitmap = BitmapFactory.decodeStream(inputStream)
-                            inputStream?.close()
-                            imageFrameOverlay.setImageBitmap(fallbackBitmap)
+                    bitmap?.let {
+                        binding.drawImageView.apply {
+                            setImageBitmap(bitmap)
                         }
+                        editViewModel.setBitmap(bitmap)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -315,17 +343,37 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    // Function selected current object
+    // Function selected current object view on image
     fun setSelectedObject(objectView: ObjectOnView?) {
         objectOnView = objectView
     }
 
     fun editTextObject(objectView: ObjectOnView) {
         val currentText = objectView.getTextView()
-        val intent = Intent(this, TextActivity::class.java)
-        intent.putExtra(FEATURE_TEXT, currentText)
+        val intent = Intent(this, TextActivity::class.java).apply {
+            putExtra(FEATURE_TEXT, currentText)
+        }
         activityResultLauncher.launch(intent)
         setSelectedObject(objectView)
+    }
+
+    // Receive event from CropToolFragment
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCropClosed(event: String) {
+        if (event == CROP_CLOSED) {
+            currentTool = null
+            binding.fragmentCrop.visibility = View.GONE
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onDestroy() {

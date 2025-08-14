@@ -3,24 +3,24 @@ package com.example.appphotointern.ui.preview
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.IMAGE_URI
-import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 
 class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
     private val binding get() = _binding!!
     var imageUri: String? = null
 
-    val pickImageLauncher =
+    private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 binding.apply {
@@ -30,10 +30,6 @@ class PreviewFragment : Fragment() {
                 }
             }
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +42,6 @@ class PreviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initUI()
         initEvent()
     }
@@ -64,13 +59,48 @@ class PreviewFragment : Fragment() {
                 startActivity(intent)
                 parentFragmentManager.beginTransaction()
                     .remove(this@PreviewFragment)
-                    .commitNow()
+                    .commit()
             }
 
             imgPreview.setOnClickListener {
                 pickImageLauncher.launch("image/*")
             }
+
+            btnDelete.setOnClickListener {
+
+            }
+
+            btnClose.setOnClickListener {
+                parentFragmentManager.beginTransaction()
+                    .remove(this@PreviewFragment)
+                    .commit()
+            }
+
+            btnShare.setOnClickListener {
+                imageUri?.let { uriString ->
+                    shareImage(uriString.toUri())
+                }
+            }
         }
+    }
+
+    private fun shareImage(uri: Uri) {
+        try {
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "image/*"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+        } catch (e: Exception) {
+            Log.e("PreviewFragment", "Error sharing image: ${e.message}")
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

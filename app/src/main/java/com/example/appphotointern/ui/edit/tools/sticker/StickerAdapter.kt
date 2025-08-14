@@ -1,8 +1,11 @@
 package com.example.appphotointern.ui.edit.tools.sticker
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
@@ -22,8 +25,7 @@ class StickerAdapter(
 
     inner class StickerViewHolder(
         private val binding: ItemStickerBinding,
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(sticker: Sticker) {
             binding.apply {
                 val context = root.context
@@ -38,20 +40,33 @@ class StickerAdapter(
                         lottieDrawable.playAnimation()
 
                         if (localFile.exists()) {
-                            Glide.with(root)
-                                .load(localFile)
-                                .placeholder(R.drawable.ic_launcher_foreground)
-                                .error(R.drawable.ic_launcher_foreground)
-                                .into(imgSticker)
+                            // Kiểm tra context có còn hợp lệ không trước khi load
+                            if (isContextValid(context)) {
+                                Glide.with(context)
+                                    .load(localFile)
+                                    .placeholder(R.drawable.ic_launcher_foreground)
+                                    .error(R.drawable.ic_launcher_foreground)
+                                    .into(imgSticker)
+                            }
                         } else {
                             val path = "${URL_STORAGE}/${sticker.folder}/${sticker.name}.webp"
                             val imageRef = storage.reference.child(path)
                             imageRef.downloadUrl.addOnSuccessListener { uri ->
-                                Glide.with(root)
-                                    .load(uri)
-                                    .placeholder(lottieDrawable)
-                                    .error(R.drawable.ic_launcher_foreground)
-                                    .into(imgSticker)
+                                // Kiểm tra context có còn hợp lệ không trong callback
+                                if (isContextValid(context)) {
+                                    Glide.with(context)
+                                        .load(uri)
+                                        .placeholder(lottieDrawable)
+                                        .error(R.drawable.ic_launcher_foreground)
+                                        .into(imgSticker)
+                                }
+                            }.addOnFailureListener {
+                                // Kiểm tra context có còn hợp lệ không khi fail
+                                if (isContextValid(context)) {
+                                    Glide.with(context)
+                                        .load(R.drawable.ic_launcher_foreground)
+                                        .into(imgSticker)
+                                }
                             }
                         }
                         root.setOnClickListener {
@@ -59,13 +74,25 @@ class StickerAdapter(
                         }
                     }
                     .addFailureListener {
-                        Glide.with(root)
-                            .load(sticker.name)
-                            .placeholder(R.drawable.ic_launcher_foreground)
-                            .error(R.drawable.ic_launcher_foreground)
-                            .into(binding.imgSticker)
+                        if (isContextValid(context)) {
+                            Glide.with(context)
+                                .load(sticker.name)
+                                .placeholder(R.drawable.ic_launcher_foreground)
+                                .error(R.drawable.ic_launcher_foreground)
+                                .into(binding.imgSticker)
+                        }
                     }
             }
+        }
+    }
+
+    // Hàm kiểm tra context có còn hợp lệ không
+    private fun isContextValid(context: Context?): Boolean {
+        return when {
+            context == null -> false
+            context is Activity -> !context.isDestroyed && !context.isFinishing
+            context is FragmentActivity -> !context.isDestroyed && !context.isFinishing
+            else -> true
         }
     }
 

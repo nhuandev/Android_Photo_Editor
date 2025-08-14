@@ -17,17 +17,17 @@ import com.example.appphotointern.models.ToolDraw
 import kotlin.math.abs
 import kotlin.math.min
 
-class DrawOnImageView @JvmOverloads constructor(
+class ImageOnView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-    private var currentToolDraw: ToolDraw? = null
     var imgL: Float = 0f
     var imgT: Float = 0f
     var imgR: Float = 0f
     var imgB: Float = 0f
 
+    private var currentToolDraw: ToolDraw? = null
     private var overlayCanvas: Canvas? = null
     private var overlayBmp: Bitmap? = null
     private var bgrBmp: Bitmap? = null
@@ -49,25 +49,6 @@ class DrawOnImageView @JvmOverloads constructor(
     private var COLOR_PEN: Int = Color.BLACK
     private val TOUCH_TOLERANCE = 4f
 
-    // Grid in camera
-    private var showGrid = false
-    private val gridPaint = Paint().apply {
-        color = Color.WHITE
-        strokeWidth = 1f
-        style = Paint.Style.STROKE
-        alpha = 120
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        if (w > 0 && h > 0) {
-            imgL = 0f
-            imgT = 0f
-            imgR = w.toFloat()
-            imgB = h.toFloat()
-        }
-    }
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         bgBmp?.let {
@@ -79,34 +60,10 @@ class DrawOnImageView @JvmOverloads constructor(
         frameBmp?.let {
             canvas.drawBitmap(it, imgL, imgT, null)
         }
-        if (showGrid) {
-            drawGrid(canvas)
-        }
-    }
-
-    private fun drawGrid(canvas: Canvas) {
-        val cols = 3
-        val rows = 3
-        val cellWidth = (imgR - imgL) / cols
-        val cellHeight = (imgB - imgT) / rows
-
-        for (i in 1 until cols) {
-            val x = imgL + i * cellWidth
-            canvas.drawLine(x, imgT, x, imgB, gridPaint)
-        }
-        for (j in 1 until rows) {
-            val y = imgT + j * cellHeight
-            canvas.drawLine(imgL, y, imgR, y, gridPaint)
-        }
-    }
-
-    fun toggleGrid() {
-        showGrid = !showGrid
-        invalidate()
     }
 
     @SuppressLint("UseKtx")
-    fun setBitmap(bmp: Bitmap?) {
+    fun setImageBitmap(bmp: Bitmap?) {
         val vw = width
         val vh = height
         if (vw <= 0 || vh <= 0) return
@@ -123,7 +80,7 @@ class DrawOnImageView @JvmOverloads constructor(
             imgB = imgT + sh
 
             bgBmp = scaled
-            initBmp = scaled.copy(scaled.config!!, true) // Create a copy of the bitmap
+            initBmp = scaled.copy(scaled.config!!, true)
         } else {
             bgrBmp = null
             bgBmp = Bitmap.createBitmap(vw, vh, Bitmap.Config.ARGB_8888).apply {
@@ -135,9 +92,6 @@ class DrawOnImageView @JvmOverloads constructor(
         overlayBmp?.recycle()
         overlayBmp = createBitmap(vw, vh).apply { eraseColor(Color.TRANSPARENT) }
         overlayCanvas = Canvas(overlayBmp!!)
-        if (bmp == null) {
-            showGrid = false
-        }
         invalidate()
     }
 
@@ -186,16 +140,6 @@ class DrawOnImageView @JvmOverloads constructor(
             bgBmp = filter(it)
             invalidate()
         }
-    }
-
-    fun setFrameBitmap(bmp: Bitmap) {
-        frameBmp = bmp
-        invalidate()
-    }
-
-    fun removeFrame() {
-        frameBmp = null
-        invalidate()
     }
 
     fun setPenColor(color: Int) {

@@ -80,7 +80,6 @@ object ImageOrientation {
                 originalBitmap.recycle()
                 rotatedBitmap
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
             return null

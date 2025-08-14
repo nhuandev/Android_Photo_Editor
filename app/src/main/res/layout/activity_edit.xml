@@ -49,10 +49,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tool_bar">
 
-        <com.example.appphotointern.views.DrawOnImageView
+        <com.example.appphotointern.views.ImageOnView
             android:id="@+id/draw_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <ImageView
             android:id="@+id/image_frame_overlay"
@@ -90,12 +90,13 @@
         android:id="@+id/rec_tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tool_bg"
+        android:background="@color/black"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_main"
         tools:ignore="MissingConstraints"
         tools:listitem="@layout/item_edit" />
 
@@ -114,6 +115,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        app:defaultNavHost="true" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_crop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

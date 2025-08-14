@@ -10,6 +10,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class StickerViewModel(private val application: Application) : AndroidViewModel(application) {
@@ -24,11 +25,19 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
     }
 
     fun loadStickersFromAssets() {
+        _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val jsonString = application.assets.open("sticker.json").bufferedReader().use { it.readText() }
+            val jsonString = application.assets.open("sticker.json")
+                .bufferedReader()
+                .use { it.readText() }
+
             val gson = Gson()
             val stickerList = gson.fromJson(jsonString, Array<Sticker>::class.java).toList()
-            _stickers.postValue(stickerList)
+
+            withContext(Dispatchers.Main) {
+                _stickers.value = stickerList
+                _loading.value = false
+            }
         }
     }
 

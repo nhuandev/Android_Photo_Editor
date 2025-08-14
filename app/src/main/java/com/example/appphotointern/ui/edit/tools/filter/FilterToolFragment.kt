@@ -10,21 +10,17 @@ import androidx.fragment.app.Fragment
 import com.example.appphotointern.databinding.FragmentToolFilterBinding
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.ui.edit.EditViewModel
-import com.example.appphotointern.views.DrawOnImageView
-import com.google.android.material.slider.Slider
+import com.example.appphotointern.views.ImageOnView
 
-class FilterToolFragment(
-    private val drawImageView: DrawOnImageView,
-    private val editViewModel: EditViewModel
-) : Fragment() {
+class FilterToolFragment() : Fragment() {
     private var _binding: FragmentToolFilterBinding? = null
     private val binding get() = _binding!!
 
+    private var currentFilterType: FilterType = FilterType.NONE
+    private lateinit var drawImageView: ImageOnView
+    private lateinit var editViewModel: EditViewModel
     private lateinit var filterAdapter: FilterAdapter
     private lateinit var originalBitmap: Bitmap
-
-    private var currentFilterType: FilterType = FilterType.NONE
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,9 +38,6 @@ class FilterToolFragment(
 
     private fun initUI() {
         binding.apply {
-            drawImageView.post {
-                originalBitmap = drawImageView.getInitBmp() ?: return@post
-            }
             filterAdapter = FilterAdapter(emptyList()) { filter ->
                 applyFilter(filter.type)
             }
@@ -58,7 +51,7 @@ class FilterToolFragment(
                     if (!fromUser) return
                     when (currentFilterType) {
                         FilterType.BRIGHTNESS -> {
-                            val brightnessValue = progress - 100f // range: -100 -> 100
+                            val brightnessValue = progress - 100f
                             editViewModel.applyFilter(
                                 originalBitmap,
                                 FilterType.BRIGHTNESS,
@@ -67,7 +60,7 @@ class FilterToolFragment(
                         }
 
                         FilterType.CONTRAST -> {
-                            val contrastValue = progress / 50f // range: 0.0 -> 2.0
+                            val contrastValue = progress / 50f
                             editViewModel.applyFilter(
                                 originalBitmap,
                                 FilterType.CONTRAST,
@@ -84,15 +77,11 @@ class FilterToolFragment(
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {}
             })
 
-//            seekbarFilter.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-//                override fun onStartTrackingTouch(slider: Slider) {
-//                    TODO("Not yet implemented")
-//                }
-//
-//                override fun onStopTrackingTouch(slider: Slider) {
-//                    TODO("Not yet implemented")
-//                }
-//            })
+            // Load filter on image preview
+            drawImageView.post {
+                originalBitmap = drawImageView.getInitBmp() ?: return@post
+                editViewModel.loadFilter(originalBitmap)
+            }
         }
     }
 
@@ -104,6 +93,10 @@ class FilterToolFragment(
         editViewModel.filteredBitmap.observe(viewLifecycleOwner) { filteredBitmap ->
             drawImageView.applyFilterOnImage { filteredBitmap }
         }
+
+        editViewModel.currentBitmap.observe(viewLifecycleOwner) { bm ->
+            drawImageView.setImageBitmap(bm)
+        }
     }
 
     private fun applyFilter(filterType: FilterType?) {
@@ -111,8 +104,8 @@ class FilterToolFragment(
         currentFilterType = filterType
 
         binding.seekbarFilter.progress = when (filterType) {
-            FilterType.BRIGHTNESS -> 100 // 0 brightness
-            FilterType.CONTRAST -> 100 // scale 1.0
+            FilterType.BRIGHTNESS -> 100
+            FilterType.CONTRAST -> 100
             else -> 0
         }
 
@@ -121,6 +114,21 @@ class FilterToolFragment(
             return
         }
         editViewModel.applyFilter(originalBitmap, filterType)
+    }
+
+    companion object {
+        fun newInstance() : FilterToolFragment {
+            return FilterToolFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+        }
+    }
+
+    fun setDependencies(drawImageView: ImageOnView, editViewModel: EditViewModel) {
+        this.drawImageView = drawImageView
+        this.editViewModel = editViewModel
     }
 
     override fun onDestroy() {

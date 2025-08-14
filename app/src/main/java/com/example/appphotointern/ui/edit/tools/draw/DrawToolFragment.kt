@@ -13,18 +13,17 @@ import androidx.fragment.app.Fragment
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentToolDrawBinding
 import com.example.appphotointern.models.ToolDraw
-import com.example.appphotointern.views.DrawOnImageView
+import com.example.appphotointern.ui.edit.EditViewModel
+import com.example.appphotointern.views.ImageOnView
 import com.github.dhaval2404.colorpicker.ColorPickerDialog
 import com.github.dhaval2404.colorpicker.model.ColorShape
 
-class DrawToolFragment(
-    private val drawOnImageView: DrawOnImageView
-) : Fragment() {
+class DrawToolFragment() : Fragment() {
     private var _binding: FragmentToolDrawBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var drawImageView: ImageOnView
+    private lateinit var editViewModel: EditViewModel
     private var selectedColor: Int = Color.BLACK
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +43,7 @@ class DrawToolFragment(
             btnPen.setOnClickListener {
                 btnPen.setBackgroundResource(R.drawable.border_view)
                 btnEraser.setBackgroundResource(0)
-                drawOnImageView.setToolDraw(ToolDraw.PEN)
+                drawImageView.setToolDraw(ToolDraw.PEN)
                 showDialogChangSize(ToolDraw.PEN) {
                     openColorPicker()
                 }
@@ -53,7 +52,7 @@ class DrawToolFragment(
             btnEraser.setOnClickListener {
                 btnEraser.setBackgroundResource(R.drawable.border_view)
                 btnPen.setBackgroundResource(0)
-                drawOnImageView.setToolDraw(ToolDraw.ERASER)
+                drawImageView.setToolDraw(ToolDraw.ERASER)
                 showDialogChangSize(ToolDraw.ERASER)
             }
         }
@@ -70,7 +69,7 @@ class DrawToolFragment(
                 val currentTool = ToolDraw.PEN
                 when (currentTool) {
                     ToolDraw.PEN -> {
-                        drawOnImageView.setPenColor(color)
+                        drawImageView.setPenColor(color)
                     }
 
                     else -> {}
@@ -102,9 +101,9 @@ class DrawToolFragment(
             .setView(dialog)
             .setPositiveButton(R.string.lb_ok) { dialog, _ ->
                 if (tool == ToolDraw.ERASER) {
-                    drawOnImageView.setSize(seekBar.progress.toFloat(), ToolDraw.ERASER)
+                    drawImageView.setSize(seekBar.progress.toFloat(), ToolDraw.ERASER)
                 } else if (tool == ToolDraw.PEN) {
-                    drawOnImageView.setSize(seekBar.progress.toFloat(), ToolDraw.PEN)
+                    drawImageView.setSize(seekBar.progress.toFloat(), ToolDraw.PEN)
                 }
                 onDone?.invoke()
             }
@@ -112,5 +111,20 @@ class DrawToolFragment(
                 dialog.dismiss()
             }
             .show()
+    }
+
+    companion object {
+        fun newInstance() : DrawToolFragment {
+            return DrawToolFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+        }
+    }
+
+    fun setDependencies(drawImageView: ImageOnView, editViewModel: EditViewModel) {
+        this.drawImageView = drawImageView
+        this.editViewModel = editViewModel
     }
 }

@@ -13,15 +13,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.appphotointern.R
 import com.example.appphotointern.models.Filter
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.utils.FilterManager
 import com.example.appphotointern.utils.URL_STORAGE
 import com.example.appphotointern.utils.outputDirectory
-import com.example.appphotointern.views.DrawOnImageView
-import com.example.appphotointern.views.ObjectOnView
+import com.example.appphotointern.views.ImageOnView
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +29,7 @@ import java.io.File
 
 class EditViewModel(private val application: Application) : AndroidViewModel(application) {
     val selectedColor = MutableLiveData<Int>()
+    val currentBitmap = MutableLiveData<Bitmap>()
     val selectedFont = MutableLiveData<String>()
 
     private val _frames = MutableLiveData<List<Frame>>()
@@ -47,7 +46,14 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
 
     init {
         loadFramesFromAssets()
-        loadFilter()
+    }
+
+    fun setBitmap(bitmap: Bitmap) {
+        currentBitmap.value = bitmap
+    }
+
+    fun updateBitmapAfterCrop(bitmap: Bitmap) {
+        currentBitmap.value = bitmap
     }
 
     fun selectColor(color: Int) {
@@ -95,25 +101,52 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
             }
     }
 
-    fun loadFilter() {
+    @SuppressLint("UseKtx")
+    fun loadFilter(originalBitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             _loading.postValue(true)
             try {
-                _filters.postValue(
-                    listOf(
-                        Filter("None", FilterType.NONE, R.drawable.img_logo),
-                        Filter("Grayscale", FilterType.GRAYSCALE, R.drawable.img_logo),
-                        Filter("Sepia", FilterType.SEPIA, R.drawable.img_logo),
-                        Filter("Invert", FilterType.INVERT, R.drawable.img_logo),
-                        Filter("Brightness", FilterType.BRIGHTNESS, R.drawable.img_logo),
-                        Filter("Contrast", FilterType.CONTRAST, R.drawable.img_logo),
-                        Filter("Vintage", FilterType.VINTAGE, R.drawable.img_logo),
-                        Filter("Cool", FilterType.COOL, R.drawable.img_logo),
-                        Filter("Warm", FilterType.WARM, R.drawable.img_logo),
-                        Filter("Posterize", FilterType.POSTERIZE, R.drawable.img_logo),
-                        Filter("Bl-Wh", FilterType.BLACKWHITE, R.drawable.img_logo)
+                val previewBitmap = Bitmap.createScaledBitmap(originalBitmap, 200, 250, true)
+
+                val filters = listOf(
+                    Filter("None", FilterType.NONE, previewBitmap),
+                    Filter(
+                        "Grayscale",
+                        FilterType.GRAYSCALE,
+                        FilterManager.applyGrayscale(previewBitmap)
+                    ),
+                    Filter("Sepia", FilterType.SEPIA, FilterManager.applySepia(previewBitmap)),
+                    Filter("Invert", FilterType.INVERT, FilterManager.applyInvert(previewBitmap)),
+                    Filter(
+                        "Brightness",
+                        FilterType.BRIGHTNESS,
+                        FilterManager.applyBrightness(previewBitmap, 20f)
+                    ),
+                    Filter(
+                        "Contrast",
+                        FilterType.CONTRAST,
+                        FilterManager.applyContrast(previewBitmap, 1.5f)
+                    ),
+                    Filter(
+                        "Vintage",
+                        FilterType.VINTAGE,
+                        FilterManager.applyVintage(previewBitmap)
+                    ),
+                    Filter("Cool", FilterType.COOL, FilterManager.applyCool(previewBitmap)),
+                    Filter("Warm", FilterType.WARM, FilterManager.applyWarm(previewBitmap)),
+                    Filter(
+                        "Posterize",
+                        FilterType.POSTERIZE,
+                        FilterManager.applyPosterize(previewBitmap)
+                    ),
+                    Filter(
+                        "Bl-Wh",
+                        FilterType.BLACKWHITE,
+                        FilterManager.applyBlackWhite(previewBitmap)
                     )
                 )
+
+                _filters.postValue(filters)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -121,6 +154,7 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
             }
         }
     }
+
 
     fun applyFilter(originalBitmap: Bitmap, filterType: FilterType, value: Float? = null) {
         viewModelScope.launch {
@@ -155,17 +189,10 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
 
     @SuppressLint("UseKtx")
     fun captureFinalImage(
-        flMain: FrameLayout, drawImageView: DrawOnImageView, onCaptured: (Bitmap?) -> Unit
+        flMain: FrameLayout, drawImageView: ImageOnView, onCaptured: (Bitmap?) -> Unit
     ) {
         _loading.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            for (i in 0 until flMain.childCount) {
-                val view = flMain.getChildAt(i)
-                if (view is ObjectOnView) {
-                    view.deselect()
-                }
-            }
-
             val imgView = drawImageView
             val left = imgView.imgL.toInt()
             val top = imgView.imgT.toInt()

@@ -10,7 +10,7 @@ import com.example.appphotointern.databinding.ActivityStickerBinding
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.RESULT_STICKER
 
-class StickerActivity() : AppCompatActivity() {
+class StickerActivity : AppCompatActivity() {
     private val binding by lazy { ActivityStickerBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<StickerViewModel>()
     private lateinit var stickerAdapter: StickerAdapter

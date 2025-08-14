@@ -3,9 +3,11 @@ package com.example.appphotointern.ui.edit.tools.filter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemFilterBinding
 import com.example.appphotointern.models.Filter
 
@@ -19,12 +21,18 @@ class FilterAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(filter: Filter, isSelected: Boolean) {
             binding.apply {
-                Glide.with(root.context)
+                val context = root.context
+                Glide.with(context)
                     .load(filter.image)
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(imgFilter)
                 tvFilterName.text = filter.name
-                rootContent.alpha = if (isSelected) 1.0f else 0.5f
+                rootContent.background = if (isSelected) {
+                    ContextCompat.getDrawable(context, R.drawable.bg_filter_selected)
+                } else {
+                    ContextCompat.getDrawable(context, R.drawable.bg_filter_normal)
+                }
+
                 root.setOnClickListener {
                     val oldSelected = filterSelected
                     val position = bindingAdapterPosition

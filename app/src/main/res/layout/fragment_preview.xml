@@ -20,6 +20,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_close"
+            android:layout_gravity="end"
+            tools:ignore="ContentDescription" />
+
         <TextView
             android:id="@+id/tv_edit_photo"
             android:layout_width="wrap_content"

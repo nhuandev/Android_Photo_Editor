@@ -5,11 +5,11 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.example.appphotointern.R
-import com.example.appphotointern.views.DrawOnImageView
+import com.example.appphotointern.views.ImageOnView
 
 class ImageLayer(frameLayout: FrameLayout) {
     private val frameOverlay: ImageView = frameLayout.findViewById(R.id.image_frame_overlay)
-    val drawImageView: DrawOnImageView = frameLayout.findViewById(R.id.draw_image_view)
+    val drawImageView: ImageOnView = frameLayout.findViewById(R.id.draw_image_view)
 
     fun addFrame(bitmap: Bitmap) {
         updateFrame()

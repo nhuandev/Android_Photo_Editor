@@ -20,4 +20,8 @@ class CustomDialog() {
             }
         dialog.show()
     }
+
+    fun dialogConfirmSave() {
+
+    }
 }

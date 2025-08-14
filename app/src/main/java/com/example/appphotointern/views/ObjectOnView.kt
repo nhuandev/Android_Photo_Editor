@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,6 +18,7 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.example.appphotointern.R
 import com.example.appphotointern.ui.edit.EditActivity
+import kotlinx.coroutines.withContext
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.sequences.forEach
@@ -36,6 +38,11 @@ class ObjectOnView @JvmOverloads constructor(
     private var lastX = 0f
     private var lastY = 0f
 
+    // Cache values for optimization
+    private var cachedCenterX = 0f
+    private var cachedCenterY = 0f
+    private var lastUpdateTime = 0L
+
     init {
         isClickable = true
         isFocusable = true
@@ -54,6 +61,13 @@ class ObjectOnView @JvmOverloads constructor(
                 select()
                 if (tvDataText.visibility == VISIBLE) {
                     (context as? EditActivity)?.setSelectedObject(this)
+                    Log.d("ObjectOnView", "Text selected")
+                }
+
+                // Check object current
+                if (stickerImage.visibility == VISIBLE) {
+                    (context as? EditActivity)?.setSelectedObject(this)
+                    Log.d("ObjectOnView", "Sticker selected")
                 }
 
                 (parent as? ViewGroup)?.children?.forEach { child ->
@@ -87,82 +101,137 @@ class ObjectOnView @JvmOverloads constructor(
             (parent as? ViewGroup)?.removeView(this)
         }
 
+        // Optimized rotation handler
         btnRotation.setOnTouchListener(object : OnTouchListener {
             private var lastAngle = 0f
+            private var currentRotation = 0f
+
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
-                val centerX = objectView.x + objectView.width / 2f
-                val centerY = objectView.y + objectView.height / 2f
 
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
-                        val dx = event.rawX - centerX
-                        val dy = event.rawY - centerY
+                        // Cache center coordinates to avoid repeated calculations
+                        cachedCenterX = objectView.x + objectView.width / 2f
+                        cachedCenterY = objectView.y + objectView.height / 2f
+                        currentRotation = objectView.rotation
+
+                        val dx = event.rawX - cachedCenterX
+                        val dy = event.rawY - cachedCenterY
                         lastAngle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        val dx = event.rawX - centerX
-                        val dy = event.rawY - centerY
+                        // Throttle updates to reduce lag
+                        val currentTime = System.currentTimeMillis()
+                        if (currentTime - lastUpdateTime < 16) { // ~60fps
+                            return true
+                        }
+                        lastUpdateTime = currentTime
+
+                        val dx = event.rawX - cachedCenterX
+                        val dy = event.rawY - cachedCenterY
                         val currentAngle =
                             Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
 
                         var angleDiff = currentAngle - lastAngle
-                        if (angleDiff > 180f) angleDiff -= 360f
-                        if (angleDiff < -180f) angleDiff += 360f
 
-                        objectView.rotation += angleDiff
+                        // Normalize angle difference
+                        while (angleDiff > 180f) angleDiff -= 360f
+                        while (angleDiff < -180f) angleDiff += 360f
+
+                        // Smooth rotation with interpolation
+                        currentRotation += angleDiff * 0.8f // Damping factor for smoother rotation
+                        objectView.rotation = currentRotation
                         lastAngle = currentAngle
+                    }
+
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        // Snap to nearest 15-degree increment for better UX (optional)
+                        val snapAngle = Math.round(currentRotation / 15f) * 15f
+                        objectView.animate()
+                            .rotation(snapAngle)
+                            .setDuration(100)
+                            .start()
+                        currentRotation = snapAngle
                     }
                 }
                 return true
             }
         })
 
+        // Optimized scale handler
         btnScale.setOnTouchListener(object : OnTouchListener {
-            var initialX = 0f
-            var initialY = 0f
-            var initialDistance = 0f
-            var initialScale = 1f
-            val MIN_SCALE = 0.5f
-            val MAX_SCALE = 1.8f
+            private var initialDistance = 0f
+            private var initialScale = 1f
+            private var currentScale = 1f
+            private val MIN_SCALE = 0.5f
+            private val MAX_SCALE = 1.8f
+
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
-                val centerX = objectView.width / 2f
-                val centerY = objectView.height / 2f
 
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
-                        initialX = event.rawX
-                        initialY = event.rawY
+                        // Cache initial values
                         initialScale = objectView.scaleX
+                        currentScale = initialScale
 
-                        val dx = event.rawX - (objectView.x + centerX)
-                        val dy = event.rawY - (objectView.y + centerY)
+                        // Get real center on screen - cache it
+                        val location = IntArray(2)
+                        objectView.getLocationOnScreen(location)
+                        cachedCenterX = location[0] + objectView.width / 2f
+                        cachedCenterY = location[1] + objectView.height / 2f
+
+                        val dx = event.rawX - cachedCenterX
+                        val dy = event.rawY - cachedCenterY
                         initialDistance = hypot(dx, dy)
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        val dx = event.rawX - (objectView.x + centerX)
-                        val dy = event.rawY - (objectView.y + centerY)
+                        // Throttle updates for smoother performance
+                        val currentTime = System.currentTimeMillis()
+                        if (currentTime - lastUpdateTime < 16) { // ~60fps
+                            return true
+                        }
+                        lastUpdateTime = currentTime
+
+                        val dx = event.rawX - cachedCenterX
+                        val dy = event.rawY - cachedCenterY
                         val newDistance = hypot(dx, dy)
 
-                        val scaleFactor = newDistance / initialDistance
-                        var newScale = initialScale * scaleFactor
+                        if (initialDistance > 0) {
+                            val scaleFactor = newDistance / initialDistance
+                            val targetScale =
+                                (initialScale * scaleFactor).coerceIn(MIN_SCALE, MAX_SCALE)
 
-                        newScale = newScale.coerceIn(MIN_SCALE, MAX_SCALE)
-                        objectView.scaleX = newScale
-                        objectView.scaleY = newScale
+                            // Smooth scaling with interpolation
+                            currentScale += (targetScale - currentScale) * 0.6f // Damping factor
 
-                        val iconScale = (1f / newScale).coerceIn(0.7f, 1.5f)
-                        btnEdit.scaleX = iconScale
-                        btnEdit.scaleY = iconScale
-                        btnClose.scaleX = iconScale
-                        btnClose.scaleY = iconScale
-                        btnScale.scaleX = iconScale
-                        btnScale.scaleY = iconScale
-                        btnRotation.scaleX = iconScale
-                        btnRotation.scaleY = iconScale
+                            objectView.scaleX = currentScale
+                            objectView.scaleY = currentScale
+
+                            // Efficiently scale control icons
+                            updateControlIconsScale(currentScale)
+                        }
+                    }
+
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        // Optional: Snap to common scale values for better UX
+                        val snapValues = floatArrayOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f)
+                        val targetScale =
+                            snapValues.minByOrNull { kotlin.math.abs(it - currentScale) }
+                                ?: currentScale
+
+                        if (kotlin.math.abs(targetScale - currentScale) < 0.1f) {
+                            objectView.animate()
+                                .scaleX(targetScale)
+                                .scaleY(targetScale)
+                                .setDuration(100)
+                                .start()
+                            currentScale = targetScale
+                            updateControlIconsScale(targetScale)
+                        }
                     }
                 }
                 return true
@@ -175,6 +244,19 @@ class ObjectOnView @JvmOverloads constructor(
             }
         }
         deselect()
+    }
+
+    // Optimized method to update control icons scale
+    private fun updateControlIconsScale(objectScale: Float) {
+        val iconScale = (1f / objectScale).coerceIn(0.7f, 1.5f)
+        btnEdit.scaleX = iconScale
+        btnEdit.scaleY = iconScale
+        btnClose.scaleX = iconScale
+        btnClose.scaleY = iconScale
+        btnScale.scaleX = iconScale
+        btnScale.scaleY = iconScale
+        btnRotation.scaleX = iconScale
+        btnRotation.scaleY = iconScale
     }
 
     fun setImage(bitmap: Bitmap) {

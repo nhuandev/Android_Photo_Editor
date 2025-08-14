@@ -8,11 +8,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -30,6 +32,7 @@ import androidx.camera.core.ImageCapture.OutputFileResults
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.core.Camera
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -39,25 +42,29 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentCameraBinding
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.models.AspectRatioModel
 import com.example.appphotointern.models.CameraTimer
 import com.example.appphotointern.ui.preview.PreviewFragment
-import com.example.appphotointern.utils.RATIO_1_1
+import com.example.appphotointern.utils.CUSTOM_FULL
+import com.example.appphotointern.utils.CUSTOM_RATIO_1_1
 import com.example.appphotointern.utils.circularClose
 import com.example.appphotointern.utils.circularReveal
 import com.example.appphotointern.utils.outputDirectory
 import com.example.appphotointern.utils.toggleButton
+import com.google.mlkit.vision.face.FaceDetector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.properties.Delegates
 
-class CameraFragment(
-) : Fragment() {
+class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
@@ -66,12 +73,17 @@ class CameraFragment(
     private var preview: Preview? = null
     private var camera: Camera? = null
 
-    private var selectedAspectRatio = AspectRatio.RATIO_DEFAULT
+    private var selectedAspectRatio = AspectRatio.RATIO_16_9
     private var lensFacing = CameraSelector.DEFAULT_BACK_CAMERA
     private var selectedTimer = CameraTimer.OFF
 
-    private var displayId = -1
+    private var isCapturing = false
     private var hasGrid = false
+    private var displayId = -1
+
+    // Test
+    private lateinit var faceDetector: FaceDetector
+    private var isAnalyzing = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,8 +94,10 @@ class CameraFragment(
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.setOnTouchListener { _, _ -> true }
         initUI()
         initEvent()
     }
@@ -108,7 +122,7 @@ class CameraFragment(
         binding.apply {
             btnGrid.setOnClickListener {
                 myDrawView.post {
-                    myDrawView.toggleGrid()
+                    myDrawView.showGrid = !myDrawView.showGrid
                     toggleGrid()
                 }
             }
@@ -116,6 +130,9 @@ class CameraFragment(
             btnTakePicture.setOnClickListener { takePhoto() }
             btnSwitchCamera.setOnClickListener { toggleCamera() }
             btnGallery.setOnClickListener { pickImageLauncher.launch("image/*") }
+            btnFilter.setOnClickListener {
+
+            }
 
             btnTimer.setOnClickListener { selectTimer() }
             btnTimerOff.setOnClickListener { closeTimerAndSelect(CameraTimer.OFF) }
@@ -126,6 +143,7 @@ class CameraFragment(
             btnRatio11.setOnClickListener { closeAspectRatio(AspectRatioModel.SCREEN_1_1) }
             btnRatio34.setOnClickListener { closeAspectRatio(AspectRatioModel.THREE_FOUR) }
             btnRatio916.setOnClickListener { closeAspectRatio(AspectRatioModel.NINE_SIXTEEN) }
+            btnRatioFull.setOnClickListener { closeAspectRatio(AspectRatioModel.SCREEN_FULL) }
 
             btnFlash.setOnClickListener { selectFlash() }
             btnFlashOff.setOnClickListener { closeFlashAndSelect(FLASH_MODE_OFF) }
@@ -136,7 +154,6 @@ class CameraFragment(
                 seekBarVertical.visibility =
                     if (seekBarVertical.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
-
             seekBarVertical.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
                     seekBar: SeekBar?,
@@ -179,23 +196,25 @@ class CameraFragment(
     private fun closeAspectRatio(aspectRatio: AspectRatioModel) =
         binding.llAspectRatio.circularClose(binding.btnAspectRatio) {
             selectedAspectRatio = when (aspectRatio) {
-                AspectRatioModel.SCREEN_1_1 -> RATIO_1_1
+                AspectRatioModel.SCREEN_FULL -> CUSTOM_FULL
                 AspectRatioModel.THREE_FOUR -> AspectRatio.RATIO_4_3
                 AspectRatioModel.NINE_SIXTEEN -> AspectRatio.RATIO_16_9
+                AspectRatioModel.SCREEN_1_1 -> CUSTOM_RATIO_1_1
             }
-            adjustPreviewFrame(selectedAspectRatio)
+            adjustPreviewFrame(aspectRatio)
             startCamera()
         }
 
-    private fun adjustPreviewFrame(aspectRatio: Int) {
+    private fun adjustPreviewFrame(aspectRatio: AspectRatioModel) {
         binding.apply {
             val params = viewFinder.layoutParams
             val screenWidth = resources.displayMetrics.widthPixels
+            val screenHeight = resources.displayMetrics.heightPixels
             val newHeight = when (aspectRatio) {
-                AspectRatio.RATIO_4_3 -> screenWidth * 4 / 3
-                AspectRatio.RATIO_16_9 -> screenWidth * 16 / 9
-                RATIO_1_1 -> (screenWidth * 0.7f).toInt()
-                else -> ViewGroup.LayoutParams.MATCH_PARENT
+                AspectRatioModel.SCREEN_FULL -> screenHeight
+                AspectRatioModel.THREE_FOUR -> screenWidth * 4 / 3
+                AspectRatioModel.NINE_SIXTEEN -> screenWidth * 16 / 9
+                AspectRatioModel.SCREEN_1_1 -> screenWidth
             }
 
             params.height = newHeight
@@ -204,6 +223,14 @@ class CameraFragment(
             myDrawView.layoutParams.height = newHeight
             myDrawView.requestLayout()
         }
+    }
+
+    // Lấy tỉ lệ thực của màn hình (full screen)
+    private fun screenFullRatio(): Double {
+        val metrics = resources.displayMetrics
+        val w = metrics.widthPixels
+        val h = metrics.heightPixels
+        return max(w, h).toDouble() / min(w, h)
     }
 
     // Flash
@@ -238,11 +265,12 @@ class CameraFragment(
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_preview_camera, previewFragment)
                     .addToBackStack(null)
-                    .commitNow()
+                    .commit()
                 binding.fragmentPreviewCamera.visibility = View.VISIBLE
             }
         }
 
+    @OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
         val context = requireContext()
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
@@ -251,21 +279,32 @@ class CameraFragment(
                 try {
                     val localCameraProvider = cameraProviderFuture.get()
                     val rotation = viewFinder.display.rotation
+                    val screenWidth = resources.displayMetrics.widthPixels
+                    val screenHeight = resources.displayMetrics.heightPixels
+
+                    val targetResolution = when (selectedAspectRatio) {
+                        CUSTOM_FULL -> Size(screenWidth, screenHeight)
+                        CUSTOM_RATIO_1_1 -> Size(screenWidth, screenWidth)
+                        AspectRatio.RATIO_4_3 -> Size(screenWidth, screenWidth * 4 / 3)
+                        AspectRatio.RATIO_16_9 -> Size(screenWidth, screenWidth * 16 / 9)
+                        else -> Size(screenWidth, screenWidth)
+                    }
 
                     preview = Preview.Builder()
-                        .setTargetAspectRatio(selectedAspectRatio)
+                        .setTargetResolution(targetResolution)
                         .setTargetRotation(rotation)
                         .build()
 
                     imageCapture = Builder()
                         .setCaptureMode(CAPTURE_MODE_MAXIMIZE_QUALITY)
                         .setFlashMode(flashMode)
-                        .setTargetAspectRatio(selectedAspectRatio)
+                        .setTargetResolution(targetResolution)
                         .setTargetRotation(rotation)
                         .build()
 
                     analyzer = ImageAnalysis.Builder()
                         .setTargetRotation(rotation)
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
 
                     localCameraProvider.unbindAll()
@@ -313,6 +352,8 @@ class CameraFragment(
     }
 
     private fun captureImage() {
+        if (isCapturing) return
+        isCapturing = true
         val localImageCapture =
             imageCapture ?: throw IllegalStateException("Camera initialization failed.")
 
@@ -321,10 +362,10 @@ class CameraFragment(
         val metadata = Metadata().apply {
             isReversedHorizontal = lensFacing == CameraSelector.DEFAULT_FRONT_CAMERA
         }
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
         val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, System.currentTimeMillis())
+                put(MediaStore.MediaColumns.DISPLAY_NAME, System.currentTimeMillis().toString())
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                 put(
                     MediaStore.MediaColumns.RELATIVE_PATH,
@@ -332,11 +373,10 @@ class CameraFragment(
                 )
             }
 
-            val contentResolver = requireContext().contentResolver
             val contentUri =
                 MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
-            OutputFileOptions.Builder(contentResolver, contentUri, contentValues)
+            OutputFileOptions.Builder(requireContext().contentResolver, contentUri, contentValues)
         } else {
             File(outputDirectory).mkdirs()
             val file = File(outputDirectory, "${System.currentTimeMillis()}.jpg")
@@ -346,16 +386,17 @@ class CameraFragment(
         localImageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
-            object : OnImageSavedCallback { // the callback, about the result of capture process
+            object : OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: OutputFileResults) {
-                    outputFileResults.savedUri
-                        ?.let { uri ->
-                            setGalleryThumbnail(uri)
-                        }
-                        ?: setLastPictureThumbnail()
+                    isCapturing = false
+                    binding.progressImageCaptured.visibility = View.GONE
+                    outputFileResults.savedUri?.let { uri ->
+                        setGalleryThumbnail(uri)
+                    } ?: setLastPictureThumbnail()
                 }
 
                 override fun onError(exception: ImageCaptureException) {
+                    isCapturing = false
                     binding.progressImageCaptured.visibility = View.GONE
                     requireContext().toast(R.string.toast_save_fail)
                     exception.printStackTrace()
@@ -370,7 +411,6 @@ class CameraFragment(
 
     private fun setGalleryThumbnail(savedUri: Uri?) {
         binding.progressImageCaptured.visibility = View.VISIBLE
-
         Glide.with(this)
             .load(savedUri)
             .placeholder(R.drawable.ic_no_picture)
@@ -380,7 +420,7 @@ class CameraFragment(
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: com.bumptech.glide.request.target.Target<Drawable?>,
+                    target: Target<Drawable?>,
                     isFirstResource: Boolean
                 ): Boolean {
                     binding.progressImageCaptured.visibility = View.GONE
@@ -390,15 +430,14 @@ class CameraFragment(
                 override fun onResourceReady(
                     resource: Drawable,
                     model: Any,
-                    target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                    target: Target<Drawable?>?,
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     binding.progressImageCaptured.visibility = View.GONE
                     return false
                 }
-            })
-            .into(binding.btnGallery)
+            }).into(binding.btnGallery)
     }
 
     private fun toggleGrid() {

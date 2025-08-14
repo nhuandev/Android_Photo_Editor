@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.main.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,6 +32,7 @@
                 android:layout_gravity="start"
                 android:src="@mipmap/ic_menu"
                 android:tint="@color/gray"
+                android:visibility="gone"
                 tools:ignore="ContentDescription,UseAppTint" />
 
             <TextView
@@ -50,7 +52,7 @@
                 android:id="@+id/img_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="start"
                 android:src="@mipmap/ic_launcher"
                 tools:ignore="ContentDescription" />
         </androidx.appcompat.widget.Toolbar>
@@ -93,10 +95,9 @@
     </com.google.android.material.navigation.NavigationView>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentNavHost"
+        android:id="@+id/fragment_camera"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        app:defaultNavHost="true" />
+        android:visibility="gone" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,9 +1,11 @@
 package com.example.appphotointern.models
 
+import android.graphics.Bitmap
+
 data class Filter(
     val name: String,
     val type: FilterType?,
-    val image: Int?,
+    val image: Bitmap?
 )
 
 enum class FilterType {
@@ -15,8 +17,8 @@ enum class FilterType {
     CONTRAST,
     VINTAGE,
     COOL,
-    WARM,
     POSTERIZE,
-    BLACKWHITE
+    BLACKWHITE,
+    WARM,
 }
 

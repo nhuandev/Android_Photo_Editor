@@ -1,8 +1,10 @@
 package com.example.appphotointern.ui.edit
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemEditBinding
@@ -17,7 +19,9 @@ import com.example.appphotointern.utils.FEATURE_TEXT
 class EditAdapter(
     private val onItemSelected: OnItemSelected
 ) : RecyclerView.Adapter<EditAdapter.ViewHolder>() {
+
     private val listTool: MutableList<ToolModel> = mutableListOf()
+    private var selectedPosition = -1
 
     inner class ToolModel(
         val mToolName: String,
@@ -30,36 +34,63 @@ class EditAdapter(
     }
 
     class ViewHolder(val binding: ItemEditBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(toolMode: ToolModel) {
+        fun bind(toolMode: ToolModel, isSelected: Boolean) {
             binding.apply {
                 imgToolIcon.setImageResource(toolMode.mToolIcon)
                 txtTool.text = toolMode.mToolName
+
+                if (isSelected) {
+                    root.setBackgroundColor(
+                        ContextCompat.getColor(
+                            root.context,
+                            android.R.color.white
+                        )
+                    )
+                    imgToolIcon.setColorFilter(
+                        ContextCompat.getColor(
+                            root.context,
+                            android.R.color.black
+                        )
+                    )
+                    txtTool.setTextColor(
+                        ContextCompat.getColor(
+                            root.context,
+                            android.R.color.black
+                        )
+                    )
+                } else {
+                    root.setBackgroundColor(Color.TRANSPARENT)
+                    imgToolIcon.clearColorFilter()
+                    txtTool.setTextColor(
+                        ContextCompat.getColor(
+                            root.context,
+                            android.R.color.white
+                        )
+                    )
+                }
             }
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
-        val binding =
-            ItemEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val toolMode = listTool[position]
-        holder.bind(toolMode)
+        holder.bind(toolMode, position == selectedPosition)
 
         holder.itemView.setOnClickListener {
+            val oldPos = selectedPosition
+            selectedPosition = position
+            notifyItemChanged(oldPos)
+            notifyItemChanged(position)
             onItemSelected.onItemSelected(toolMode.mToolType)
         }
     }
 
-    override fun getItemCount(): Int {
-        return listTool.size
-    }
+    override fun getItemCount(): Int = listTool.size
 
     init {
         listTool.add(ToolModel(FEATURE_CROP, R.mipmap.ic_tools, ToolType.CROP))
