@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -18,7 +17,6 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.example.appphotointern.R
 import com.example.appphotointern.ui.edit.EditActivity
-import kotlinx.coroutines.withContext
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.sequences.forEach
@@ -61,13 +59,11 @@ class ObjectOnView @JvmOverloads constructor(
                 select()
                 if (tvDataText.visibility == VISIBLE) {
                     (context as? EditActivity)?.setSelectedObject(this)
-                    Log.d("ObjectOnView", "Text selected")
                 }
 
                 // Check object current
                 if (stickerImage.visibility == VISIBLE) {
                     (context as? EditActivity)?.setSelectedObject(this)
-                    Log.d("ObjectOnView", "Sticker selected")
                 }
 
                 (parent as? ViewGroup)?.children?.forEach { child ->
@@ -105,10 +101,8 @@ class ObjectOnView @JvmOverloads constructor(
         btnRotation.setOnTouchListener(object : OnTouchListener {
             private var lastAngle = 0f
             private var currentRotation = 0f
-
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
-
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
                         // Cache center coordinates to avoid repeated calculations
@@ -135,7 +129,6 @@ class ObjectOnView @JvmOverloads constructor(
                             Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
 
                         var angleDiff = currentAngle - lastAngle
-
                         // Normalize angle difference
                         while (angleDiff > 180f) angleDiff -= 360f
                         while (angleDiff < -180f) angleDiff += 360f
@@ -160,13 +153,12 @@ class ObjectOnView @JvmOverloads constructor(
             }
         })
 
-        // Optimized scale handler
         btnScale.setOnTouchListener(object : OnTouchListener {
             private var initialDistance = 0f
             private var initialScale = 1f
             private var currentScale = 1f
-            private val MIN_SCALE = 0.5f
-            private val MAX_SCALE = 1.8f
+            private val MIN_SCALE = 0.7f
+            private val MAX_SCALE = 1.5f
 
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
@@ -189,7 +181,6 @@ class ObjectOnView @JvmOverloads constructor(
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        // Throttle updates for smoother performance
                         val currentTime = System.currentTimeMillis()
                         if (currentTime - lastUpdateTime < 16) { // ~60fps
                             return true
@@ -211,13 +202,11 @@ class ObjectOnView @JvmOverloads constructor(
                             objectView.scaleX = currentScale
                             objectView.scaleY = currentScale
 
-                            // Efficiently scale control icons
                             updateControlIconsScale(currentScale)
                         }
                     }
 
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        // Optional: Snap to common scale values for better UX
                         val snapValues = floatArrayOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f)
                         val targetScale =
                             snapValues.minByOrNull { kotlin.math.abs(it - currentScale) }

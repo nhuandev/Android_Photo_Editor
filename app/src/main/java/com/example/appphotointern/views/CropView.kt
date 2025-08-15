@@ -14,7 +14,6 @@ class CropView @JvmOverloads constructor(
 ) : View(context, attrs) {
     private var bitmap: Bitmap? = null
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var fixedAspectRatio: Float? = null // null = tự do, ví dụ 1f = 1:1
 
     private val overlayPaint = Paint().apply {
         color = "#80000000".toColorInt()
@@ -53,11 +52,6 @@ class CropView @JvmOverloads constructor(
 
     fun setImageBitmap(bm: Bitmap) {
         bitmap = bm
-        invalidate()
-    }
-
-    fun setFixedAspectRatio(ratio: Float?) {
-        fixedAspectRatio = ratio
         invalidate()
     }
 

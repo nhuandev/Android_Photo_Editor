@@ -18,9 +18,9 @@ const val URL_STORAGE = "app_editor"
 
 // Tag feature
 const val TAG_FEATURE_EDIT = 1
-const val TAG_FEATURE_ALBUM = 2
-const val TAG_FEATURE_BACKGROUND = 3
-const val TAG_FEATURE_CAMERA = 4
+const val TAG_FEATURE_CAMERA = 2
+const val TAG_FEATURE_ALBUM = 3
+const val TAG_FEATURE_BACKGROUND = 4
 const val FEATURE_CROP = "Crop"
 const val FEATURE_FRAME = "Frame"
 const val FEATURE_STICKER = "Sticker"
@@ -44,5 +44,6 @@ const val CUSTOM_FULL = 4
 
 // EventBus
 const val CROP_CLOSED = "CROP_CLOSED"
+
 
 

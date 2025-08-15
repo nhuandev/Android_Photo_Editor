@@ -29,8 +29,13 @@ class MainAdapter(
                 bgImage.setImageResource(feature.featureBackgroundRes)
                 val layoutParams = itemView.layoutParams
                 if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-                    layoutParams.isFullSpan = feature.featureType in setOf(2, 3)
+                    layoutParams.isFullSpan = feature.featureType in setOf(3, 4)
                     itemView.layoutParams = layoutParams
+                }
+                if (feature.featureType == TAG_FEATURE_BACKGROUND) {
+                    binding.imgComingSoon.visibility = View.VISIBLE
+                } else {
+                    binding.imgComingSoon.visibility = View.GONE
                 }
                 overlayView.setBackgroundColor(
                     ContextCompat.getColor(

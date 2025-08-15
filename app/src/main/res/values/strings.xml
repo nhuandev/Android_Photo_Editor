@@ -53,6 +53,7 @@
     <string name="lb_notification">Notification</string>
     <string name="lb_confirm">Confirm</string>
     <string name="lb_out_confirm">Are you sure exit ? </string>
+    <string name="lb_save_confirm">Are you sure save ? </string>
 
     <!--Feature name-->
     <string name="lb_crop">Crop</string>

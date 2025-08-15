@@ -1,12 +1,13 @@
 package com.example.appphotointern.ui.album
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityAlbumBinding
-import com.example.appphotointern.ui.main.MainAdapter
 import com.example.appphotointern.ui.preview.PreviewFragment
 
 class AlbumActivity : AppCompatActivity() {
@@ -33,15 +34,14 @@ class AlbumActivity : AppCompatActivity() {
             adapterGallery = AlbumAdapter(
                 emptyList(),
                 onClick = { uri ->
+                    Log.d("AlbumActivity", "Image clicked: $uri")
                     val previewFragment = PreviewFragment.newInstance(uri.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentNavHost, previewFragment)
-                        .addToBackStack(null)
                         .commit()
                 }
             )
-            addItemDecoration(MainAdapter.SpaceItemDecoration(10))
-            layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = GridLayoutManager(this@AlbumActivity, 4)
             adapter = adapterGallery
         }
     }
@@ -49,6 +49,10 @@ class AlbumActivity : AppCompatActivity() {
     private fun initObserver() {
         viewModel.imageUri.observe(this) { images ->
             adapterGallery.updateData(images)
+        }
+
+        viewModel.loading.observe(this) { isLoading ->
+            binding.progressAlbum.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/img_gallery"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/img_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/img_logo" />
-</FrameLayout>
+    android:layout_height="@dimen/dimen_100"
+    android:background="?attr/selectableItemBackground"
+    android:contentDescription="@string/lb_size_default"
+    android:padding="@dimen/dimen_4"
+    android:scaleType="centerCrop" />

@@ -80,6 +80,7 @@ class CameraFragment : Fragment() {
     private var isCapturing = false
     private var hasGrid = false
     private var displayId = -1
+    private var imageLatest: Uri? = null
 
     // Test
     private lateinit var faceDetector: FaceDetector
@@ -110,10 +111,6 @@ class CameraFragment : Fragment() {
                 displayId = viewFinder.display?.displayId ?: -1
                 startCamera()
             }
-
-            viewFinder.post {
-                startCamera()
-            }
         }
     }
 
@@ -129,7 +126,14 @@ class CameraFragment : Fragment() {
 
             btnTakePicture.setOnClickListener { takePhoto() }
             btnSwitchCamera.setOnClickListener { toggleCamera() }
-            btnGallery.setOnClickListener { pickImageLauncher.launch("image/*") }
+            btnGallery.setOnClickListener {
+                if(imageLatest == null) return@setOnClickListener
+                val previewFragment = PreviewFragment.newInstance(imageLatest.toString())
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_preview_camera, previewFragment)
+                    .commit()
+                fragmentPreviewCamera.visibility = View.VISIBLE
+            }
             btnFilter.setOnClickListener {
 
             }
@@ -225,14 +229,6 @@ class CameraFragment : Fragment() {
         }
     }
 
-    // Lấy tỉ lệ thực của màn hình (full screen)
-    private fun screenFullRatio(): Double {
-        val metrics = resources.displayMetrics
-        val w = metrics.widthPixels
-        val h = metrics.heightPixels
-        return max(w, h).toDouble() / min(w, h)
-    }
-
     // Flash
     private var flashMode by Delegates.observable(FLASH_MODE_OFF) { _, old, new ->
         binding.btnFlash.setImageResource(
@@ -256,18 +252,6 @@ class CameraFragment : Fragment() {
                 }
             )
             imageCapture?.flashMode = flashMode
-        }
-
-    val pickImageLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                val previewFragment = PreviewFragment.newInstance(uri.toString())
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_preview_camera, previewFragment)
-                    .addToBackStack(null)
-                    .commit()
-                binding.fragmentPreviewCamera.visibility = View.VISIBLE
-            }
         }
 
     @OptIn(ExperimentalGetImage::class)
@@ -391,6 +375,7 @@ class CameraFragment : Fragment() {
                     isCapturing = false
                     binding.progressImageCaptured.visibility = View.GONE
                     outputFileResults.savedUri?.let { uri ->
+                        imageLatest = uri
                         setGalleryThumbnail(uri)
                     } ?: setLastPictureThumbnail()
                 }

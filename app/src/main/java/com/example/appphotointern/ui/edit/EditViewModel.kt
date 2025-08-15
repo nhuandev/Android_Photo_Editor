@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.math.min
 
 class EditViewModel(private val application: Application) : AndroidViewModel(application) {
     val selectedColor = MutableLiveData<Int>()
@@ -46,10 +47,6 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
 
     init {
         loadFramesFromAssets()
-    }
-
-    fun setBitmap(bitmap: Bitmap) {
-        currentBitmap.value = bitmap
     }
 
     fun updateBitmapAfterCrop(bitmap: Bitmap) {
@@ -155,7 +152,6 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
         }
     }
 
-
     fun applyFilter(originalBitmap: Bitmap, filterType: FilterType, value: Float? = null) {
         viewModelScope.launch {
             _loading.postValue(true)
@@ -191,8 +187,8 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     fun captureFinalImage(
         flMain: FrameLayout, drawImageView: ImageOnView, onCaptured: (Bitmap?) -> Unit
     ) {
-        _loading.postValue(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
+            _loading.postValue(true)
             val imgView = drawImageView
             val left = imgView.imgL.toInt()
             val top = imgView.imgT.toInt()
@@ -219,6 +215,7 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     }
 
     fun saveBitmapToGallery(bitmap: Bitmap): String? {
+        _loading.postValue(true)
         val filename = "edited_photo_${System.currentTimeMillis()}.png"
         var savedUriString: String? = null
 
@@ -253,7 +250,27 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            _loading.postValue(false)
         }
         return savedUriString
+    }
+
+    @SuppressLint("UseKtx")
+    fun setBitmap(bitmap: Bitmap, targetWidth: Int, targetHeight: Int) {
+        try {
+            val scale = min(
+                targetWidth.toFloat() / bitmap.width,
+                targetHeight.toFloat() / bitmap.height
+            )
+            val sw = (bitmap.width * scale).toInt()
+            val sh = (bitmap.height * scale).toInt()
+
+            val scaled = Bitmap.createScaledBitmap(bitmap, sw, sh, true)
+            val mutableCopy = scaled.copy(scaled.config ?: Bitmap.Config.ARGB_8888, true)
+            currentBitmap.value = mutableCopy
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

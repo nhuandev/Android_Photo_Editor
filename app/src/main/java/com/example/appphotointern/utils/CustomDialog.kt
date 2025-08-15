@@ -5,13 +5,15 @@ import androidx.appcompat.app.AlertDialog
 import com.example.appphotointern.R
 
 class CustomDialog() {
-    fun dialogConfirmOut(
+    fun dialogConfirm(
+        title: String,
+        message: String,
         context: Context,
         onConfirm: () -> Unit, onCancel: () -> Unit = {}
     ) {
         val dialog = AlertDialog.Builder(context)
-            .setTitle(R.string.lb_notification)
-            .setMessage(R.string.lb_out_confirm)
+            .setTitle(title)
+            .setMessage(message)
             .setPositiveButton(R.string.lb_confirm) { _, _ ->
                 onConfirm()
             }
@@ -19,9 +21,5 @@ class CustomDialog() {
                 onCancel()
             }
         dialog.show()
-    }
-
-    fun dialogConfirmSave() {
-
     }
 }

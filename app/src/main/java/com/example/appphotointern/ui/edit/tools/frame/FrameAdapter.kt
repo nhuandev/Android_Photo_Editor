@@ -1,12 +1,15 @@
 package com.example.appphotointern.ui.edit.tools.frame
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieCompositionFactory
-import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.target.Target
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemFrameBinding
 import com.example.appphotointern.models.Frame
@@ -19,70 +22,68 @@ class FrameAdapter(
     private val onItemClick: (Frame) -> Unit
 ) : RecyclerView.Adapter<FrameAdapter.FrameViewHolder>() {
     private val storage = FirebaseStorage.getInstance()
-
     inner class FrameViewHolder(private val binding: ItemFrameBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(frame: Frame) {
-            binding.apply {
-                val context = root.context
-                val frameDir = File(context.filesDir, frame.folder)
-                val localFile = File(frameDir, "${frame.name}.webp")
+            val context = binding.root.context
+            val frameDir = File(context.filesDir, frame.folder)
+            val localFile = File(frameDir, "${frame.name}.webp")
 
-                val lottieDrawable = LottieDrawable()
-                LottieCompositionFactory.fromRawRes(context, R.raw.animation_load)
-                    .addListener {
-                        lottieDrawable.composition = it
-                        lottieDrawable.repeatCount = LottieDrawable.INFINITE
-                        lottieDrawable.playAnimation()
+            var isError = false
 
-                        if (localFile.exists()) {
-                            Glide.with(root)
-                                .load(localFile)
-                                .placeholder(R.drawable.ic_launcher_foreground)
-                                .error(R.drawable.ic_launcher_foreground)
-                                .into(imgFrame)
-                        } else {
-                            val path = "${URL_STORAGE}/${frame.folder}/${frame.name}.webp"
-                            val imageRef = storage.reference.child(path)
-                            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                                Glide.with(root)
-                                    .load(uri)
-                                    .placeholder(lottieDrawable)
-                                    .error(R.drawable.ic_launcher_foreground)
-                                    .into(imgFrame)
-                            }
-                        }
-                        root.setOnClickListener {
-                            onItemClick(frame)
-                        }
+            val glideRequest = if (localFile.exists()) {
+                Glide.with(context).load(localFile)
+            } else {
+                val path = "${URL_STORAGE}/${frame.folder}/${frame.name}.webp"
+                val imageRef = storage.reference.child(path)
+                Glide.with(context).load(imageRef)
+            }
+
+            glideRequest
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(R.drawable.ic_error)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable?>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        isError = true
+                        return false
                     }
-                    .addFailureListener {
-                        Glide.with(root)
-                            .load(frame.name)
-                            .placeholder(R.drawable.ic_launcher_foreground)
-                            .error(R.drawable.ic_launcher_foreground)
-                            .into(binding.imgFrame)
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable?>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        isError = false
+                        return false
                     }
+                }).into(binding.imgFrame)
+
+            binding.root.setOnClickListener {
+                if (!isError) {
+                    onItemClick(frame)
+                }
             }
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): FrameViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FrameViewHolder {
         val binding = ItemFrameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FrameViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FrameViewHolder, position: Int) {
-        val frame = frames[position]
-        holder.bind(frame)
+        holder.bind(frames[position])
     }
 
-    override fun getItemCount(): Int {
-        return frames.size
-    }
+    override fun getItemCount(): Int = frames.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateFrames(newFrames: List<Frame>) {

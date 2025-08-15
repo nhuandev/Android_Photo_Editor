@@ -2,13 +2,16 @@ package com.example.appphotointern.ui.album
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieCompositionFactory
-import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemGalleryBinding
 
@@ -33,29 +36,39 @@ class AlbumAdapter(
         private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(uri: Uri) {
-            val lottieDrawable = LottieDrawable()
-            LottieCompositionFactory.fromRawRes(context, R.raw.animation_load)
-                .addListener { composition ->
-                    lottieDrawable.composition = composition
-                    lottieDrawable.repeatCount = LottieDrawable.INFINITE
-                    lottieDrawable.playAnimation()
+            var isError = false
 
-                    Glide.with(context)
-                        .load(uri)
-                        .placeholder(lottieDrawable)
-                        .error(R.drawable.ic_launcher_foreground)
-                        .into(binding.imgGallery)
-                }
-                .addFailureListener {
-                    Glide.with(context)
-                        .load(uri)
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_foreground)
-                        .into(binding.imgGallery)
-                }
+            Glide.with(context)
+                .load(uri)
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(R.drawable.ic_error)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable?>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        isError = true
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable?>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        isError = false
+                        return false
+                    }
+                }).into(binding.imgGallery)
 
             binding.root.setOnClickListener {
-                onClick(uri)
+                if (!isError) {
+                    onClick(uri)
+                }
             }
         }
     }

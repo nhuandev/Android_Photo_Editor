@@ -80,9 +80,8 @@ class ImageOnView @JvmOverloads constructor(
             imgB = imgT + sh
 
             bgBmp = scaled
-            initBmp = scaled.copy(scaled.config!!, true)
+            initBmp = scaled.copy(scaled.config ?: Bitmap.Config.ARGB_8888, true)
         } else {
-            bgrBmp = null
             bgBmp = Bitmap.createBitmap(vw, vh, Bitmap.Config.ARGB_8888).apply {
                 eraseColor(Color.WHITE)
             }

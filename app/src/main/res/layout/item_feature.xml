@@ -29,8 +29,8 @@
             android:id="@+id/overlay_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#AA0088CC"
             android:alpha="0.7"
+            android:background="#AA0088CC"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +61,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_edit_photo"
             tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/img_coming_soon"
+            android:layout_width="@dimen/dimen_36"
+            android:layout_height="@dimen/dimen_36"
+            android:layout_margin="8dp"
+            android:src="@drawable/img_coming_soon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

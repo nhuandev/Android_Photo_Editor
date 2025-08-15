@@ -117,7 +117,7 @@ class FilterToolFragment() : Fragment() {
     }
 
     companion object {
-        fun newInstance() : FilterToolFragment {
+        fun newInstance(): FilterToolFragment {
             return FilterToolFragment().apply {
                 arguments = Bundle().apply {
 

@@ -7,29 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.IMAGE_URI
-import org.greenrobot.eventbus.EventBus
 
 class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
     private val binding get() = _binding!!
     var imageUri: String? = null
-
-    private val pickImageLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                binding.apply {
-                    imgPreview.setImageDrawable(null)
-                    imageUri = it.toString()
-                    imgPreview.setImageURI(it)
-                }
-            }
-        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +36,9 @@ class PreviewFragment : Fragment() {
 
     private fun initUI() {
         imageUri = arguments?.getString(IMAGE_URI)
-        binding.imgPreview.setImageURI(imageUri?.toUri())
+        Glide.with(this)
+            .load(imageUri)
+            .into(binding.imgPreview)
     }
 
     private fun initEvent() {
@@ -60,10 +50,6 @@ class PreviewFragment : Fragment() {
                 parentFragmentManager.beginTransaction()
                     .remove(this@PreviewFragment)
                     .commit()
-            }
-
-            imgPreview.setOnClickListener {
-                pickImageLauncher.launch("image/*")
             }
 
             btnDelete.setOnClickListener {

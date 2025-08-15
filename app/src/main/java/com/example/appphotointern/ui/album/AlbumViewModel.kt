@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,30 +27,24 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     @SuppressLint("Recycle")
-    fun loadImageAlbum(): List<Uri> {
+    fun loadImageAlbum() {
         _loading.postValue(true)
-        val imageUri = mutableListOf<Uri>()
         viewModelScope.launch(Dispatchers.IO) {
+            val imageUriList = mutableListOf<Uri>()
             val projection = arrayOf(MediaStore.Images.Media._ID)
             val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
             val queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
             val cursor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val queryArgs = Bundle().apply {
                     putString(ContentResolver.QUERY_ARG_SQL_SORT_ORDER, sortOrder)
                 }
-                application.contentResolver.query(
-                    queryUri,
-                    projection,
-                    queryArgs,
-                    null
+                getApplication<Application>().contentResolver.query(
+                    queryUri, projection, queryArgs, null
                 )
             } else {
-                application.contentResolver.query(
-                    queryUri,
-                    projection,
-                    null,
-                    null,
-                    sortOrder
+                getApplication<Application>().contentResolver.query(
+                    queryUri, projection, null, null, sortOrder
                 )
             }
 
@@ -60,14 +53,12 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
                 while (it.moveToNext()) {
                     val id = it.getLong(idColumn)
                     val uri = ContentUris.withAppendedId(queryUri, id)
-                    imageUri.add(uri)
+                    imageUriList.add(uri)
                 }
             }
-        }
-        viewModelScope.launch(Dispatchers.Main) {
-            _imageUri.postValue(imageUri)
+
+            _imageUri.postValue(imageUriList)  // <-- Chỉ post khi đã load xong
             _loading.postValue(false)
         }
-        return imageUri
     }
 }

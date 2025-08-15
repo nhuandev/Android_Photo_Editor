@@ -132,15 +132,6 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    private fun showExitDialog() {
-        CustomDialog().dialogConfirmOut(
-            this@EditActivity,
-            onConfirm = {
-                finish()
-            }
-        )
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun initUI() {
         binding.apply {
@@ -227,7 +218,6 @@ class EditActivity : AppCompatActivity() {
                             return
                         }
                     }
-
                     // Visible sub fragment
                     fragment?.let {
                         supportFragmentManager.beginTransaction()
@@ -241,51 +231,17 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    // Remove sub fragment when move to activity
-    private fun removeSubFragment() {
-        supportFragmentManager.findFragmentById(binding.frameSubTools.id)?.let {
-            supportFragmentManager.beginTransaction()
-                .remove(it)
-                .commit()
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun initEvent() {
         binding.apply {
             btnSave.setOnClickListener {
-                for (i in 0 until flMain.childCount) {
-                    val view = flMain.getChildAt(i)
-                    if (view is ObjectOnView) {
-                        view.deselect()
-                    }
-                }
-                editViewModel.captureFinalImage(flMain, drawImageView) { bitMapSaved ->
-                    bitMapSaved?.let {
-                        uriImageSaved = editViewModel.saveBitmapToGallery(bitMapSaved)
-                        toast(R.string.toast_save_success)
-                        // Show preview fragment
-                        val previewFragment = PreviewFragment.newInstance(uriImageSaved.toString())
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_preview_edit, previewFragment)
-                            .addToBackStack(null)
-                            .commit()
-                        fragmentPreviewEdit.visibility = View.VISIBLE
-                    } ?: run {
-                        toast(R.string.toast_save_fail)
-                    }
-                }
+                showSaveDialog()
             }
 
             // Deselect border object when touch screen
             drawImageView.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
-                    for (i in 0 until flMain.childCount) {
-                        val child = flMain.getChildAt(i)
-                        if (child is ObjectOnView) {
-                            child.deselect()
-                        }
-                    }
+                    deselect()
                     objectOnView = null
                 }
                 false
@@ -324,6 +280,7 @@ class EditActivity : AppCompatActivity() {
 
     private fun loadImage() {
         val imageUri = intent?.getStringExtra(IMAGE_URI)?.toUri()
+        binding.progressEdit.visibility = View.VISIBLE
         imageUri?.let {
             binding.drawImageView.post {
                 try {
@@ -334,10 +291,16 @@ class EditActivity : AppCompatActivity() {
                         binding.drawImageView.apply {
                             setImageBitmap(bitmap)
                         }
-                        editViewModel.setBitmap(bitmap)
+                        editViewModel.setBitmap(
+                            bitmap,
+                            binding.drawImageView.width,
+                            binding.drawImageView.height
+                        )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                } finally {
+                    binding.progressEdit.visibility = View.GONE
                 }
             }
         }
@@ -364,6 +327,65 @@ class EditActivity : AppCompatActivity() {
             currentTool = null
             binding.fragmentCrop.visibility = View.GONE
         }
+    }
+
+    private fun showExitDialog() {
+        CustomDialog().dialogConfirm(
+            title = getString(R.string.lb_notification),
+            message = getString(R.string.lb_out_confirm),
+            this@EditActivity,
+            onConfirm = {
+                finish()
+            }
+        )
+    }
+
+    // Remove sub fragment when move to activity
+    private fun removeSubFragment() {
+        supportFragmentManager.findFragmentById(binding.frameSubTools.id)?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commit()
+        }
+    }
+
+    // Deselect all object view on image
+    private fun deselect() {
+        for (i in 0 until binding.flMain.childCount) {
+            val child = binding.flMain.getChildAt(i)
+            if (child is ObjectOnView) {
+                child.deselect()
+            }
+        }
+    }
+
+    private fun showSaveDialog() {
+        CustomDialog().dialogConfirm(
+            title = getString(R.string.lb_notification),
+            message = getString(R.string.lb_save_confirm),
+            this@EditActivity,
+            onConfirm = {
+                binding.apply {
+                    deselect()
+                    editViewModel.captureFinalImage(flMain, drawImageView) { bitMapSaved ->
+                        bitMapSaved?.let {
+                            uriImageSaved = editViewModel.saveBitmapToGallery(bitMapSaved)
+                            toast(R.string.toast_save_success)
+                            // Show preview fragment
+                            val previewFragment =
+                                PreviewFragment.newInstance(uriImageSaved.toString())
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_preview_edit, previewFragment)
+                                .addToBackStack(null)
+                                .commit()
+                            fragmentPreviewEdit.visibility = View.VISIBLE
+                        } ?: run {
+                            toast(R.string.toast_save_fail)
+                        }
+                    }
+                }
+            }
+        )
     }
 
     override fun onStart() {
