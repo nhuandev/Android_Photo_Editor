@@ -13,4 +13,11 @@
         android:padding="@dimen/dimen_8"
         tools:ignore="ContentDescription" />
 
+    <ProgressBar
+        android:id="@+id/progress_sticker"
+        android:layout_width="@dimen/dimen_32"
+        android:layout_height="@dimen/dimen_32"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 </FrameLayout>

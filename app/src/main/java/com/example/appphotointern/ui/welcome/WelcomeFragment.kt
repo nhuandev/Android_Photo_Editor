@@ -19,7 +19,6 @@ class WelcomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
             title = it.getString(ARG_DESCRIPTION)
             description = it.getString(ARG_DESCRIPTION)
@@ -37,7 +36,6 @@ class WelcomeFragment : Fragment() {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(title: String, description: String, imageResId: Int): WelcomeFragment {
             return WelcomeFragment().apply {
@@ -52,7 +50,6 @@ class WelcomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val title = arguments?.getString(ARG_TITLE)
         val desc = arguments?.getString(ARG_DESCRIPTION)
         val imageRes = arguments?.getInt(ARG_IMAGE_RESOURCE)

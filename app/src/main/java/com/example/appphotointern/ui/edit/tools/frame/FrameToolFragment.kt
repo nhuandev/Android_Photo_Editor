@@ -78,7 +78,8 @@ class FrameToolFragment(
                     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                     val targetWidth = (imgR - imgL).toInt()
                     val targetHeight = (imgB - imgT).toInt()
-                    val scaledBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
+                    val scaledBitmap =
+                        Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
                     bitmap.recycle()
                     imageLayerController.addFrame(scaledBitmap)
                     frameCache.put(

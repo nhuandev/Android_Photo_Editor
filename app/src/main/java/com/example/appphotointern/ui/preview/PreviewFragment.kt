@@ -1,5 +1,6 @@
 package com.example.appphotointern.ui.preview
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -28,8 +29,10 @@ class PreviewFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.setOnTouchListener { _, _ -> true }
         initUI()
         initEvent()
     }
@@ -50,10 +53,6 @@ class PreviewFragment : Fragment() {
                 parentFragmentManager.beginTransaction()
                     .remove(this@PreviewFragment)
                     .commit()
-            }
-
-            btnDelete.setOnClickListener {
-
             }
 
             btnClose.setOnClickListener {

@@ -22,16 +22,17 @@ class StickerAdapter(
     private val onStickerSelected: (Sticker) -> Unit
 ) : RecyclerView.Adapter<StickerAdapter.StickerViewHolder>() {
     private val storage = FirebaseStorage.getInstance()
+
     inner class StickerViewHolder(
         private val binding: ItemStickerBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(sticker: Sticker) {
             val context = binding.root.context
             val stickerDir = File(context.filesDir, sticker.folder)
             val localFile = File(stickerDir, "${sticker.name}.webp")
 
             var isError = false
+            binding.progressSticker.visibility = android.view.View.VISIBLE
 
             val glideRequest = if (localFile.exists()) {
                 Glide.with(context)
@@ -47,7 +48,6 @@ class StickerAdapter(
                 .error(R.drawable.ic_error)
                 .listener(object :
                     RequestListener<Drawable> {
-
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
@@ -55,6 +55,7 @@ class StickerAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         isError = true
+                        binding.progressSticker.visibility = android.view.View.GONE
                         return false
                     }
 
@@ -66,6 +67,7 @@ class StickerAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         isError = false
+                        binding.progressSticker.visibility = android.view.View.GONE
                         return false
                     }
                 }).into(binding.imgSticker)

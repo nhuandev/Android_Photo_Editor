@@ -2,6 +2,9 @@ package com.example.appphotointern.ui.camera
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -13,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -37,6 +39,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -48,20 +51,21 @@ import com.example.appphotointern.databinding.FragmentCameraBinding
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.models.AspectRatioModel
 import com.example.appphotointern.models.CameraTimer
+import com.example.appphotointern.models.Frame
+import com.example.appphotointern.ui.edit.EditViewModel
+import com.example.appphotointern.ui.edit.tools.frame.FrameAdapter
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.utils.CUSTOM_FULL
 import com.example.appphotointern.utils.CUSTOM_RATIO_1_1
 import com.example.appphotointern.utils.circularClose
 import com.example.appphotointern.utils.circularReveal
+import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.utils.outputDirectory
 import com.example.appphotointern.utils.toggleButton
-import com.google.mlkit.vision.face.FaceDetector
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.properties.Delegates
 
 class CameraFragment : Fragment() {
@@ -77,14 +81,15 @@ class CameraFragment : Fragment() {
     private var lensFacing = CameraSelector.DEFAULT_BACK_CAMERA
     private var selectedTimer = CameraTimer.OFF
 
+    private var imageLatest: Uri? = null
     private var isCapturing = false
     private var hasGrid = false
     private var displayId = -1
-    private var imageLatest: Uri? = null
 
-    // Test
-    private lateinit var faceDetector: FaceDetector
-    private var isAnalyzing = false
+    private val editViewModel: EditViewModel by activityViewModels()
+    private lateinit var frameAdapter: FrameAdapter
+    private var currentFrameBm: Bitmap? = null
+    private var currentFrame: Frame? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,6 +106,7 @@ class CameraFragment : Fragment() {
         binding.root.setOnTouchListener { _, _ -> true }
         initUI()
         initEvent()
+        initObserver()
     }
 
     private fun initUI() {
@@ -110,6 +116,29 @@ class CameraFragment : Fragment() {
             viewFinder.post {
                 displayId = viewFinder.display?.displayId ?: -1
                 startCamera()
+                viewFrame.setAspectRatio(viewFinder.width, viewFinder.height)
+            }
+
+            recFrame.apply {
+                frameAdapter = FrameAdapter(emptyList()) { frame ->
+                    if (currentFrame == frame && currentFrameBm != null) {
+                        currentFrame = null
+                        currentFrameBm = null
+                        viewFrame.setFrameBitmap(null)
+                        return@FrameAdapter
+                    }
+                    currentFrame = frame
+                    editViewModel.downloadFrameToInternalStorage(frame) { file ->
+                        if (file != null && file.exists()) {
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            if (bitmap != null) {
+                                currentFrameBm = bitmap
+                                viewFrame.setFrameBitmap(bitmap)
+                            }
+                        }
+                    }
+                }
+                adapter = frameAdapter
             }
         }
     }
@@ -118,25 +147,35 @@ class CameraFragment : Fragment() {
     private fun initEvent() {
         binding.apply {
             btnGrid.setOnClickListener {
-                myDrawView.post {
-                    myDrawView.showGrid = !myDrawView.showGrid
+                viewGrid.post {
+                    viewGrid.showGrid = !viewGrid.showGrid
                     toggleGrid()
                 }
             }
 
-            btnTakePicture.setOnClickListener { takePhoto() }
-            btnSwitchCamera.setOnClickListener { toggleCamera() }
             btnGallery.setOnClickListener {
-                if(imageLatest == null) return@setOnClickListener
+                if (imageLatest == null) return@setOnClickListener
                 val previewFragment = PreviewFragment.newInstance(imageLatest.toString())
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_preview_camera, previewFragment)
                     .commit()
                 fragmentPreviewCamera.visibility = View.VISIBLE
             }
-            btnFilter.setOnClickListener {
 
+            btnFrame.setOnClickListener {
+                recFrame.visibility =
+                    if (recFrame.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
+
+            // Add long press to remove frame
+            btnFrame.setOnLongClickListener {
+                currentFrameBm = null
+                binding.viewFrame.setFrameBitmap(null)
+                true
+            }
+
+            btnTakePicture.setOnClickListener { takePhoto() }
+            btnSwitchCamera.setOnClickListener { toggleCamera() }
 
             btnTimer.setOnClickListener { selectTimer() }
             btnTimerOff.setOnClickListener { closeTimerAndSelect(CameraTimer.OFF) }
@@ -144,10 +183,24 @@ class CameraFragment : Fragment() {
             btnTimer10.setOnClickListener { closeTimerAndSelect(CameraTimer.S10) }
 
             btnAspectRatio.setOnClickListener { selectAspectRatio() }
-            btnRatio11.setOnClickListener { closeAspectRatio(AspectRatioModel.SCREEN_1_1) }
-            btnRatio34.setOnClickListener { closeAspectRatio(AspectRatioModel.THREE_FOUR) }
-            btnRatio916.setOnClickListener { closeAspectRatio(AspectRatioModel.NINE_SIXTEEN) }
-            btnRatioFull.setOnClickListener { closeAspectRatio(AspectRatioModel.SCREEN_FULL) }
+            btnRatio11.setOnClickListener {
+                closeAspectRatio(AspectRatioModel.SCREEN_1_1)
+                viewFrame.setAspectRatio(1, 1)
+            }
+            btnRatio34.setOnClickListener {
+                closeAspectRatio(AspectRatioModel.THREE_FOUR)
+                viewFrame.setAspectRatio(3, 4)
+            }
+            btnRatio916.setOnClickListener {
+                closeAspectRatio(AspectRatioModel.NINE_SIXTEEN)
+                viewFrame.setAspectRatio(9, 16)
+            }
+            btnRatioFull.setOnClickListener {
+                closeAspectRatio(AspectRatioModel.SCREEN_FULL)
+                val screenWidth = resources.displayMetrics.widthPixels
+                val screenHeight = resources.displayMetrics.heightPixels
+                viewFrame.setAspectRatio(screenWidth, screenHeight)
+            }
 
             btnFlash.setOnClickListener { selectFlash() }
             btnFlashOff.setOnClickListener { closeFlashAndSelect(FLASH_MODE_OFF) }
@@ -178,6 +231,16 @@ class CameraFragment : Fragment() {
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {}
             })
+        }
+    }
+
+    private fun initObserver() {
+        editViewModel.frames.observe(viewLifecycleOwner) {
+            frameAdapter.updateFrames(it)
+        }
+
+        editViewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressFrame.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 
@@ -220,12 +283,11 @@ class CameraFragment : Fragment() {
                 AspectRatioModel.NINE_SIXTEEN -> screenWidth * 16 / 9
                 AspectRatioModel.SCREEN_1_1 -> screenWidth
             }
-
             params.height = newHeight
             viewFinder.layoutParams = params
 
-            myDrawView.layoutParams.height = newHeight
-            myDrawView.requestLayout()
+            viewGrid.layoutParams.height = newHeight
+            viewGrid.requestLayout()
         }
     }
 
@@ -311,7 +373,7 @@ class CameraFragment : Fragment() {
                 imageCapture,
                 analyzer
             )
-            preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+            preview?.surfaceProvider = viewFinder.surfaceProvider
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -338,6 +400,7 @@ class CameraFragment : Fragment() {
     private fun captureImage() {
         if (isCapturing) return
         isCapturing = true
+
         val localImageCapture =
             imageCapture ?: throw IllegalStateException("Camera initialization failed.")
 
@@ -374,10 +437,43 @@ class CameraFragment : Fragment() {
                 override fun onImageSaved(outputFileResults: OutputFileResults) {
                     isCapturing = false
                     binding.progressImageCaptured.visibility = View.GONE
-                    outputFileResults.savedUri?.let { uri ->
-                        imageLatest = uri
-                        setGalleryThumbnail(uri)
-                    } ?: setLastPictureThumbnail()
+
+                    val savedUri = outputFileResults.savedUri
+                    if (savedUri != null) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            try {
+                                val resolver = requireContext().contentResolver
+                                val capturedBitmap =
+                                    ImageOrientation.decodeRotated(resolver, savedUri)
+                                if (capturedBitmap != null) {
+                                    val finalBitmap = currentFrameBm?.let { frame ->
+                                        mergeWithFrame(capturedBitmap, frame)
+                                    } ?: capturedBitmap
+
+                                    resolver.openOutputStream(savedUri, "w")?.use { out ->
+                                        finalBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
+                                    }
+
+                                    if (finalBitmap != capturedBitmap) {
+                                        finalBitmap.recycle()
+                                    }
+                                }
+
+                                launch(Dispatchers.Main) {
+                                    imageLatest = savedUri
+                                    setGalleryThumbnail(savedUri)
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                launch(Dispatchers.Main) {
+                                    setLastPictureThumbnail()
+                                    requireContext().toast(R.string.toast_save_fail)
+                                }
+                            }
+                        }
+                    } else {
+                        setLastPictureThumbnail()
+                    }
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -448,5 +544,17 @@ class CameraFragment : Fragment() {
             CameraSelector.DEFAULT_FRONT_CAMERA
         }
         startCamera()
+    }
+
+    @SuppressLint("UseKtx")
+    private fun mergeWithFrame(captured: Bitmap, frame: Bitmap): Bitmap {
+        val result = Bitmap.createBitmap(captured.width, captured.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        canvas.drawBitmap(captured, 0f, 0f, null)
+
+        val scaledFrame = Bitmap.createScaledBitmap(frame, captured.width, captured.height, true)
+        canvas.drawBitmap(scaledFrame, 0f, 0f, null)
+        scaledFrame.recycle()
+        return result
     }
 }

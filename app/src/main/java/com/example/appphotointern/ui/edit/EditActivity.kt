@@ -156,8 +156,8 @@ class EditActivity : AppCompatActivity() {
                         return
                     }
 
-                    // Case 1: visible fragment container (frame, filter, draw, crop)
-                    // Case 2: not visible fragment container (text, sticker)
+                    // Case 1 visible fragment container (frame, filter, draw, crop)
+                    // Case 2 not visible fragment container (text, sticker)
                     val fragment = when (toolType) {
                         ToolType.FRAME -> {
                             if (!::frameTool.isInitialized) {

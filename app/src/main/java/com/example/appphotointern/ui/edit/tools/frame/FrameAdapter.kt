@@ -3,6 +3,7 @@ package com.example.appphotointern.ui.edit.tools.frame
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ class FrameAdapter(
     private val onItemClick: (Frame) -> Unit
 ) : RecyclerView.Adapter<FrameAdapter.FrameViewHolder>() {
     private val storage = FirebaseStorage.getInstance()
+
     inner class FrameViewHolder(private val binding: ItemFrameBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -31,6 +33,7 @@ class FrameAdapter(
             val localFile = File(frameDir, "${frame.name}.webp")
 
             var isError = false
+            binding.progressLoading.visibility = View.VISIBLE
 
             val glideRequest = if (localFile.exists()) {
                 Glide.with(context).load(localFile)
@@ -51,6 +54,7 @@ class FrameAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         isError = true
+                        binding.progressLoading.visibility = View.GONE
                         return false
                     }
 
@@ -62,6 +66,7 @@ class FrameAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         isError = false
+                        binding.progressLoading.visibility = View.GONE
                         return false
                     }
                 }).into(binding.imgFrame)

@@ -17,6 +17,13 @@
             android:layout_gravity="center"
             tools:ignore="ContentDescription" />
 
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="@dimen/dimen_32"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
     </FrameLayout>
 
 </androidx.cardview.widget.CardView>

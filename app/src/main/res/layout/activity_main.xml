@@ -80,19 +80,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/drawer_main"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        android:fitsSystemWindows="true"
-        app:drawerLayoutCornerSize="0dp"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
-        tools:ignore="MissingConstraints">
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:id="@+id/drawer_main"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:background="@color/white"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        android:visibility="gone"-->
+<!--        app:drawerLayoutCornerSize="0dp"-->
+<!--        app:headerLayout="@layout/nav_header"-->
+<!--        app:menu="@menu/nav_menu"-->
+<!--        tools:ignore="MissingConstraints">-->
 
-    </com.google.android.material.navigation.NavigationView>
+<!--    </com.google.android.material.navigation.NavigationView>-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_camera"

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -17,8 +18,10 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.example.appphotointern.R
 import com.example.appphotointern.ui.edit.EditActivity
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
+import kotlin.math.roundToInt
 import kotlin.sequences.forEach
 
 @SuppressLint("ClickableViewAccessibility", "UseKtx")
@@ -36,9 +39,11 @@ class ObjectOnView @JvmOverloads constructor(
     private var lastX = 0f
     private var lastY = 0f
 
-    // Cache values for optimization
+    // lưu tâm của object để tính toán xoay và scale
     private var cachedCenterX = 0f
     private var cachedCenterY = 0f
+
+    // giới hạn tần suất
     private var lastUpdateTime = 0L
 
     init {
@@ -97,7 +102,6 @@ class ObjectOnView @JvmOverloads constructor(
             (parent as? ViewGroup)?.removeView(this)
         }
 
-        // Optimized rotation handler
         btnRotation.setOnTouchListener(object : OnTouchListener {
             private var lastAngle = 0f
             private var currentRotation = 0f
@@ -105,13 +109,14 @@ class ObjectOnView @JvmOverloads constructor(
                 val objectView = this@ObjectOnView
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
-                        // Cache center coordinates to avoid repeated calculations
+                        // tính tâm object và góc ban đầu so với touch
                         cachedCenterX = objectView.x + objectView.width / 2f
                         cachedCenterY = objectView.y + objectView.height / 2f
                         currentRotation = objectView.rotation
 
                         val dx = event.rawX - cachedCenterX
                         val dy = event.rawY - cachedCenterY
+                        // Rad to degrees
                         lastAngle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
                     }
 
@@ -125,8 +130,7 @@ class ObjectOnView @JvmOverloads constructor(
 
                         val dx = event.rawX - cachedCenterX
                         val dy = event.rawY - cachedCenterY
-                        val currentAngle =
-                            Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
+                        val currentAngle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
 
                         var angleDiff = currentAngle - lastAngle
                         // Normalize angle difference
@@ -134,14 +138,13 @@ class ObjectOnView @JvmOverloads constructor(
                         while (angleDiff < -180f) angleDiff += 360f
 
                         // Smooth rotation with interpolation
-                        currentRotation += angleDiff * 0.8f // Damping factor for smoother rotation
+                        currentRotation += angleDiff * 1f // Hệ số giảm chấn
                         objectView.rotation = currentRotation
                         lastAngle = currentAngle
                     }
 
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        // Snap to nearest 15-degree increment for better UX (optional)
-                        val snapAngle = Math.round(currentRotation / 15f) * 15f
+                        val snapAngle = (currentRotation / 15f).roundToInt() * 15f
                         objectView.animate()
                             .rotation(snapAngle)
                             .setDuration(100)
@@ -159,10 +162,8 @@ class ObjectOnView @JvmOverloads constructor(
             private var currentScale = 1f
             private val MIN_SCALE = 0.7f
             private val MAX_SCALE = 1.5f
-
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val objectView = this@ObjectOnView
-
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
                         // Cache initial values
@@ -182,7 +183,7 @@ class ObjectOnView @JvmOverloads constructor(
 
                     MotionEvent.ACTION_MOVE -> {
                         val currentTime = System.currentTimeMillis()
-                        if (currentTime - lastUpdateTime < 16) { // ~60fps
+                        if (currentTime - lastUpdateTime < 16) {
                             return true
                         }
                         lastUpdateTime = currentTime
@@ -209,10 +210,10 @@ class ObjectOnView @JvmOverloads constructor(
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                         val snapValues = floatArrayOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f)
                         val targetScale =
-                            snapValues.minByOrNull { kotlin.math.abs(it - currentScale) }
+                            snapValues.minByOrNull { abs(it - currentScale) }
                                 ?: currentScale
 
-                        if (kotlin.math.abs(targetScale - currentScale) < 0.1f) {
+                        if (abs(targetScale - currentScale) < 0.1f) {
                             objectView.animate()
                                 .scaleX(targetScale)
                                 .scaleY(targetScale)
@@ -235,7 +236,6 @@ class ObjectOnView @JvmOverloads constructor(
         deselect()
     }
 
-    // Optimized method to update control icons scale
     private fun updateControlIconsScale(objectScale: Float) {
         val iconScale = (1f / objectScale).coerceIn(0.7f, 1.5f)
         btnEdit.scaleX = iconScale
@@ -260,6 +260,14 @@ class ObjectOnView @JvmOverloads constructor(
 
     fun setTextColor(color: Int) {
         tvDataText.setTextColor(color)
+    }
+
+    fun setTextBorder(border: Int) {
+        val drawable = GradientDrawable()
+        drawable.setColor(Color.TRANSPARENT)
+        drawable.setStroke(border, Color.BLACK)
+        drawable.cornerRadius = 16f
+        tvDataText.background = drawable
     }
 
     fun setFont(fontName: String) {

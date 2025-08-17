@@ -102,9 +102,6 @@ dependencies {
     // --- Coroutines ---
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_play_services_version")
 
-    // On-device Face Detection
-    implementation("com.google.mlkit:face-detection:16.1.7")
-
     // --- Lottie ---
     implementation("com.airbnb.android:lottie:6.4.0")
 
@@ -120,4 +117,6 @@ dependencies {
     // --- EventBus ---
     implementation("org.greenrobot:eventbus:3.3.1")
 
+    // --- ExifInterface ---
+    implementation("androidx.exifinterface:exifinterface:1.3.7")
 }

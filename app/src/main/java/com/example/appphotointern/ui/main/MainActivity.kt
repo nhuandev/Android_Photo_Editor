@@ -136,41 +136,41 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initEvent() {
-        binding.apply {
-            btnMenu.setOnClickListener {
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-
-            drawerMain.setNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.nav_menu_album -> {
-                        if (!isHasPermission(storagePermission)) {
-                            requestStoragePermissionLauncher.launch(storagePermission)
-                        } else {
-                            val intent = Intent(this@MainActivity, AlbumActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }
-
-                    R.id.nav_menu_bgr -> {
-
-                    }
-
-                    R.id.nav_menu_dev -> {
-
-                    }
-                }
-                drawerLayout.closeDrawer(GravityCompat.START)
-                true
-            }
-
-            val navHeaderBinding = NavHeaderBinding.bind(drawerMain.getHeaderView(0))
-            navHeaderBinding.btnCloseDraw.setOnClickListener {
-                drawerLayout.closeDrawer(GravityCompat.START)
-            }
-        }
-    }
+//    private fun initEvent() {
+//        binding.apply {
+//            btnMenu.setOnClickListener {
+//                drawerLayout.openDrawer(GravityCompat.START)
+//            }
+//
+//            drawerMain.setNavigationItemSelectedListener {
+//                when (it.itemId) {
+//                    R.id.nav_menu_album -> {
+//                        if (!isHasPermission(storagePermission)) {
+//                            requestStoragePermissionLauncher.launch(storagePermission)
+//                        } else {
+//                            val intent = Intent(this@MainActivity, AlbumActivity::class.java)
+//                            startActivity(intent)
+//                        }
+//                    }
+//
+//                    R.id.nav_menu_bgr -> {
+//
+//                    }
+//
+//                    R.id.nav_menu_dev -> {
+//
+//                    }
+//                }
+//                drawerLayout.closeDrawer(GravityCompat.START)
+//                true
+//            }
+//
+//            val navHeaderBinding = NavHeaderBinding.bind(drawerMain.getHeaderView(0))
+//            navHeaderBinding.btnCloseDraw.setOnClickListener {
+//                drawerLayout.closeDrawer(GravityCompat.START)
+//            }
+//        }
+//    }
 
     private fun initObserver() {
         viewModel.features.observe(this) { features ->

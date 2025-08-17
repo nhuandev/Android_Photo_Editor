@@ -23,26 +23,28 @@
             android:layout_gravity="center"
             android:scaleType="fitCenter" />
 
-        <com.example.appphotointern.views.FilterCameraView
-            android:id="@+id/view_filter_camera"
+        <com.example.appphotointern.views.FrameOnView
+            android:id="@+id/view_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="fitCenter" />
 
         <com.example.appphotointern.views.GridOverlayView
-            android:id="@+id/my_draw_view"
+            android:id="@+id/view_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />
 
     </FrameLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/sub_fragment_filter"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/view_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -204,16 +206,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_filter"
+        app:layout_constraintTop_toBottomOf="@id/btn_frame"
         app:layout_constraintVertical_bias="0.1"
         tools:ignore="MissingConstraints" />
 
     <ImageButton
-        android:id="@+id/btn_filter"
+        android:id="@+id/btn_frame"
         android:layout_width="@dimen/button_size_small"
         android:layout_height="@dimen/button_size_small"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_filter"
+        android:src="@drawable/ic_filter_frames"
         app:layout_constraintBottom_toTopOf="@+id/view_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -394,5 +396,16 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         app:defaultNavHost="true" />
+
+    <ProgressBar
+        android:id="@+id/progress_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

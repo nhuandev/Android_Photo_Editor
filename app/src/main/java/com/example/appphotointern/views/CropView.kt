@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toColorInt
+import kotlin.math.hypot
 
 class CropView @JvmOverloads constructor(
     context: Context,
@@ -18,11 +19,13 @@ class CropView @JvmOverloads constructor(
     private val overlayPaint = Paint().apply {
         color = "#80000000".toColorInt()
     }
+
     private val borderPaint = Paint().apply {
         color = Color.WHITE
         style = Paint.Style.STROKE
         strokeWidth = 4f
     }
+
     private val handlePaint = Paint().apply {
         color = Color.WHITE
         style = Paint.Style.FILL
@@ -34,11 +37,13 @@ class CropView @JvmOverloads constructor(
         strokeWidth = 2f
         alpha = 160
     }
+
     private val dotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         style = Paint.Style.FILL
         alpha = 200
     }
+
     private val dotRadius = 6f
     private val imageRect = RectF()
     private var cropRect = RectF(200f, 200f, 800f, 800f)
@@ -46,9 +51,13 @@ class CropView @JvmOverloads constructor(
     private var lastY = 0f
     private var activeHandle: Handle? = null
     private val handleRadius = 10f
-    private val touchArea = 60f // phạm vi nhạy để bắt handle
+    private val touchArea = 60f
 
-    enum class Handle { LEFT, TOP, RIGHT, BOTTOM, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, CENTER }
+    enum class Handle {
+        LEFT, TOP, RIGHT, BOTTOM,
+        TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT,
+        CENTER
+    }
 
     fun setImageBitmap(bm: Bitmap) {
         bitmap = bm
@@ -57,7 +66,6 @@ class CropView @JvmOverloads constructor(
 
     fun getCroppedBitmap(): Bitmap? {
         bitmap ?: return null
-
         // Giao giữa cropRect và imageRect
         val intersect = RectF(
             maxOf(cropRect.left, imageRect.left),
@@ -111,19 +119,12 @@ class CropView @JvmOverloads constructor(
         canvas.clipRect(cropRect, Region.Op.DIFFERENCE)
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), overlayPaint)
         canvas.restore()
-
-        // Viền crop
         canvas.drawRect(cropRect, borderPaint)
-
-        // Vẽ grid (2 dọc, 2 ngang => tạo lưới 3x3) và các dấu chấm ở các giao điểm giữa đường ngang & dọc
         drawGrid(canvas)
-
-        // Vẽ handle
         drawHandles(canvas)
     }
 
     private fun drawGrid(canvas: Canvas) {
-        // nếu cropRect chưa hợp lệ thì bỏ qua
         if (cropRect.width() <= 0 || cropRect.height() <= 0) return
 
         val thirdW = cropRect.width() / 3f
@@ -177,6 +178,7 @@ class CropView @JvmOverloads constructor(
                 val dy = event.y - lastY
                 when (activeHandle) {
                     Handle.CENTER -> cropRect.offset(dx, dy)
+                    // Thay đổi biên
                     Handle.LEFT -> cropRect.left += dx
                     Handle.RIGHT -> cropRect.right += dx
                     Handle.TOP -> cropRect.top += dy
@@ -235,7 +237,7 @@ class CropView @JvmOverloads constructor(
     }
 
     private fun isInCircle(x: Float, y: Float, cx: Float, cy: Float): Boolean {
-        return Math.hypot((x - cx).toDouble(), (y - cy).toDouble()) <= touchArea
+        return hypot((x - cx).toDouble(), (y - cy).toDouble()) <= touchArea
     }
 
     private fun ensureInsideBounds() {
@@ -248,7 +250,6 @@ class CropView @JvmOverloads constructor(
         if (cropRect.right > viewW) cropRect.right = viewW
         if (cropRect.bottom > viewH) cropRect.bottom = viewH
 
-        // Ngăn cropRect đảo chiều và giới hạn kích thước tối thiểu
         if (cropRect.width() < 100f) cropRect.right = cropRect.left + 100f
         if (cropRect.height() < 100f) cropRect.bottom = cropRect.top + 100f
     }

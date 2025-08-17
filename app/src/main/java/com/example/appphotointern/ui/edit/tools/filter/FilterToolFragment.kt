@@ -79,6 +79,7 @@ class FilterToolFragment() : Fragment() {
 
             // Load filter on image preview
             drawImageView.post {
+                // Get original bitmap
                 originalBitmap = drawImageView.getInitBmp() ?: return@post
                 editViewModel.loadFilter(originalBitmap)
             }

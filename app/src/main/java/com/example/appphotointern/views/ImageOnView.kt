@@ -28,12 +28,10 @@ class ImageOnView @JvmOverloads constructor(
     var imgB: Float = 0f
 
     private var currentToolDraw: ToolDraw? = null
-    private var overlayCanvas: Canvas? = null
-    private var overlayBmp: Bitmap? = null
-    private var bgrBmp: Bitmap? = null
-    private var bgBmp: Bitmap? = null // Original bitmap
-    private var initBmp: Bitmap? = null // Create copy bitmap crop
-    private var frameBmp: Bitmap? = null
+    private var overlayCanvas: Canvas? = null // Draw overlay on image
+    private var drawBitmap: Bitmap? = null
+    private var originBmp: Bitmap? = null // Original bitmap
+    private var initBmp: Bitmap? = null // Create copy bitmap use crop
 
     // Pen and line in feature draw
     private var mPath = Path()
@@ -51,14 +49,11 @@ class ImageOnView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        bgBmp?.let {
+        originBmp?.let {
             canvas.drawBitmap(it, imgL, imgT, null)
         }
-        overlayBmp?.let {
+        drawBitmap?.let {
             canvas.drawBitmap(it, 0f, 0f, null)
-        }
-        frameBmp?.let {
-            canvas.drawBitmap(it, imgL, imgT, null)
         }
     }
 
@@ -68,10 +63,10 @@ class ImageOnView @JvmOverloads constructor(
         val vh = height
         if (vw <= 0 || vh <= 0) return
         if (bmp != null) {
-            bgrBmp = bmp.copy(bmp.config ?: Bitmap.Config.ARGB_8888, true)
+            originBmp = bmp.copy(bmp.config ?: Bitmap.Config.ARGB_8888, true)
             val scale = min(vw.toFloat() / bmp.width, vh.toFloat() / bmp.height)
-            val sw = (bmp.width * scale).toInt()
-            val sh = (bmp.height * scale).toInt()
+            val sw = (bmp.width * scale).toInt() // Width image
+            val sh = (bmp.height * scale).toInt() // Height image
             val scaled = Bitmap.createScaledBitmap(bmp, sw, sh, true)
 
             imgL = (vw - sw) / 2f
@@ -79,18 +74,18 @@ class ImageOnView @JvmOverloads constructor(
             imgR = imgL + sw
             imgB = imgT + sh
 
-            bgBmp = scaled
+            originBmp = scaled
             initBmp = scaled.copy(scaled.config ?: Bitmap.Config.ARGB_8888, true)
         } else {
-            bgBmp = Bitmap.createBitmap(vw, vh, Bitmap.Config.ARGB_8888).apply {
+            originBmp = Bitmap.createBitmap(vw, vh, Bitmap.Config.ARGB_8888).apply {
                 eraseColor(Color.WHITE)
             }
             imgR = vw.toFloat()
             imgB = vh.toFloat()
         }
-        overlayBmp?.recycle()
-        overlayBmp = createBitmap(vw, vh).apply { eraseColor(Color.TRANSPARENT) }
-        overlayCanvas = Canvas(overlayBmp!!)
+        drawBitmap?.recycle()
+        drawBitmap = createBitmap(vw, vh).apply { eraseColor(Color.TRANSPARENT) }
+        overlayCanvas = Canvas(drawBitmap!!)
         invalidate()
     }
 
@@ -135,8 +130,8 @@ class ImageOnView @JvmOverloads constructor(
     }
 
     fun applyFilterOnImage(filter: (Bitmap) -> Bitmap) {
-        bgBmp?.let {
-            bgBmp = filter(it)
+        originBmp?.let {
+            originBmp = filter(it)
             invalidate()
         }
     }

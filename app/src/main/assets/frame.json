@@ -1,5 +1,9 @@
 [
   {
+    "name": "frame_1",
+    "folder": "frame"
+  },
+  {
     "name": "frame_2",
     "folder": "frame"
   },
