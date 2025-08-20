@@ -6,11 +6,13 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityStickerBinding
+import com.example.appphotointern.utils.BaseActivity
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.RESULT_STICKER
 
-class StickerActivity : AppCompatActivity() {
+class StickerActivity : BaseActivity() {
     private val binding by lazy { ActivityStickerBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<StickerViewModel>()
     private lateinit var stickerAdapter: StickerAdapter
@@ -25,7 +27,7 @@ class StickerActivity : AppCompatActivity() {
 
     private fun setUpToolBar() {
         setSupportActionBar(binding.toolBar)
-        supportActionBar?.title = null
+        supportActionBar?.title = getString(R.string.lb_sticker)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

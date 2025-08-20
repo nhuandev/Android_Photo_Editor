@@ -15,15 +15,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:id="@+id/tv_sticker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/lb_sticker"
-            android:textSize="@dimen/font_16"
-            android:textStyle="bold"
-            tools:ignore="SpUsage" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_sticker"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="@string/lb_sticker"-->
+<!--            android:textSize="@dimen/font_18"-->
+<!--            android:textStyle="bold"-->
+<!--            tools:ignore="SpUsage" />-->
 
     </androidx.appcompat.widget.Toolbar>
 

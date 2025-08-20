@@ -3,6 +3,7 @@ package com.example.appphotointern.ui.edit.tools.sticker
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -32,7 +33,7 @@ class StickerAdapter(
             val localFile = File(stickerDir, "${sticker.name}.webp")
 
             var isError = false
-            binding.progressSticker.visibility = android.view.View.VISIBLE
+            binding.progressSticker.visibility = View.VISIBLE
 
             val glideRequest = if (localFile.exists()) {
                 Glide.with(context)
@@ -55,7 +56,7 @@ class StickerAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         isError = true
-                        binding.progressSticker.visibility = android.view.View.GONE
+                        binding.progressSticker.visibility = View.GONE
                         return false
                     }
 
@@ -67,7 +68,7 @@ class StickerAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         isError = false
-                        binding.progressSticker.visibility = android.view.View.GONE
+                        binding.progressSticker.visibility = View.GONE
                         return false
                     }
                 }).into(binding.imgSticker)

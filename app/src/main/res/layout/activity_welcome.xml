@@ -16,12 +16,12 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/skip_button"
+        android:id="@+id/btn_prev"
         android:layout_width="@dimen/dimen_100"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/button_material_light"
         android:gravity="center"
-        android:text="@string/lb_skip"
+        android:text="@string/lb_prev"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +41,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/next_button"
-        app:layout_constraintStart_toEndOf="@+id/skip_button"
+        app:layout_constraintStart_toEndOf="@+id/btn_prev"
         app:layout_constraintTop_toBottomOf="@+id/welcome_view_pager"
         tools:ignore="MissingConstraints" />
 
@@ -54,9 +54,9 @@
         android:text="@string/lb_next"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/skip_button"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_prev"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/skip_button"
+        app:layout_constraintTop_toTopOf="@+id/btn_prev"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

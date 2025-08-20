@@ -71,6 +71,7 @@ class ImageOnView @JvmOverloads constructor(
 
             imgL = (vw - sw) / 2f
             imgT = (vh - sh) / 2f
+            // Use frame
             imgR = imgL + sw
             imgB = imgT + sh
 

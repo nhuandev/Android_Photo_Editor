@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SnapMagic</string>
+    <string name="lb_dev">Nhà phát triển</string>
+
+    <!-- Content screen welcome -->
+    <string name="lb_title_1">Chào mừng đến với App Editor!</string>
+    <string name="lb_desc_1">Khám phá công cụ sáng tạo mạnh mẽ giúp bạn biến ý tưởng thành hiện thực.</string>
+    <string name="lb_title_2">Sức mạnh của App Editor</string>
+    <string name="lb_desc_2">Tạo, chỉnh sửa và quản lý dự án của bạn với giao diện trực quan.</string>
+    <string name="lb_title_3">Cộng tác và Chia sẻ</string>
+    <string name="lb_desc_3">Làm việc hiệu quả với nhóm của bạn, chia sẻ sáng tạo và nhận phản hồi ngay lập tức.</string>
+    <string name="lb_next">Tiếp</string>
+    <string name="lb_prev">Trước</string>
+    <string name="lb_skip">Bỏ qua</string>
+    <string name="lb_start">Bắt đầu</string>
+    <string name="lb_made_by">Được tạo bởi&#160;</string>
+    <string name="lb_made_author">Phú Nhuận.</string>
+
+    <!-- Content Toasts -->
+    <string name="toast_save_success">Lưu thành công</string>
+    <string name="toast_save_fail">Lưu thất bại</string>
+    <string name="toast_load_fail">Tải thất bại</string>
+
+    <!--Content fragment home-->
+    <string name="lb_features">Tính năng</string>
+    <string name="feature_edited_photos">Ảnh đã chỉnh sửa</string>
+    <string name="lb_view_all">Xem tất cả</string>
+
+    <!--String layout permission-->
+    <string name="lb_permission_granted">Quyền đã được cấp</string>
+    <string name="lb_storage_permission">Quyền lưu trữ</string>
+    <string name="lb_camera_permission">Quyền máy ảnh</string>
+    <string name="lb_message_permission_gallery">Ứng dụng cần quyền lưu trữ để truy cập ảnh và video của bạn.</string>
+    <string name="lb_message_permission_camera">Ứng dụng cần quyền máy ảnh để chụp ảnh.</string>
+    <string name="lb_allow">Cho phép</string>
+    <string name="lb_cancel">Hủy</string>
+    <string name="lb_ok">Đồng ý</string>
+    <string name="lb_permission_denied">Quyền bị từ chối. Vui lòng bật trong cài đặt.</string>
+    <string name="lb_setting">Cài đặt</string>
+
+    <!--String preview-->
+    <string name="lb_edit">Chỉnh sửa</string>
+    <string name="lb_preview">Xem trước</string>
+
+    <!--String tools-->
+    <string name="lb_edit_photo">Chỉnh sửa ảnh</string>
+    <string name="lb_make_collage">Tạo ảnh ghép</string>
+    <string name="lb_background">Hình nền</string>
+    <string name="lb_camera">Máy ảnh</string>
+    <string name="lb_album">Album ảnh</string>
+    <string name="lb_premium">Premium</string>
+    <string name="lb_feature_text">Nhập văn bản</string>
+    <string name="lb_enter_text">Nhập văn bản của bạn…</string>
+
+    <!--Dialog-->
+    <string name="lb_notification">Thông báo</string>
+    <string name="lb_confirm">Xác nhận</string>
+    <string name="lb_out_confirm">Bạn có chắc chắn muốn thoát không?</string>
+    <string name="lb_save_confirm">Bạn có chắc chắn muốn lưu không?</string>
+
+    <!--Feature name-->
+    <string name="lb_crop">Cắt</string>
+    <string name="lb_frame">Khung</string>
+    <string name="lb_filter">Bộ lọc</string>
+    <string name="lb_sticker">Nhãn dán</string>
+    <string name="lb_text">Văn bản</string>
+    <string name="lb_draw">Vẽ</string>
+    <string name="lb_eraser">Tẩy</string>
+
+    <!--Picker-->
+    <string name="lb_size_default">Kích thước: 50</string>
+    <string name="lb_size">Kích thước: </string>
+    <string name="lb_choose_size">Chọn kích thước</string>
+    <string name="lb_choose_color">Chọn màu</string>
+
+    <string name="lb_delete_image">Đã xóa ảnh</string>
+    <string name="lb_delete_fail">Xóa ảnh thất bại</string>
+    <string name="lb_select_text">Chọn bên ngoài vùng hoặc văn bản</string>
+
+    <string name="lb_language">Ngôn ngữ</string>
+    <string name="lb_please_select_language">Vui lòng chọn ngôn ngữ</string>
+    <string name="lb_title_unlimited">Không giới hạn</string>
+    <string name="lb_title_access">Truy cập</string>
+    <string name="lb_free">Miễn phí</string>
+    <string name="lb_free_trial">Miễn phí thử nghiệm</string>
+    <string name="lb_desc_free">Sau 3 ngày, sẽ bắt đầu plan tuần</string>
+    <string name="lb_fee_yearly">Năm</string>
+    <string name="lb_desc_yearly">Giá tốt nhất. Hủy bất cứ lúc nào</string>
+    <string name="lb_continue">Tiếp tục</string>
+</resources>

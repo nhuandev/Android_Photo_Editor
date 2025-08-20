@@ -32,7 +32,6 @@
                 android:layout_gravity="start"
                 android:src="@mipmap/ic_menu"
                 android:tint="@color/gray"
-                android:visibility="gone"
                 tools:ignore="ContentDescription,UseAppTint" />
 
             <TextView
@@ -52,7 +51,7 @@
                 android:id="@+id/img_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:layout_gravity="end"
                 android:src="@mipmap/ic_launcher"
                 tools:ignore="ContentDescription" />
         </androidx.appcompat.widget.Toolbar>
@@ -80,25 +79,24 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/drawer_main"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        android:background="@color/white"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        android:visibility="gone"-->
-<!--        app:drawerLayoutCornerSize="0dp"-->
-<!--        app:headerLayout="@layout/nav_header"-->
-<!--        app:menu="@menu/nav_menu"-->
-<!--        tools:ignore="MissingConstraints">-->
-
-<!--    </com.google.android.material.navigation.NavigationView>-->
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_camera"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/drawer_main"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        app:drawerLayoutCornerSize="0dp"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@null"
+        app:menu="@menu/nav_menu"
+        tools:ignore="MissingConstraints">
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

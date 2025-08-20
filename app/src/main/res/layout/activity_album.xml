@@ -15,16 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:id="@+id/tv_album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/lb_album"
-            android:textSize="@dimen/font_16"
-            android:textStyle="bold"
-            tools:ignore="SpUsage" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

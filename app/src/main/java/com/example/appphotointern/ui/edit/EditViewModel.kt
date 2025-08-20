@@ -103,7 +103,9 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
         viewModelScope.launch(Dispatchers.IO) {
             _loading.postValue(true)
             try {
-                val previewBitmap = Bitmap.createScaledBitmap(originalBitmap, 200, 250, true)
+                // Dùng Bitmap.createScaledBitmap để scale ảnh gốc
+                // Tránh việc load ảnh quá lớn gây ra OutOfMemoryError
+                val previewBitmap = Bitmap.createScaledBitmap(originalBitmap, 1000, 1000, true)
 
                 val filters = listOf(
                     Filter("None", FilterType.NONE, previewBitmap),
@@ -187,8 +189,8 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     fun captureFinalImage(
         flMain: FrameLayout, drawImageView: ImageOnView, onCaptured: (Bitmap?) -> Unit
     ) {
+        _loading.postValue(true)
         viewModelScope.launch(Dispatchers.Default) {
-            _loading.postValue(true)
             val imgView = drawImageView
             val left = imgView.imgL.toInt()
             val top = imgView.imgT.toInt()

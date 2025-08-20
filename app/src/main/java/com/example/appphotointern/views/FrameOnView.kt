@@ -26,7 +26,6 @@ class FrameOnView @JvmOverloads constructor(
         bmFrame?.let {
             val viewWidth = width
             val viewHeight = height
-
             val dest = if (aspectRatio != null) {
                 val targetRatio = aspectRatio!!
 
@@ -36,8 +35,8 @@ class FrameOnView @JvmOverloads constructor(
                     scaledHeight = viewHeight
                     scaledWidth = (viewHeight * targetRatio).toInt()
                 } else {
-                    scaledWidth = viewWidth
                     scaledHeight = (viewWidth / targetRatio).toInt()
+                    scaledWidth = viewWidth
                 }
 
                 val left = (viewWidth - scaledWidth) / 2
@@ -57,7 +56,6 @@ class FrameOnView @JvmOverloads constructor(
             val targetHeight = height.takeIf { it > 0 } ?: bitmap.height
 
             val scaledBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
-
             bmFrame = scaledBitmap
         } else {
             bmFrame = null

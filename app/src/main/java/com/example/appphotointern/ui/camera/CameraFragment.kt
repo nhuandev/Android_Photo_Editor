@@ -2,6 +2,8 @@ package com.example.appphotointern.ui.camera
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -11,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +57,7 @@ import com.example.appphotointern.models.CameraTimer
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.ui.edit.EditViewModel
 import com.example.appphotointern.ui.edit.tools.frame.FrameAdapter
+import com.example.appphotointern.ui.main.MainActivity
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.utils.CUSTOM_FULL
 import com.example.appphotointern.utils.CUSTOM_RATIO_1_1
@@ -111,6 +115,8 @@ class CameraFragment : Fragment() {
 
     private fun initUI() {
         binding.apply {
+            btnTakePicture.isEnabled = isCapturing == false
+
             btnGrid.setImageResource(if (hasGrid) R.drawable.ic_grid_on else R.drawable.ic_grid_off)
 
             viewFinder.post {
@@ -174,7 +180,10 @@ class CameraFragment : Fragment() {
                 true
             }
 
-            btnTakePicture.setOnClickListener { takePhoto() }
+            btnTakePicture.setOnClickListener {
+                takePhoto()
+            }
+
             btnSwitchCamera.setOnClickListener { toggleCamera() }
 
             btnTimer.setOnClickListener { selectTimer() }
@@ -556,5 +565,11 @@ class CameraFragment : Fragment() {
         canvas.drawBitmap(scaledFrame, 0f, 0f, null)
         scaledFrame.recycle()
         return result
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        parentFragmentManager.popBackStack()
+        (requireActivity() as MainActivity).binding.fragmentCamera.visibility = View.GONE
     }
 }

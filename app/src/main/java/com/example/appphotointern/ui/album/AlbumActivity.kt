@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityAlbumBinding
 import com.example.appphotointern.ui.preview.PreviewFragment
+import com.example.appphotointern.utils.BaseActivity
 
-class AlbumActivity : AppCompatActivity() {
+class AlbumActivity : BaseActivity() {
     private val binding by lazy { ActivityAlbumBinding.inflate(layoutInflater) }
     private lateinit var adapterGallery: AlbumAdapter
     private val viewModel: AlbumViewModel by viewModels()
@@ -25,7 +26,7 @@ class AlbumActivity : AppCompatActivity() {
 
     private fun setUpToolBar() {
         setSupportActionBar(binding.toolBar)
-        supportActionBar?.title = null
+        supportActionBar?.title = getString(R.string.lb_album)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -34,7 +35,6 @@ class AlbumActivity : AppCompatActivity() {
             adapterGallery = AlbumAdapter(
                 emptyList(),
                 onClick = { uri ->
-                    Log.d("AlbumActivity", "Image clicked: $uri")
                     val previewFragment = PreviewFragment.newInstance(uri.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentNavHost, previewFragment)

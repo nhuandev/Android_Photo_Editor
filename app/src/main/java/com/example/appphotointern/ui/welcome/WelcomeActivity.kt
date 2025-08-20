@@ -1,6 +1,5 @@
 package com.example.appphotointern.ui.welcome
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.view.View
@@ -8,10 +7,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.appphotointern.R
 import com.example.appphotointern.repository.impl.WelcomeRepository
 import com.example.appphotointern.databinding.ActivityWelcomeBinding
-import com.example.appphotointern.ui.splash.SplashActivity
+import com.example.appphotointern.ui.main.MainActivity
+import com.example.appphotointern.utils.BaseActivity
 import kotlin.getValue
 
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : BaseActivity() {
     private val binding by lazy { ActivityWelcomeBinding.inflate(layoutInflater) }
     private val viewModelWelcome: WelcomeViewModel by lazy { WelcomeViewModel(WelcomeRepository(this)) }
 
@@ -48,9 +48,8 @@ class WelcomeActivity : AppCompatActivity() {
                     R.drawable.img_welcome_3
                 )
             )
-
             welcomeViewPager.adapter = pagerAdapter
-
+            welcomeViewPager.isUserInputEnabled = false
             welcomeViewPager.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -58,7 +57,7 @@ class WelcomeActivity : AppCompatActivity() {
                     if (position == pagerAdapter.itemCount - 1) {
                         btnStarted.visibility = View.VISIBLE
                         nextButton.visibility = View.GONE
-                        skipButton.visibility = View.GONE
+                        btnPrev.visibility = View.GONE
                     } else {
                         btnStarted.visibility = View.GONE
                     }
@@ -74,6 +73,10 @@ class WelcomeActivity : AppCompatActivity() {
                 }
             }
 
+            btnPrev.setOnClickListener {
+                welcomeViewPager.currentItem = welcomeViewPager.currentItem - 1
+            }
+
             btnStarted.setOnClickListener {
                 viewModelWelcome.markWelcome()
                 startMainActivity()
@@ -82,7 +85,8 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun startMainActivity() {
-        val intent = Intent(this@WelcomeActivity, SplashActivity::class.java)
+        val intent = Intent(this@WelcomeActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

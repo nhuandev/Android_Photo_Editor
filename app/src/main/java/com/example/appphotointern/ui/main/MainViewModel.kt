@@ -1,6 +1,7 @@
 package com.example.appphotointern.ui.main
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,35 +24,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _features = MutableLiveData<List<Feature>>()
     val features: LiveData<List<Feature>> = _features
 
-    init {
-        loadFeatures()
-    }
-
-    fun loadFeatures() {
+    fun loadFeatures(context: Context) {
         _loading.postValue(true)
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val listFeature = listOf(
                     Feature(
-                        application.getString(R.string.lb_edit_photo),
+                        context.getString(R.string.lb_edit_photo),
                         R.mipmap.ic_photo,
                         TAG_FEATURE_EDIT,
                         R.drawable.img_fea_1
                     ),
                     Feature(
-                        application.getString(R.string.lb_camera),
+                        context.getString(R.string.lb_camera),
                         R.mipmap.ic_camera,
                         TAG_FEATURE_CAMERA,
                         R.drawable.img_fea_3
                     ),
                     Feature(
-                        application.getString(R.string.lb_album),
+                        context.getString(R.string.lb_album),
                         R.mipmap.ic_album,
                         TAG_FEATURE_ALBUM,
                         R.drawable.img_fea_2
                     ),
                     Feature(
-                        application.getString(R.string.lb_background),
+                        context.getString(R.string.lb_background),
                         R.mipmap.ic_background,
                         TAG_FEATURE_BACKGROUND,
                         R.drawable.img_fea_3

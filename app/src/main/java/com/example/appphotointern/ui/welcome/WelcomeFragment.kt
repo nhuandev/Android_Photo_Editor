@@ -20,7 +20,7 @@ class WelcomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            title = it.getString(ARG_DESCRIPTION)
+            title = it.getString(ARG_TITLE)
             description = it.getString(ARG_DESCRIPTION)
             imageResource = it.getInt(ARG_IMAGE_RESOURCE)
         }

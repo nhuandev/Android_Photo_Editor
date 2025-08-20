@@ -2,12 +2,13 @@ package com.example.appphotointern.ui.edit.tools.text
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityTextBinding
+import com.example.appphotointern.utils.BaseActivity
 import com.example.appphotointern.utils.FEATURE_TEXT
 import com.example.appphotointern.utils.RESULT_TEXT
 
-class TextActivity : AppCompatActivity() {
+class TextActivity : BaseActivity() {
     private val binding by lazy { ActivityTextBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class TextActivity : AppCompatActivity() {
     private fun setUpToolBar() {
         setSupportActionBar(binding.toolBar)
         supportActionBar?.apply {
-            title = null
+            title = getString(R.string.lb_text)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }

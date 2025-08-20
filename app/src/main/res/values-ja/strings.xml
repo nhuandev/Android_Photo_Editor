@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SnapMagic</string>
+    <string name="lb_dev">開発者</string>
+
+    <!-- Content screen welcome -->
+    <string name="lb_title_1">アプリエディターへようこそ！</string>
+    <string name="lb_desc_1">アイデアを現実に変える強力なクリエイティブツールを発見しましょう。</string>
+    <string name="lb_title_2">アプリエディターの力</string>
+    <string name="lb_desc_2">直感的なインターフェースでプロジェクトを作成、編集、管理できます。</string>
+    <string name="lb_title_3">コラボレーションと共有</string>
+    <string name="lb_desc_3">チームと効率的に作業し、作品を共有して即時のフィードバックを得ましょう。</string>
+    <string name="lb_next">次へ</string>
+    <string name="lb_prev">前へ</string>
+    <string name="lb_skip">スキップ</string>
+    <string name="lb_start">開始</string>
+    <string name="lb_made_by">制作：&#160;</string>
+    <string name="lb_made_author">Phu Nhuan.</string>
+
+    <!-- Content Toasts -->
+    <string name="toast_save_success">保存に成功しました</string>
+    <string name="toast_save_fail">保存に失敗しました</string>
+    <string name="toast_load_fail">ロードに失敗しました</string>
+
+    <!--Content fragment home-->
+    <string name="lb_features">機能</string>
+    <string name="feature_edited_photos">編集済みの写真</string>
+    <string name="lb_view_all">すべて表示</string>
+
+    <!--String layout permission-->
+    <string name="lb_permission_granted">許可されました</string>
+    <string name="lb_storage_permission">ストレージの許可</string>
+    <string name="lb_camera_permission">カメラの許可</string>
+    <string name="lb_message_permission_gallery">このアプリは写真や動画にアクセスするためにストレージの許可が必要です。</string>
+    <string name="lb_message_permission_camera">このアプリは写真を撮影するためにカメラの許可が必要です。</string>
+    <string name="lb_allow">許可</string>
+    <string name="lb_cancel">キャンセル</string>
+    <string name="lb_ok">OK</string>
+    <string name="lb_permission_denied">許可が拒否されました。設定で有効にしてください。</string>
+    <string name="lb_setting">設定</string>
+
+    <!--String preview-->
+    <string name="lb_edit">編集</string>
+    <string name="lb_preview">プレビュー</string>
+
+    <!--String tools-->
+    <string name="lb_edit_photo">写真を編集</string>
+    <string name="lb_make_collage">コラージュを作成</string>
+    <string name="lb_background">背景</string>
+    <string name="lb_camera">カメラ</string>
+    <string name="lb_album">アルバム</string>
+    <string name="lb_premium">プレミアム</string>
+    <string name="lb_feature_text">テキスト入力</string>
+    <string name="lb_enter_text">テキストを入力してください…</string>
+
+    <!--Dialog-->
+    <string name="lb_notification">通知</string>
+    <string name="lb_confirm">確認</string>
+    <string name="lb_out_confirm">終了してもよろしいですか？</string>
+    <string name="lb_save_confirm">保存してもよろしいですか？</string>
+
+    <!--Feature name-->
+    <string name="lb_crop">切り抜き</string>
+    <string name="lb_frame">フレーム</string>
+    <string name="lb_filter">フィルター</string>
+    <string name="lb_sticker">ステッカー</string>
+    <string name="lb_text">テキスト</string>
+    <string name="lb_draw">描画</string>
+    <string name="lb_eraser">消しゴム</string>
+
+    <!--Picker-->
+    <string name="lb_size_default">サイズ: 50</string>
+    <string name="lb_size">サイズ: </string>
+    <string name="lb_choose_size">サイズを選択</string>
+    <string name="lb_choose_color">色を選択</string>
+
+    <string name="lb_delete_image">画像を削除しました</string>
+    <string name="lb_delete_fail">画像の削除に失敗しました</string>
+    <string name="lb_select_text">範囲外またはテキストを選択してください</string>
+
+    <string name="lb_language">言語</string>
+    <string name="lb_please_select_language">言語を選択してください</string>
+    <string name="lb_title_unlimited">無制限</string>
+    <string name="lb_title_access">アクセス</string>
+    <string name="lb_free">無料</string>
+    <string name="lb_free_trial">無料トライアル</string>
+    <string name="lb_desc_free">3日経過すると、週ごとのプランが始まります</string>
+    <string name="lb_fee_yearly">年間</string>
+    <string name="lb_desc_yearly">ベスト値。いつでもキャンセル</string>
+    <string name="lb_continue">続ける</string>
+</resources>

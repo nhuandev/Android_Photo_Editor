@@ -22,11 +22,11 @@
 
         <ImageView
             android:id="@+id/btn_close"
-            android:layout_width="@dimen/dimen_26"
-            android:layout_height="@dimen/dimen_26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginStart="@dimen/dimen_6"
-            android:src="@drawable/ic_arrow_back_24"
+            android:layout_marginStart="@dimen/dimen_14"
+            android:src="@drawable/ic_arrow_back"
             android:tint="@color/black"
             tools:ignore="ContentDescription,UseAppTint" />
 

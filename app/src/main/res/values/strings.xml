@@ -10,6 +10,7 @@
     <string name="lb_title_3">Collaborate and Share</string>
     <string name="lb_desc_3">Work effectively with your team, share your creations, and get instant feedback.</string>
     <string name="lb_next">Next</string>
+    <string name="lb_prev">Prev</string>
     <string name="lb_skip">Skip</string>
     <string name="lb_start">Get Started</string>
     <string name="lb_made_by">Made by&#160;</string>
@@ -18,6 +19,7 @@
     <!-- Content Toasts -->
     <string name="toast_save_success">Save success</string>
     <string name="toast_save_fail">Save fail</string>
+    <string name="toast_load_fail">Load fail</string>
 
     <!--Content fragment home-->
     <string name="lb_features">Features</string>
@@ -44,6 +46,7 @@
     <string name="lb_edit_photo">Edit Photo</string>
     <string name="lb_make_collage">Make a Collage</string>
     <string name="lb_background">Backgrounds</string>
+    <string name="lb_premium">Premium</string>
     <string name="lb_camera">Camera</string>
     <string name="lb_album">Album Photo</string>
     <string name="lb_feature_text">Enter Text</string>
@@ -74,4 +77,15 @@
     <string name="lb_delete_fail">Image delete fail</string>
     <string name="lb_select_text">Select outside the area or the text</string>
 
+    <string name="lb_language">Language</string>
+    <string name="lb_please_select_language">Please select language</string>
+
+    <string name="lb_title_unlimited">UNLIMITED</string>
+    <string name="lb_title_access">ACCESS</string>
+    <string name="lb_free">FREE</string>
+    <string name="lb_free_trial">FREE TRIAL</string>
+    <string name="lb_desc_free">After 3 days, weekly plan will start</string>
+    <string name="lb_fee_yearly">YEARLY</string>
+    <string name="lb_desc_yearly">Best value.\nCancel Anytime</string>
+    <string name="lb_continue">Continue</string>
 </resources>

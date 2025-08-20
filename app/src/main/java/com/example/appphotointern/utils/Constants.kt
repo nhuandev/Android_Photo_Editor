@@ -2,6 +2,7 @@ package com.example.appphotointern.utils
 
 const val PREFS_NAME = "MyPrefsAccount"
 const val KEY_SEEN_WELCOME = "hasSeenWelcome"
+const val KEY_CHOOSE_LANGUAGE = "hasChooseLanguage"
 const val SPLASH_DELAY: Long = 2000
 
 // WelcomeFragment
@@ -21,12 +22,8 @@ const val TAG_FEATURE_EDIT = 1
 const val TAG_FEATURE_CAMERA = 2
 const val TAG_FEATURE_ALBUM = 3
 const val TAG_FEATURE_BACKGROUND = 4
-const val FEATURE_CROP = "Crop"
-const val FEATURE_FRAME = "Frame"
 const val FEATURE_STICKER = "Sticker"
-const val FEATURE_FILTER = "Filter"
 const val FEATURE_TEXT = "Text"
-const val FEATURE_DRAW = "Draw"
 
 // Result code
 const val RESULT_STICKER = 2
@@ -44,6 +41,8 @@ const val CUSTOM_FULL = 4
 
 // EventBus
 const val CROP_CLOSED = "CROP_CLOSED"
+
+const val KEY_LANGUAGE = "app_language"
 
 
 

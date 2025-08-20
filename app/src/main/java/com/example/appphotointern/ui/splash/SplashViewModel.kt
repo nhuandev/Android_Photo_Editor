@@ -7,4 +7,8 @@ class SplashViewModel(private val repository: SplashRepository) : ViewModel() {
     fun hasScreenWelcome(): Boolean{
        return repository.hasScreenWelcome()
     }
+
+    fun hasScreenLanguage(): Boolean{
+        return repository.hasScreenLanguage()
+    }
 }

@@ -82,6 +82,7 @@ dependencies {
     // AppCheck Providers
     implementation("com.google.firebase:firebase-appcheck-debug:17.0.1")
     implementation("com.google.firebase:firebase-appcheck-playintegrity:17.0.1")
+    implementation("com.google.firebase:firebase-analytics:23.0.0")
 
     // --- Dependency Injection (Hilt) ---
     implementation("com.google.dagger:hilt-android:$hilt_version")
@@ -104,9 +105,6 @@ dependencies {
 
     // --- Lottie ---
     implementation("com.airbnb.android:lottie:6.4.0")
-
-    // --- Cropper ---
-    implementation("com.vanniktech:android-image-cropper:4.6.0")
 
     // --- Color Picker ---
     implementation("com.github.Dhaval2404:ColorPicker:2.3")

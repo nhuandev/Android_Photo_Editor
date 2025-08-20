@@ -12,6 +12,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.appphotointern.databinding.FragmentPreviewBinding
+import com.example.appphotointern.firebase.AnalyticsManager
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.IMAGE_URI
 
@@ -47,6 +48,11 @@ class PreviewFragment : Fragment() {
     private fun initEvent() {
         binding.apply {
             btnEdit.setOnClickListener {
+                AnalyticsManager.logEvent(
+                    "edit_image",
+                    mapOf("image_uri" to imageUri.toString())
+                )
+
                 val intent = Intent(requireContext(), EditActivity::class.java)
                 intent.putExtra(IMAGE_URI, imageUri)
                 startActivity(intent)
@@ -83,8 +89,8 @@ class PreviewFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 

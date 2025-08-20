@@ -26,6 +26,7 @@ import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.ui.edit.tools.text.TextActivity
 import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
+import com.example.appphotointern.utils.BaseActivity
 import com.example.appphotointern.utils.CROP_CLOSED
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.FEATURE_STICKER
@@ -40,7 +41,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class EditActivity : AppCompatActivity() {
+class EditActivity : BaseActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
     private val editViewModel: EditViewModel by viewModels()
     private lateinit var editAdapter: EditAdapter
@@ -54,6 +55,7 @@ class EditActivity : AppCompatActivity() {
     private lateinit var frameTool: FrameToolFragment
     private lateinit var textTool: TextToolFragment
     private lateinit var drawTool: DrawToolFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -64,7 +66,6 @@ class EditActivity : AppCompatActivity() {
         initObserver()
     }
 
-    // Register activity result
     private val activityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -73,19 +74,23 @@ class EditActivity : AppCompatActivity() {
                 RESULT_STICKER -> {
                     val uri = result.data?.getStringExtra(FEATURE_STICKER)
                     val bitmap = BitmapFactory.decodeFile(uri)
-                    val objetView = ObjectOnView(this@EditActivity)
-                    objetView.setImage(bitmap)
-                    val params = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT
-                    )
-                    params.leftMargin = 100
-                    params.topMargin = 100
-                    binding.flMain.addView(objetView, params)
+                    bitmap?.let {
+                        val objetView = ObjectOnView(this@EditActivity)
+                        objetView.setImage(bitmap)
+                        val params = FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        params.leftMargin = 100
+                        params.topMargin = 100
+                        binding.flMain.addView(objetView, params)
+                    } ?: run {
+                        toast(R.string.toast_load_fail)
+                    }
                 }
 
                 RESULT_TEXT -> {
-                    val dataText = result.data?.getStringExtra(FEATURE_TEXT)
+                    val dataText = result.data?.getStringExtra(FEATURE_TEXT)?.trim()
                     if (!dataText.isNullOrBlank()) {
                         objectOnView?.setText(dataText) ?: run {
                             val newView = ObjectOnView(this@EditActivity)
@@ -143,7 +148,7 @@ class EditActivity : AppCompatActivity() {
                 setDependencies(drawImageView, editViewModel)
             }
 
-            editAdapter = EditAdapter(object : EditAdapter.OnItemSelected {
+            editAdapter = EditAdapter(this@EditActivity, object : EditAdapter.OnItemSelected {
                 override fun onItemSelected(toolType: ToolType) {
                     // Remove fragment if current tool is same
                     if (currentTool == toolType) {
@@ -203,7 +208,7 @@ class EditActivity : AppCompatActivity() {
                                 if (it.isText()) {
                                     textTool = TextToolFragment()
                                     supportFragmentManager.beginTransaction()
-                                        .replace(binding.frameSubTools.id, textTool)
+                                        .replace(frameSubTools.id, textTool)
                                         .commit()
                                     currentTool = toolType
                                 } else {
@@ -284,9 +289,7 @@ class EditActivity : AppCompatActivity() {
         imageUri?.let {
             binding.drawImageView.post {
                 try {
-                    val bitmap = ImageOrientation.decodeRotated(
-                        this.contentResolver, it
-                    )
+                    val bitmap = ImageOrientation.decodeRotated(this.contentResolver, it)
                     bitmap?.let {
                         binding.drawImageView.apply {
                             setImageBitmap(bitmap)
@@ -396,9 +399,5 @@ class EditActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

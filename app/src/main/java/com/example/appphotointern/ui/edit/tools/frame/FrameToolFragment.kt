@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,12 +22,6 @@ class FrameToolFragment(
     private val binding get() = _binding!!
     private lateinit var frameAdapter: FrameAdapter
     private var activeFrame: Frame? = null
-
-    private val frameCache: LruCache<Int, Bitmap> by lazy {
-        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
-        val cacheSize = maxMemory / 8
-        LruCache<Int, Bitmap>(cacheSize)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,10 +75,6 @@ class FrameToolFragment(
                         Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
                     bitmap.recycle()
                     imageLayerController.addFrame(scaledBitmap)
-                    frameCache.put(
-                        file.absolutePath.hashCode(),
-                        scaledBitmap
-                    )
                     activeFrame = frame
                 }
             }

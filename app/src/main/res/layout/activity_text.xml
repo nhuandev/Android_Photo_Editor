@@ -14,16 +14,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:id="@+id/tv_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/lb_feature_text"
-            android:textSize="@dimen/font_18"
-            android:textStyle="bold"
-            tools:ignore="SpUsage" />
-
         <ImageView
             android:id="@+id/btn_done"
             android:layout_width="@dimen/dimen_36"

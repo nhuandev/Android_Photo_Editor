@@ -44,7 +44,7 @@ class CropView @JvmOverloads constructor(
         alpha = 200
     }
 
-    private val dotRadius = 6f
+    private val dotRadius = 10f
     private val imageRect = RectF()
     private var cropRect = RectF(200f, 200f, 800f, 800f)
     private var lastX = 0f
@@ -132,6 +132,7 @@ class CropView @JvmOverloads constructor(
 
         val x1 = cropRect.left + thirdW
         val x2 = cropRect.left + 2 * thirdW
+
         val y1 = cropRect.top + thirdH
         val y2 = cropRect.top + 2 * thirdH
 
@@ -157,6 +158,7 @@ class CropView @JvmOverloads constructor(
         canvas.drawCircle(cropRect.right, cropRect.top, handleRadius, handlePaint)
         canvas.drawCircle(cropRect.left, cropRect.bottom, handleRadius, handlePaint)
         canvas.drawCircle(cropRect.right, cropRect.bottom, handleRadius, handlePaint)
+
         // Cạnh
         canvas.drawCircle(cx, cropRect.top, handleRadius, handlePaint)
         canvas.drawCircle(cx, cropRect.bottom, handleRadius, handlePaint)

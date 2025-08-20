@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SnapMagic</string>
+    <string name="lb_dev">Developer</string>
+
+    <!-- Content screen welcome -->
+    <string name="lb_title_1">Welcome to App Editor!</string>
+    <string name="lb_desc_1">Discover a powerful creative tool that helps you turn ideas into reality.</string>
+    <string name="lb_title_2">The Power of App Editor</string>
+    <string name="lb_desc_2">Create, edit, and manage your projects with an intuitive interface.</string>
+    <string name="lb_title_3">Collaborate and Share</string>
+    <string name="lb_desc_3">Work effectively with your team, share your creations, and get instant feedback.</string>
+    <string name="lb_next">Next</string>
+    <string name="lb_prev">Prev</string>
+    <string name="lb_skip">Skip</string>
+    <string name="lb_start">Get Started</string>
+    <string name="lb_made_by">Made by&#160;</string>
+    <string name="lb_made_author">Phu Nhuan.</string>
+
+    <!-- Content Toasts -->
+    <string name="toast_save_success">Save success</string>
+    <string name="toast_save_fail">Save fail</string>
+    <string name="toast_load_fail">Load fail</string>
+
+    <!--Content fragment home-->
+    <string name="lb_features">Features</string>
+    <string name="feature_edited_photos">Edited Photos</string>
+    <string name="lb_view_all">View all</string>
+
+    <!--String layout permission-->
+    <string name="lb_permission_granted">Permission Granted</string>
+    <string name="lb_storage_permission">Storage Permission</string>
+    <string name="lb_camera_permission">Camera Permission</string>
+    <string name="lb_message_permission_gallery">This app requires storage permission to access your photos and videos.</string>
+    <string name="lb_message_permission_camera">This app requires camera permission to take photos.</string>
+    <string name="lb_allow">Allow</string>
+    <string name="lb_cancel">Cancel</string>
+    <string name="lb_ok">Ok</string>
+    <string name="lb_permission_denied">Permission Denied. Please enable it in settings.</string>
+    <string name="lb_setting">Settings</string>
+
+    <!--String preview-->
+    <string name="lb_edit">Edit</string>
+    <string name="lb_preview">Preview</string>
+
+    <!--String tools-->
+    <string name="lb_edit_photo">Edit Photo</string>
+    <string name="lb_make_collage">Make a Collage</string>
+    <string name="lb_background">Backgrounds</string>
+    <string name="lb_camera">Camera</string>
+    <string name="lb_premium">Premium</string>
+    <string name="lb_album">Album Photo</string>
+    <string name="lb_feature_text">Enter Text</string>
+    <string name="lb_enter_text">Enter your text…</string>
+
+    <!--Dialog-->
+    <string name="lb_notification">Notification</string>
+    <string name="lb_confirm">Confirm</string>
+    <string name="lb_out_confirm">Are you sure exit ? </string>
+    <string name="lb_save_confirm">Are you sure save ? </string>
+
+    <!--Feature name-->
+    <string name="lb_crop">Crop</string>
+    <string name="lb_frame">Frame</string>
+    <string name="lb_filter">Filter</string>
+    <string name="lb_sticker">Sticker</string>
+    <string name="lb_text">Text</string>
+    <string name="lb_draw">Draw</string>
+    <string name="lb_eraser">Eraser</string>
+
+    <!--Picker-->
+    <string name="lb_size_default">Size: 50</string>
+    <string name="lb_size">Size: </string>
+    <string name="lb_choose_size">Choose size</string>
+    <string name="lb_choose_color">Choose color</string>
+
+    <string name="lb_delete_image">Image Deleted</string>
+    <string name="lb_delete_fail">Image delete fail</string>
+    <string name="lb_select_text">Select outside the area or the text</string>
+
+    <string name="lb_language">Language</string>
+    <string name="lb_please_select_language">Please select language</string>
+    <string name="lb_title_unlimited">UNLIMITED</string>
+    <string name="lb_title_access">ACCESS</string>
+    <string name="lb_free">FREE</string>
+    <string name="lb_free_trial">FREE TRIAL</string>
+    <string name="lb_desc_free">After 3 days, weekly plan will start</string>
+    <string name="lb_fee_yearly">YEARLY</string>
+    <string name="lb_desc_yearly">Best value. Cancel Anytime</string>
+    <string name="lb_continue">Continue</string>
+</resources>

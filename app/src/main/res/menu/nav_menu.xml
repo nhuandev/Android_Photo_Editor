@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/nav_menu_premium"
+        android:icon="@drawable/img_premium"
+        android:title="@string/lb_premium" />
+
+    <item
         android:id="@+id/nav_menu_album"
         android:icon="@mipmap/ic_photo"
         android:title="@string/lb_album" />
 
     <item
-        android:id="@+id/nav_menu_bgr"
-        android:icon="@mipmap/ic_background"
-        android:title="@string/lb_background" />
+        android:id="@+id/nav_menu_language"
+        android:icon="@drawable/ic_language"
+        android:title="@string/lb_language" />
 
     <item
         android:id="@+id/nav_menu_dev"
