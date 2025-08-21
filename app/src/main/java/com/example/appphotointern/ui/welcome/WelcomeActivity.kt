@@ -8,7 +8,7 @@ import com.example.appphotointern.R
 import com.example.appphotointern.repository.impl.WelcomeRepository
 import com.example.appphotointern.databinding.ActivityWelcomeBinding
 import com.example.appphotointern.ui.main.MainActivity
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
 import kotlin.getValue
 
 class WelcomeActivity : BaseActivity() {

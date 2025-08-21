@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.appphotointern.databinding.FragmentPreviewBinding
-import com.example.appphotointern.firebase.AnalyticsManager
+import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.IMAGE_URI
 

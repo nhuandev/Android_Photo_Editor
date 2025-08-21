@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appphotointern.databinding.FragmentToolFrameBinding
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.ui.edit.EditViewModel
-import com.example.appphotointern.utils.ImageLayer
 
 class FrameToolFragment(
-    private val imageLayerController: ImageLayer,
+    private val imageLayerController: FrameLayer,
     private val editViewModel: EditViewModel,
 ) : Fragment() {
     private var _binding: FragmentToolFrameBinding? = null

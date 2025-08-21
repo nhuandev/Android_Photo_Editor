@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityAlbumBinding
 import com.example.appphotointern.ui.preview.PreviewFragment
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
 
 class AlbumActivity : BaseActivity() {
     private val binding by lazy { ActivityAlbumBinding.inflate(layoutInflater) }

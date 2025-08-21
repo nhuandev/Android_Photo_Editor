@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityStickerBinding
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.RESULT_STICKER
 

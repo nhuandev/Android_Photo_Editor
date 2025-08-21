@@ -1,8 +1,8 @@
-package com.example.appphotointern.utils
+package com.example.appphotointern.common
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
-import com.example.appphotointern.ui.language.LanguageManager
+import com.example.appphotointern.utils.LanguageManager
 
 abstract class BaseActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {

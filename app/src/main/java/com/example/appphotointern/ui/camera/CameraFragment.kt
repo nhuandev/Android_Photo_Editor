@@ -2,8 +2,6 @@ package com.example.appphotointern.ui.camera
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -13,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +48,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentCameraBinding
+import com.example.appphotointern.extention.circularClose
+import com.example.appphotointern.extention.circularReveal
 import com.example.appphotointern.extention.toast
+import com.example.appphotointern.extention.toggleButton
 import com.example.appphotointern.models.AspectRatioModel
 import com.example.appphotointern.models.CameraTimer
 import com.example.appphotointern.models.Frame
@@ -61,11 +61,8 @@ import com.example.appphotointern.ui.main.MainActivity
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.utils.CUSTOM_FULL
 import com.example.appphotointern.utils.CUSTOM_RATIO_1_1
-import com.example.appphotointern.utils.circularClose
-import com.example.appphotointern.utils.circularReveal
 import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.utils.outputDirectory
-import com.example.appphotointern.utils.toggleButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityTextBinding
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.utils.FEATURE_TEXT
 import com.example.appphotointern.utils.RESULT_TEXT
 

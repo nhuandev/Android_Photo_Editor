@@ -11,7 +11,8 @@ import com.example.appphotointern.databinding.ActivityLanguageBinding
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.models.Language
 import com.example.appphotointern.ui.welcome.WelcomeActivity
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
+import com.example.appphotointern.utils.LanguageManager
 import kotlin.getValue
 
 class LanguageActivity : BaseActivity() {

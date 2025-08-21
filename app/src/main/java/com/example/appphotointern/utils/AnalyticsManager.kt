@@ -1,4 +1,4 @@
-package com.example.appphotointern.firebase
+package com.example.appphotointern.utils
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics

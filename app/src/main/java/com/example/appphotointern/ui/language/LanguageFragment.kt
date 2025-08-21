@@ -11,6 +11,7 @@ import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentLanguageBinding
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.models.Language
+import com.example.appphotointern.utils.LanguageManager
 
 class LanguageFragment : DialogFragment() {
     private var _binding: FragmentLanguageBinding? = null
@@ -70,6 +71,9 @@ class LanguageFragment : DialogFragment() {
     private fun initObserver() {
         languageViewModel.languages.observe(viewLifecycleOwner) { languages ->
             languageAdapter.updateLanguage(languages)
+
+            val savedCode = LanguageManager.getLanguage(requireContext())
+            languageAdapter.setSelectedLanguage(savedCode)
         }
     }
 }

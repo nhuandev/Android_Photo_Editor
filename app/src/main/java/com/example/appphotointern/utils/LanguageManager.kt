@@ -1,11 +1,10 @@
-package com.example.appphotointern.ui.language
+package com.example.appphotointern.utils
 
 import android.content.Context
 import android.content.res.Configuration
 import android.preference.PreferenceManager
-import java.util.Locale
 import androidx.core.content.edit
-import com.example.appphotointern.utils.KEY_LANGUAGE
+import java.util.Locale
 
 object LanguageManager {
     fun setLanguage(context: Context, langCode: String) {

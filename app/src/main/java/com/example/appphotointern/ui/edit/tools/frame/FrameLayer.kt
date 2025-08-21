@@ -1,4 +1,4 @@
-package com.example.appphotointern.utils
+package com.example.appphotointern.ui.edit.tools.frame
 
 import android.graphics.Bitmap
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.ImageView
 import com.example.appphotointern.R
 import com.example.appphotointern.views.ImageOnView
 
-class ImageLayer(frameLayout: FrameLayout) {
+class FrameLayer(frameLayout: FrameLayout) {
     private val frameOverlay: ImageView = frameLayout.findViewById(R.id.image_frame_overlay)
     val drawImageView: ImageOnView = frameLayout.findViewById(R.id.draw_image_view)
 

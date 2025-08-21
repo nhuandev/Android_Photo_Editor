@@ -24,7 +24,7 @@ import com.example.appphotointern.ui.camera.CameraFragment
 import com.example.appphotointern.ui.language.LanguageFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.ui.purchase.FragmentPurchase
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
 import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA

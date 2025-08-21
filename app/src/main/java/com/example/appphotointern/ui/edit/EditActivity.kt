@@ -26,13 +26,13 @@ import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.ui.edit.tools.text.TextActivity
 import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
-import com.example.appphotointern.utils.BaseActivity
+import com.example.appphotointern.common.BaseActivity
+import com.example.appphotointern.ui.edit.tools.frame.FrameLayer
 import com.example.appphotointern.utils.CROP_CLOSED
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.FEATURE_TEXT
 import com.example.appphotointern.utils.IMAGE_URI
-import com.example.appphotointern.utils.ImageLayer
 import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.utils.RESULT_STICKER
 import com.example.appphotointern.utils.RESULT_TEXT
@@ -45,7 +45,7 @@ class EditActivity : BaseActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
     private val editViewModel: EditViewModel by viewModels()
     private lateinit var editAdapter: EditAdapter
-    private lateinit var imageLayer: ImageLayer
+    private lateinit var imageLayer: FrameLayer
 
     private var objectOnView: ObjectOnView? = null
     private var uriImageSaved: String? = null
@@ -140,7 +140,7 @@ class EditActivity : BaseActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initUI() {
         binding.apply {
-            imageLayer = ImageLayer(flMain)
+            imageLayer = FrameLayer(flMain)
             drawTool = DrawToolFragment.newInstance().apply {
                 setDependencies(drawImageView, editViewModel)
             }

@@ -33,7 +33,8 @@ class LanguageAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageViewHolder {
-        val binding = ItemLanguageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemLanguageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LanguageViewHolder(binding)
     }
 
@@ -42,8 +43,18 @@ class LanguageAdapter(
         holder.bind(language, position == selectedPosition)
     }
 
-    override fun getItemCount(): Int {
-        return languageList.size
+    override fun getItemCount() = languageList.size
+
+    private fun updateSelectedPosition(position: Int) {
+        if (selectedPosition == position) return
+
+        val previousSelectedPosition = selectedPosition
+        selectedPosition = position
+
+        if (previousSelectedPosition != RecyclerView.NO_POSITION) {
+            notifyItemChanged(previousSelectedPosition)
+        }
+        notifyItemChanged(selectedPosition)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -52,21 +63,19 @@ class LanguageAdapter(
         notifyDataSetChanged()
     }
 
-    private fun updateSelectedPosition(position: Int) {
-        if(selectedPosition == position) return
-
-        val previousSelectedPosition = selectedPosition
-        selectedPosition = position
-
-        if(previousSelectedPosition != RecyclerView.NO_POSITION) {
-            notifyItemChanged(previousSelectedPosition)
-        }
-        notifyItemChanged(selectedPosition)
-    }
-
     fun getSelectedLanguage(): Language? {
         return if (selectedPosition != RecyclerView.NO_POSITION) {
             languageList[selectedPosition]
         } else null
+    }
+
+    fun setSelectedLanguage(currentLanguageCode: String) {
+        val index = languageList.indexOfFirst { it.code == currentLanguageCode }
+        if (index != -1) {
+            val oldPos = selectedPosition
+            selectedPosition = index
+            if (oldPos != RecyclerView.NO_POSITION) notifyItemChanged(oldPos)
+            notifyItemChanged(selectedPosition)
+        }
     }
 }

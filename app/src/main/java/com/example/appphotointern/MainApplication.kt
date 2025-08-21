@@ -2,8 +2,8 @@ package com.example.appphotointern
 
 import android.app.Application
 import android.content.Context
-import com.example.appphotointern.firebase.AnalyticsManager
-import com.example.appphotointern.ui.language.LanguageManager
+import com.example.appphotointern.utils.AnalyticsManager
+import com.example.appphotointern.utils.LanguageManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.appcheck.FirebaseAppCheck
