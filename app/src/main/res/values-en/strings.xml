@@ -88,4 +88,8 @@
     <string name="lb_fee_yearly">YEARLY</string>
     <string name="lb_desc_yearly">Best value. Cancel Anytime</string>
     <string name="lb_continue">Continue</string>
+
+    <string name="lb_sticker_basic">Basic</string>
+    <string name="lb_sticker_festival">Festival</string>
+    <string name="lb_sticker_creative">Creative</string>
 </resources>

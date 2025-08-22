@@ -88,4 +88,8 @@
     <string name="lb_fee_yearly">Năm</string>
     <string name="lb_desc_yearly">Giá tốt nhất. Hủy bất cứ lúc nào</string>
     <string name="lb_continue">Tiếp tục</string>
+
+    <string name="lb_sticker_basic">Cơ bản</string>
+    <string name="lb_sticker_festival">Lễ hội</string>
+    <string name="lb_sticker_creative">Sáng tạo</string>
 </resources>

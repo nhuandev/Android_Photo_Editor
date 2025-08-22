@@ -23,9 +23,10 @@ import com.example.appphotointern.ui.album.AlbumActivity
 import com.example.appphotointern.ui.camera.CameraFragment
 import com.example.appphotointern.ui.language.LanguageFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
-import com.example.appphotointern.ui.purchase.FragmentPurchase
+import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.extention.toast
+import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.KEY_BANNER
 import com.example.appphotointern.utils.KEY_BANNER_IMAGE_URL
@@ -154,7 +155,6 @@ class MainActivity : BaseActivity() {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = adapterHome
         }
-
         binding.drawerMain.itemIconTintList = null
     }
 
@@ -169,11 +169,8 @@ class MainActivity : BaseActivity() {
             drawerMain.setNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.nav_menu_premium -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_camera, FragmentPurchase())
-                            .addToBackStack(null)
-                            .commit()
-                        fragmentCamera.visibility = View.VISIBLE
+                        val intent = Intent(this@MainActivity, PurchaseActivity::class.java)
+                        startActivity(intent)
                     }
 
                     R.id.nav_menu_album -> {
@@ -188,6 +185,11 @@ class MainActivity : BaseActivity() {
                     R.id.nav_menu_language -> {
                         val languageFragment = LanguageFragment()
                         languageFragment.show(supportFragmentManager, languageFragment.tag)
+                    }
+
+                    R.id.nav_menu_sticker -> {
+                        val intent = Intent(this@MainActivity, StickerActivity::class.java)
+                        startActivity(intent)
                     }
 
                     R.id.nav_menu_dev -> {

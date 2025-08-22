@@ -1,0 +1,190 @@
+[
+  {
+    "categoryName": "Cơ bản",
+    "categoryId": "sticker_basic",
+    "stickers": [
+      {
+        "name": "icon_apache_helicopter",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_bottle",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_convertible",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_engine_oil",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_favorite",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_giraffe",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_gum",
+        "folder": "sticker_basic",
+        "isPremium": false
+      },
+      {
+        "name": "icon_lasagna",
+        "folder": "sticker_basic",
+        "isPremium": true
+      },
+      {
+        "name": "icon_omlette",
+        "folder": "sticker_basic",
+        "isPremium": true
+      },
+      {
+        "name": "icon_protection",
+        "folder": "sticker_basic",
+        "isPremium": true
+      },
+      {
+        "name": "icon_science_fiction",
+        "folder": "sticker_basic",
+        "isPremium": true
+      },
+      {
+        "name": "icon_space_fighter",
+        "folder": "sticker_basic",
+        "isPremium": true
+      },
+      {
+        "name": "icon_stingray",
+        "folder": "sticker_basic",
+        "isPremium": true
+      },
+      {
+        "name": "icon_weapon",
+        "folder": "sticker_basic",
+        "isPremium": true
+      }
+    ]
+  },
+  {
+    "categoryName": "Music Festival",
+    "categoryId": "sticker_festival",
+    "stickers": [
+      {
+        "name": "icon_bass_drum",
+        "folder": "sticker_festival",
+        "isPremium": false
+      },
+      {
+        "name": "icon_cymbals",
+        "folder": "sticker_festival",
+        "isPremium": false
+      },
+      {
+        "name": "icon_drum_set",
+        "folder": "sticker_festival",
+        "isPremium": false
+      },
+      {
+        "name": "icon_electronic_music",
+        "folder": "sticker_festival",
+        "isPremium": false
+      },
+      {
+        "name": "icon_maracas",
+        "folder": "sticker_festival",
+        "isPremium": true
+      },
+      {
+        "name": "icon_music_festival",
+        "folder": "sticker_festival",
+        "isPremium": true
+      },
+      {
+        "name": "icon_rock_music",
+        "folder": "sticker_festival",
+        "isPremium": true
+      },
+      {
+        "name": "icon_snare_drum",
+        "folder": "sticker_festival",
+        "isPremium": true
+      },
+      {
+        "name": "icon_snare_drum_top",
+        "folder": "sticker_festival",
+        "isPremium": true
+      },
+      {
+        "name": "icon_xylophone",
+        "folder": "sticker_festival",
+        "isPremium": true
+      }
+    ]
+  },
+  {
+    "categoryName": "Office & Utility",
+    "categoryId": "sticker_creative",
+    "stickers": [
+      {
+        "name": "icon_adobe_illustrator",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_approval",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_certificate",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_notepad",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_positive_dynamic",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_recycle",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_sparkling",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_sparkling_2",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_sun",
+        "folder": "sticker_creative",
+        "isPremium": false
+      },
+      {
+        "name": "icon_verified_account",
+        "folder": "sticker_creative",
+        "isPremium": false
+      }
+    ]
+  }
+]

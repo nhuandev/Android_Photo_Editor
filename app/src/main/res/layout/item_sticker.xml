@@ -6,6 +6,18 @@
     android:layout_margin="@dimen/dimen_8">
 
     <ImageView
+        android:id="@+id/img_premium"
+        android:layout_width="@dimen/dimen_14"
+        android:layout_height="@dimen/dimen_14"
+        android:layout_gravity="end|top"
+        android:layout_margin="@dimen/dimen_4"
+        android:background="@drawable/bg_border_purchase"
+        android:padding="@dimen/dimen_2"
+        android:src="@drawable/img_premium"
+        android:visibility="visible"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
         android:id="@+id/img_sticker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

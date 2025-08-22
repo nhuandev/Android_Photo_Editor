@@ -46,6 +46,7 @@
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.edit.EditActivity" />
         <activity android:name=".ui.album.AlbumActivity" />
+        <activity android:name=".ui.purchase.PurchaseActivity" />
         <activity android:name=".ui.language.LanguageActivity" />
         <activity android:name=".ui.edit.tools.text.TextActivity" />
         <activity android:name=".ui.edit.tools.sticker.StickerActivity" />

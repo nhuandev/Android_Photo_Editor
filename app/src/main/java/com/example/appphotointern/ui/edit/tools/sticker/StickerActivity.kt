@@ -1,30 +1,23 @@
 package com.example.appphotointern.ui.edit.tools.sticker
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityStickerBinding
 import com.example.appphotointern.common.BaseActivity
-import com.example.appphotointern.utils.AnalyticsManager
-import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_STICKER_SELECTED
-import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_STICKER_NAME
-import com.example.appphotointern.utils.FEATURE_STICKER
-import com.example.appphotointern.utils.RESULT_STICKER
+import com.example.appphotointern.ui.edit.tools.sticker.fragments.StickerViewPager
+import com.example.appphotointern.utils.STICKER_BASIC
+import com.example.appphotointern.utils.STICKER_CREATIVE
+import com.example.appphotointern.utils.STICKER_FESTIVAL
+import com.google.android.material.tabs.TabLayoutMediator
 
 class StickerActivity : BaseActivity() {
     private val binding by lazy { ActivityStickerBinding.inflate(layoutInflater) }
-    private val viewModel by viewModels<StickerViewModel>()
-    private lateinit var stickerAdapter: StickerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setUpToolBar()
         initUI()
-        initObserver()
     }
 
     private fun setUpToolBar() {
@@ -34,34 +27,17 @@ class StickerActivity : BaseActivity() {
     }
 
     private fun initUI() {
+        val viewpager = StickerViewPager(this)
         binding.apply {
-            stickerAdapter = StickerAdapter(emptyList()) { sticker ->
-                AnalyticsManager.logEvent(
-                    EVENT_STICKER_SELECTED,
-                    mapOf(PARAM_STICKER_NAME to sticker.name)
-                )
-                viewModel.downloadStickerToInternalStorage(sticker) { file ->
-                    val intent = Intent().apply {
-                        putExtra(FEATURE_STICKER, file?.absolutePath)
-                    }
-                    setResult(RESULT_STICKER, intent)
-                    finish()
+            viewpagerSticker.adapter = viewpager
+
+            TabLayoutMediator(tlySticker, viewpagerSticker) { tab, position ->
+                when (position) {
+                    STICKER_BASIC -> tab.text = getString(R.string.lb_sticker_basic)
+                    STICKER_FESTIVAL -> tab.text = getString(R.string.lb_sticker_festival)
+                    STICKER_CREATIVE -> tab.text = getString(R.string.lb_sticker_creative)
                 }
-            }
-            recSticker.layoutManager = GridLayoutManager(this@StickerActivity, 4)
-            recSticker.adapter = stickerAdapter
-        }
-    }
-
-    private fun initObserver() {
-        binding.apply {
-            viewModel.stickers.observe(this@StickerActivity) { stickers ->
-                stickerAdapter.updateStickers(stickers)
-            }
-
-            viewModel.loading.observe(this@StickerActivity) { isLoading ->
-                progressSticker.visibility = if (isLoading) View.VISIBLE else View.GONE
-            }
+            }.attach()
         }
     }
 

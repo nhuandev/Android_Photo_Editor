@@ -2,6 +2,7 @@ package com.example.appphotointern.ui.edit.tools.sticker
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,15 +32,14 @@ class StickerAdapter(
             val context = binding.root.context
             val stickerDir = File(context.filesDir, sticker.folder)
             val localFile = File(stickerDir, "${sticker.name}.webp")
-
+            binding.imgPremium.visibility = if (sticker.isPremium) View.VISIBLE else View.GONE
             var isError = false
             binding.progressSticker.visibility = View.VISIBLE
 
             val glideRequest = if (localFile.exists()) {
-                Glide.with(context)
-                    .load(localFile)
+                Glide.with(context).load(localFile)
             } else {
-                val path = "${URL_STORAGE}/${sticker.folder}/${sticker.name}.webp"
+                val path = "$URL_STORAGE/sticker/${sticker.folder}/${sticker.name}.webp"
                 val imageRef = storage.reference.child(path)
                 Glide.with(context).load(imageRef)
             }

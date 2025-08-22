@@ -26,15 +26,28 @@
             android:textStyle="bold"
             tools:ignore="SpUsage" />
 
-        <ImageView
-            android:id="@+id/btn_save"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/dimen_10"
-            android:layout_weight="1"
-            android:src="@mipmap/ic_save"
-            tools:ignore="ContentDescription,UseAppTint" />
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_12"
+                android:layout_height="@dimen/dimen_12"
+                android:layout_gravity="end|top"
+                android:src="@drawable/img_premium"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_save"
+                tools:ignore="ContentDescription,UseAppTint" />
+        </FrameLayout>
 
     </androidx.appcompat.widget.Toolbar>
 

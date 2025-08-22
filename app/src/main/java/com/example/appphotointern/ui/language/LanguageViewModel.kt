@@ -27,9 +27,9 @@ class LanguageViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             _loading.value = true
             val languageList = listOf(
-                Language("en", "English", R.drawable.img_usa),
-                Language("vi", "Tiếng Việt", R.drawable.img_vietnam),
-                Language("ja", "日本語", R.drawable.img_japan)
+                Language("en", "English", R.drawable.img_flag_usa),
+                Language("vi", "Tiếng Việt", R.drawable.img_flag_vietnam),
+                Language("ja", "日本語", R.drawable.img_flag_japan)
             )
             _languages.value = languageList
             _loading.value = false

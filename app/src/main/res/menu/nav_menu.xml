@@ -16,6 +16,11 @@
         android:title="@string/lb_language" />
 
     <item
+        android:id="@+id/nav_menu_sticker"
+        android:icon="@mipmap/ic_stickers"
+        android:title="@string/lb_sticker" />
+
+    <item
         android:id="@+id/nav_menu_dev"
         android:icon="@mipmap/ic_dev"
         android:title="@string/lb_dev" />

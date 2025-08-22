@@ -26,6 +26,7 @@ import com.example.appphotointern.ui.edit.tools.text.TextActivity
 import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.common.BaseActivity
+import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.ui.edit.tools.frame.FrameLayer
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.CROP_CLOSED
@@ -56,6 +57,8 @@ class EditActivity : BaseActivity() {
     private lateinit var textTool: TextToolFragment
     private lateinit var drawTool: DrawToolFragment
 
+    private var listSticker: Map<String, Boolean> = mapOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -73,8 +76,8 @@ class EditActivity : BaseActivity() {
             when (result.resultCode) {
                 RESULT_STICKER -> {
                     val uri = result.data?.getStringExtra(FEATURE_STICKER)
-                    val bitmap = BitmapFactory.decodeFile(uri)
-                    bitmap?.let {
+                    uri?.let {
+                        val bitmap = BitmapFactory.decodeFile(uri)
                         val objetView = ObjectOnView(this@EditActivity)
                         objetView.setImage(bitmap)
                         val params = FrameLayout.LayoutParams(

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appphotointern.models.Sticker
+import com.example.appphotointern.models.StickerCategory
 import com.example.appphotointern.utils.KEY_STICKER
 import com.example.appphotointern.utils.URL_STORAGE
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -24,18 +25,17 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
 
     private val remoteConfig = FirebaseRemoteConfig.getInstance()
 
-    init {
-        loadStickersFromAssets()
-    }
-
-    fun loadStickersFromAssets() {
+    fun loadStickersFromAssets(categoryId: String) {
         _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val jsonString = remoteConfig.getString(KEY_STICKER)
             val gson = Gson()
-            val stickerList = gson.fromJson(jsonString, Array<Sticker>::class.java).toList()
+            val allStickerCategories =
+                gson.fromJson(jsonString, Array<StickerCategory>::class.java).toList()
+            val selectedCategory = allStickerCategories.find { it.categoryId == categoryId }
+            val filteredStickers = selectedCategory?.stickers ?: emptyList()
             withContext(Dispatchers.Main) {
-                _stickers.value = stickerList
+                _stickers.value = filteredStickers
                 _loading.value = false
             }
         }
@@ -44,7 +44,7 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
     fun downloadStickerToInternalStorage(sticker: Sticker, onDownloaded: (File?) -> Unit) {
         _loading.postValue(true)
         val storage = FirebaseStorage.getInstance()
-        val path = "${URL_STORAGE}/${sticker.folder}/${sticker.name}.webp"
+        val path = "$URL_STORAGE/sticker/${sticker.folder}/${sticker.name}.webp"
         val imageRef = storage.reference.child(path)
 
         val stickerDir = File(application.filesDir, sticker.folder)

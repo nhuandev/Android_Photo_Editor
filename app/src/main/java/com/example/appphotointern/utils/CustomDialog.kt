@@ -30,10 +30,8 @@ class CustomDialog() {
     }
 
     fun showBannerUI(
-        context: Context,
-        title: String,
-        message: String,
-        imageUrl: String,
+        context: Context, title: String,
+        message: String, imageUrl: String,
         onClick: () -> Unit
     ) {
         val activity = context as? Activity ?: return

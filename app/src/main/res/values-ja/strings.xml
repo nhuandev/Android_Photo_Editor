@@ -88,4 +88,8 @@
     <string name="lb_fee_yearly">年間</string>
     <string name="lb_desc_yearly">ベスト値。いつでもキャンセル</string>
     <string name="lb_continue">続ける</string>
+
+    <string name="lb_sticker_basic">基本</string>
+    <string name="lb_sticker_festival">祝祭</string>
+    <string name="lb_sticker_creative">クリエイティブ</string>
 </resources>

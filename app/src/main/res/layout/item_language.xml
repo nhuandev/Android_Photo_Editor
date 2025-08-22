@@ -11,7 +11,7 @@
         android:id="@+id/imgFlag"
         android:layout_width="@dimen/dimen_32"
         android:layout_height="@dimen/dimen_32"
-        android:src="@drawable/img_vietnam"
+        android:src="@drawable/img_flag_vietnam"
         tools:ignore="ContentDescription" />
 
     <TextView
