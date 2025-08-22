@@ -17,9 +17,11 @@ import com.example.appphotointern.models.Filter
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.utils.FilterManager
+import com.example.appphotointern.utils.KEY_FRAME
 import com.example.appphotointern.utils.URL_STORAGE
 import com.example.appphotointern.utils.outputDirectory
 import com.example.appphotointern.views.ImageOnView
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +34,7 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     val selectedColor = MutableLiveData<Int>()
     val currentBitmap = MutableLiveData<Bitmap>()
     val selectedFont = MutableLiveData<String>()
+    private val remoteConfig = FirebaseRemoteConfig.getInstance()
 
     private val _frames = MutableLiveData<List<Frame>>()
     val frames: MutableLiveData<List<Frame>> = _frames
@@ -62,8 +65,7 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     }
 
     fun loadFramesFromAssets() {
-        val json =
-            application.assets.open("frame.json").bufferedReader().use { it.readText() }
+        val json = remoteConfig.getString(KEY_FRAME)
         val gson = Gson()
         val frameList = gson.fromJson(json, Array<Frame>::class.java).toList()
         _frames.postValue(frameList)
@@ -103,9 +105,7 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
         viewModelScope.launch(Dispatchers.IO) {
             _loading.postValue(true)
             try {
-                // Dùng Bitmap.createScaledBitmap để scale ảnh gốc
-                // Tránh việc load ảnh quá lớn gây ra OutOfMemoryError
-                val previewBitmap = Bitmap.createScaledBitmap(originalBitmap, 1000, 1000, true)
+                val previewBitmap = Bitmap.createScaledBitmap(originalBitmap, 255, 255, true)
 
                 val filters = listOf(
                     Filter("None", FilterType.NONE, previewBitmap),

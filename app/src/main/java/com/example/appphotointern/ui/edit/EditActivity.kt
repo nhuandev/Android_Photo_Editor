@@ -12,7 +12,6 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityEditBinding
@@ -28,6 +27,7 @@ import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.ui.edit.tools.frame.FrameLayer
+import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.CROP_CLOSED
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.FEATURE_STICKER
@@ -338,6 +338,7 @@ class EditActivity : BaseActivity() {
             message = getString(R.string.lb_out_confirm),
             this@EditActivity,
             onConfirm = {
+                AnalyticsManager.clearAllEvents()
                 finish()
             }
         )
@@ -382,6 +383,7 @@ class EditActivity : BaseActivity() {
                                 .addToBackStack(null)
                                 .commit()
                             fragmentPreviewEdit.visibility = View.VISIBLE
+                            AnalyticsManager.flushEvents()
                         } ?: run {
                             toast(R.string.toast_save_fail)
                         }

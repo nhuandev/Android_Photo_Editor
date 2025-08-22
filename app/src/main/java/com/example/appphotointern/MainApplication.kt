@@ -6,8 +6,6 @@ import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.LanguageManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -15,10 +13,6 @@ class MainApplication : Application() {
         FirebaseApp.initializeApp(this)
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         AnalyticsManager.init(firebaseAnalytics)
-
-        FirebaseAppCheck.getInstance().installAppCheckProviderFactory(
-            DebugAppCheckProviderFactory.getInstance()
-        )
     }
 
     override fun attachBaseContext(base: Context) {

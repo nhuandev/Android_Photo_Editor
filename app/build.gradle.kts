@@ -72,17 +72,18 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-appcheck")
+    implementation("com.google.firebase:firebase-appcheck-interop")
+    implementation("com.google.firebase:firebase-appcheck-debug")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-config")
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
-
-    // Firebase Core
-    implementation("com.google.firebase:firebase-storage:20.3.0")
-    implementation("com.google.firebase:firebase-appcheck:17.0.1")
-    implementation("com.google.firebase:firebase-appcheck-interop:17.0.0")
-
-    // AppCheck Providers
-    implementation("com.google.firebase:firebase-appcheck-debug:17.0.1")
-    implementation("com.google.firebase:firebase-appcheck-playintegrity:17.0.1")
-    implementation("com.google.firebase:firebase-analytics:23.0.0")
 
     // --- Dependency Injection (Hilt) ---
     implementation("com.google.dagger:hilt-android:$hilt_version")

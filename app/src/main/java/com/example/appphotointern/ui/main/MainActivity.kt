@@ -25,14 +25,28 @@ import com.example.appphotointern.ui.language.LanguageFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.ui.purchase.FragmentPurchase
 import com.example.appphotointern.common.BaseActivity
+import com.example.appphotointern.extention.toast
+import com.example.appphotointern.utils.CustomDialog
+import com.example.appphotointern.utils.KEY_BANNER
+import com.example.appphotointern.utils.KEY_BANNER_IMAGE_URL
+import com.example.appphotointern.utils.KEY_BANNER_MESSAGE
+import com.example.appphotointern.utils.KEY_BANNER_TITLE
+import com.example.appphotointern.utils.KEY_SHOW_BANNER
 import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
 import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
+import org.json.JSONObject
 
 class MainActivity : BaseActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val remoteConfig by lazy { Firebase.remoteConfig }
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapterHome: MainAdapter
 
@@ -62,20 +76,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-//        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-//        val bundle = Bundle().apply {
-//            putString(FirebaseAnalytics.Param.METHOD, "app_launch")
-//        }
-//        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle)
-
-        FirebaseAuth.getInstance().signInAnonymously()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("TAG", "signInAnonymously:success")
-                } else {
-                    Log.e("TAG", "signInAnonymously:failure", task.exception)
-                }
-            }
         initPermissionLaunchers()
         initUI()
         initEvent()
@@ -107,6 +107,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initUI() {
+        remoteConfigBanner()
         adapterHome = MainAdapter(emptyList(), onItemClick = { feature ->
             when (feature.featureType) {
                 TAG_FEATURE_EDIT -> {
@@ -212,6 +213,58 @@ class MainActivity : BaseActivity() {
 
         viewModel.loading.observe(this) { isLoading ->
             binding.progressCircular.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun remoteConfigBanner() {
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetchAndActivate()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    displayBanner()
+                } else {
+                    toast(R.string.toast_load_fail)
+                }
+            }
+
+        remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
+            override fun onUpdate(configUpdate: ConfigUpdate) {
+                if (configUpdate.updatedKeys.contains(KEY_BANNER)) {
+                    remoteConfig.activate().addOnCompleteListener {
+                        displayBanner()
+                    }
+                }
+            }
+
+            override fun onError(error: FirebaseRemoteConfigException) {
+                Log.e("RemoteConfig", "Config update error: ${error.message}")
+            }
+        })
+    }
+
+    private fun displayBanner() {
+        val bannerJson = remoteConfig.getString(KEY_BANNER)
+        if (bannerJson.isNotEmpty()) {
+            try {
+                val banner = JSONObject(bannerJson)
+                val show = banner.getBoolean(KEY_SHOW_BANNER)
+                if (show) {
+                    CustomDialog().showBannerUI(
+                        this@MainActivity,
+                        title = banner.getString(KEY_BANNER_TITLE),
+                        message = banner.getString(KEY_BANNER_MESSAGE),
+                        imageUrl = banner.getString(KEY_BANNER_IMAGE_URL),
+                        onClick = {
+
+                        }
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("RemoteConfig", "Parse error: ${e.message}")
+            }
         }
     }
 

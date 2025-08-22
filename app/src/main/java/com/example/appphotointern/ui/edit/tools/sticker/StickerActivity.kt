@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityStickerBinding
 import com.example.appphotointern.common.BaseActivity
+import com.example.appphotointern.utils.AnalyticsManager
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_STICKER_SELECTED
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_STICKER_NAME
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.RESULT_STICKER
 
@@ -34,6 +36,10 @@ class StickerActivity : BaseActivity() {
     private fun initUI() {
         binding.apply {
             stickerAdapter = StickerAdapter(emptyList()) { sticker ->
+                AnalyticsManager.logEvent(
+                    EVENT_STICKER_SELECTED,
+                    mapOf(PARAM_STICKER_NAME to sticker.name)
+                )
                 viewModel.downloadStickerToInternalStorage(sticker) { file ->
                     val intent = Intent().apply {
                         putExtra(FEATURE_STICKER, file?.absolutePath)

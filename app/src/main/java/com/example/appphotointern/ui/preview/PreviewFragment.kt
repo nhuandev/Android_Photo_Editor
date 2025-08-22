@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.ui.edit.EditActivity
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_EDIT_IMAGE
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_IMAGE_URI
 import com.example.appphotointern.utils.IMAGE_URI
 
 class PreviewFragment : Fragment() {
@@ -49,9 +51,10 @@ class PreviewFragment : Fragment() {
         binding.apply {
             btnEdit.setOnClickListener {
                 AnalyticsManager.logEvent(
-                    "edit_image",
-                    mapOf("image_uri" to imageUri.toString())
+                    EVENT_EDIT_IMAGE,
+                    mapOf(PARAM_IMAGE_URI to imageUri.toString())
                 )
+                AnalyticsManager.flushEvents()
 
                 val intent = Intent(requireContext(), EditActivity::class.java)
                 intent.putExtra(IMAGE_URI, imageUri)

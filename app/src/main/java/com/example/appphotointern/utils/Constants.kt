@@ -35,7 +35,7 @@ const val TEXT_FONT = 1
 const val TEXT_DATA_COLOR = "Color"
 const val TEXT_DATA_FONT = "Font"
 
-// Ratio came
+// Ratio camera
 const val CUSTOM_RATIO_1_1 = 3
 const val CUSTOM_FULL = 4
 
@@ -44,5 +44,11 @@ const val CROP_CLOSED = "CROP_CLOSED"
 
 const val KEY_LANGUAGE = "app_language"
 
-
-
+// Remote config
+const val KEY_BANNER = "banner_main"
+const val KEY_SHOW_BANNER = "show_banner"
+const val KEY_BANNER_TITLE = "title"
+const val KEY_BANNER_MESSAGE = "message"
+const val KEY_BANNER_IMAGE_URL = "image_url"
+const val KEY_STICKER = "sticker_main"
+const val KEY_FRAME = "frame_main"

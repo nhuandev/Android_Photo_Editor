@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appphotointern.databinding.FragmentToolFrameBinding
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.ui.edit.EditViewModel
+import com.example.appphotointern.utils.AnalyticsManager
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_FRAME_SELECTED
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_FRAME_NAME
 
 class FrameToolFragment(
     private val imageLayerController: FrameLayer,
@@ -42,6 +45,10 @@ class FrameToolFragment(
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             frameAdapter = FrameAdapter(emptyList()) { frame ->
+                AnalyticsManager.logEvent(
+                    EVENT_FRAME_SELECTED,
+                    mapOf(PARAM_FRAME_NAME to frame.name)
+                )
                 onFrameSelected(frame)
             }
             adapter = frameAdapter

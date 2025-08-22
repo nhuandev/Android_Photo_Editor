@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appphotointern.models.Sticker
+import com.example.appphotointern.utils.KEY_STICKER
 import com.example.appphotointern.utils.URL_STORAGE
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,8 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
     private val _loading = MutableLiveData<Boolean>()
     val loading: MutableLiveData<Boolean> = _loading
 
+    private val remoteConfig = FirebaseRemoteConfig.getInstance()
+
     init {
         loadStickersFromAssets()
     }
@@ -27,13 +31,9 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
     fun loadStickersFromAssets() {
         _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val jsonString = application.assets.open("sticker.json")
-                .bufferedReader()
-                .use { it.readText() }
-
+            val jsonString = remoteConfig.getString(KEY_STICKER)
             val gson = Gson()
             val stickerList = gson.fromJson(jsonString, Array<Sticker>::class.java).toList()
-
             withContext(Dispatchers.Main) {
                 _stickers.value = stickerList
                 _loading.value = false

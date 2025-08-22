@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import com.example.appphotointern.databinding.FragmentToolFilterBinding
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.ui.edit.EditViewModel
+import com.example.appphotointern.utils.AnalyticsManager
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_FILTER_SELECTED
+import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_FILTER_NAME
 import com.example.appphotointern.views.ImageOnView
 
 class FilterToolFragment() : Fragment() {
@@ -39,6 +42,10 @@ class FilterToolFragment() : Fragment() {
     private fun initUI() {
         binding.apply {
             filterAdapter = FilterAdapter(emptyList()) { filter ->
+                AnalyticsManager.logEvent(
+                    EVENT_FILTER_SELECTED,
+                    mapOf(PARAM_FILTER_NAME to filter.name)
+                )
                 applyFilter(filter.type)
             }
             rvFilter.adapter = filterAdapter
