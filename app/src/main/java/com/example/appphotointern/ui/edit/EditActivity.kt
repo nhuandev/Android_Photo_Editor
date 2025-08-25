@@ -44,7 +44,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 class EditActivity : BaseActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
-    private val editViewModel: EditViewModel by viewModels()
+    private val editViewModel by viewModels<EditViewModel>()
     private lateinit var editAdapter: EditAdapter
     private lateinit var imageLayer: FrameLayer
 
@@ -56,8 +56,6 @@ class EditActivity : BaseActivity() {
     private lateinit var frameTool: FrameToolFragment
     private lateinit var textTool: TextToolFragment
     private lateinit var drawTool: DrawToolFragment
-
-    private var listSticker: Map<String, Boolean> = mapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

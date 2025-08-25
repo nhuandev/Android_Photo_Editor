@@ -67,6 +67,10 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
 
     fun loadFramesFromAssets() {
         val json = remoteConfig.getString(KEY_FRAME)
+        if (json.isNullOrEmpty()) {
+            _frames.postValue(emptyList())
+            return
+        }
         val gson = Gson()
         val frameList = gson.fromJson(json, Array<Frame>::class.java).toList()
         _frames.postValue(frameList)

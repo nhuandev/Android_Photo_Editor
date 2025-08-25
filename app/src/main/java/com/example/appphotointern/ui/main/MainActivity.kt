@@ -38,6 +38,9 @@ import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
 import com.google.firebase.Firebase
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
+import com.google.firebase.initialize
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException

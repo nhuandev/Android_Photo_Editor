@@ -83,6 +83,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-config")
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore")
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
 
     // --- Dependency Injection (Hilt) ---
