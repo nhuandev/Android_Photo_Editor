@@ -21,7 +21,7 @@ const val URL_STORAGE = "app_editor"
 const val TAG_FEATURE_EDIT = 1
 const val TAG_FEATURE_CAMERA = 2
 const val TAG_FEATURE_ALBUM = 3
-const val TAG_FEATURE_BACKGROUND = 4
+const val TAG_FEATURE_ANALYTICS = 4
 const val FEATURE_STICKER = "Sticker"
 const val FEATURE_TEXT = "Text"
 
@@ -57,3 +57,7 @@ const val KEY_FRAME = "frame_main"
 const val STICKER_BASIC = 0
 const val STICKER_FESTIVAL = 1
 const val STICKER_CREATIVE = 2
+
+// Analytics fragment
+const val ANALYTICS_FILTER = 0
+const val ANALYTICS_STICKER = 1

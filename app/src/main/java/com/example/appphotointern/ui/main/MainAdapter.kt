@@ -12,7 +12,7 @@ import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemFeatureBinding
 import com.example.appphotointern.models.Feature
 import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
-import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
+import com.example.appphotointern.utils.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
 
@@ -32,11 +32,6 @@ class MainAdapter(
                     layoutParams.isFullSpan = feature.featureType in setOf(3, 4)
                     itemView.layoutParams = layoutParams
                 }
-                if (feature.featureType == TAG_FEATURE_BACKGROUND) {
-                    binding.imgComingSoon.visibility = View.VISIBLE
-                } else {
-                    binding.imgComingSoon.visibility = View.GONE
-                }
                 overlayView.setBackgroundColor(
                     ContextCompat.getColor(
                         itemView.context,
@@ -44,7 +39,7 @@ class MainAdapter(
                             TAG_FEATURE_EDIT -> R.color.feature_edit
                             TAG_FEATURE_CAMERA -> R.color.feature_camera
                             TAG_FEATURE_ALBUM -> R.color.feature_collage
-                            TAG_FEATURE_BACKGROUND -> R.color.feature_background
+                            TAG_FEATURE_ANALYTICS -> R.color.feature_background
                             else -> R.color.sky_200
                         }
                     )

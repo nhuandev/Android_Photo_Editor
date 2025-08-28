@@ -48,8 +48,14 @@
         <activity android:name=".ui.album.AlbumActivity" />
         <activity android:name=".ui.purchase.PurchaseActivity" />
         <activity android:name=".ui.language.LanguageActivity" />
+        <activity android:name=".ui.analytics.AnalyticsActivity" />
         <activity android:name=".ui.edit.tools.text.TextActivity" />
         <activity android:name=".ui.edit.tools.sticker.StickerActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
     </application>
 
 </manifest>

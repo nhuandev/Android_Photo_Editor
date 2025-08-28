@@ -26,6 +26,7 @@ import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.extention.toast
+import com.example.appphotointern.ui.analytics.AnalyticsActivity
 import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.KEY_BANNER
@@ -34,13 +35,11 @@ import com.example.appphotointern.utils.KEY_BANNER_MESSAGE
 import com.example.appphotointern.utils.KEY_BANNER_TITLE
 import com.example.appphotointern.utils.KEY_SHOW_BANNER
 import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
-import com.example.appphotointern.utils.TAG_FEATURE_BACKGROUND
+import com.example.appphotointern.utils.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
+import com.google.android.gms.ads.AdRequest
 import com.google.firebase.Firebase
-import com.google.firebase.appcheck.appCheck
-import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
-import com.google.firebase.initialize
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
@@ -112,6 +111,9 @@ class MainActivity : BaseActivity() {
 
     private fun initUI() {
         remoteConfigBanner()
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
         adapterHome = MainAdapter(emptyList(), onItemClick = { feature ->
             when (feature.featureType) {
                 TAG_FEATURE_EDIT -> {
@@ -143,8 +145,9 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
-                TAG_FEATURE_BACKGROUND -> {
-
+                TAG_FEATURE_ANALYTICS -> {
+                    val intent = Intent(this, AnalyticsActivity::class.java)
+                    startActivity(intent)
                 }
 
                 else -> {
@@ -223,8 +226,9 @@ class MainActivity : BaseActivity() {
 
     private fun remoteConfigBanner() {
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3600
+            minimumFetchIntervalInSeconds = 0
         }
+        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener { task ->
@@ -250,7 +254,7 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun displayBanner() {
+    fun displayBanner() {
         val bannerJson = remoteConfig.getString(KEY_BANNER)
         if (bannerJson.isNotEmpty()) {
             try {
@@ -263,7 +267,8 @@ class MainActivity : BaseActivity() {
                         message = banner.getString(KEY_BANNER_MESSAGE),
                         imageUrl = banner.getString(KEY_BANNER_IMAGE_URL),
                         onClick = {
-
+                            val intent = Intent(this@MainActivity, PurchaseActivity::class.java)
+                            startActivity(intent)
                         }
                     )
                 }

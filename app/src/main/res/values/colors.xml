@@ -42,4 +42,16 @@
     <color name="feature_background">#F43E8B</color>
     <color name="feature_filter">#4F25A8</color>
     <color name="feature_camera">#CAA137</color>
+
+    <color name="top1_start">#FFD700</color>
+    <color name="top1_end">#FFA500</color>
+
+    <color name="top2_start">#C0C0C0</color>
+    <color name="top2_end">#A9A9A9</color>
+
+    <color name="top3_start">#CD7F32</color>
+    <color name="top3_end">#8B4513</color>
+
+    <color name="normal_start">#F5F5F5</color>
+    <color name="normal_end">#E0E0E0</color>
 </resources>

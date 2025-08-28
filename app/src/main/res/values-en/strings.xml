@@ -92,4 +92,6 @@
     <string name="lb_sticker_basic">Basic</string>
     <string name="lb_sticker_festival">Festival</string>
     <string name="lb_sticker_creative">Creative</string>
+    <string name="lb_interact">Interact: %1$d</string>
+    <string name="lb_analytics">Analytics</string>
 </resources>

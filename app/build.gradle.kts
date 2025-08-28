@@ -119,4 +119,10 @@ dependencies {
 
     // --- ExifInterface ---
     implementation("androidx.exifinterface:exifinterface:1.3.7")
+
+    implementation("com.google.android.gms:play-services-ads:23.2.0")
+
+    implementation("com.stripe:stripe-android:20.48.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.8.3")
+
 }

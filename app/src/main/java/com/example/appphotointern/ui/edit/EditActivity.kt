@@ -26,18 +26,24 @@ import com.example.appphotointern.ui.edit.tools.text.TextActivity
 import com.example.appphotointern.ui.edit.tools.text.tool.TextToolFragment
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.common.BaseActivity
-import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.ui.edit.tools.frame.FrameLayer
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.CROP_CLOSED
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.FEATURE_STICKER
 import com.example.appphotointern.utils.FEATURE_TEXT
+import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.utils.IMAGE_URI
 import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.utils.RESULT_STICKER
 import com.example.appphotointern.utils.RESULT_TEXT
 import com.example.appphotointern.views.ObjectOnView
+import com.google.ads.mediation.admob.AdMobAdapter
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -47,7 +53,9 @@ class EditActivity : BaseActivity() {
     private val editViewModel by viewModels<EditViewModel>()
     private lateinit var editAdapter: EditAdapter
     private lateinit var imageLayer: FrameLayer
+    private lateinit var adView: AdView
 
+    private var mInterstitialAd: InterstitialAd? = null
     private var objectOnView: ObjectOnView? = null
     private var uriImageSaved: String? = null
     private var currentTool: ToolType? = null
@@ -140,6 +148,13 @@ class EditActivity : BaseActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initUI() {
+        adView = binding.adView
+        val adRequest = AdRequest.Builder()
+            .addNetworkExtrasBundle(AdMobAdapter::class.java, Bundle().apply {
+                putString("collapsible", "bottom")
+            }).build()
+        adView.loadAd(adRequest)
+
         binding.apply {
             imageLayer = FrameLayer(flMain)
             drawTool = DrawToolFragment.newInstance().apply {
@@ -340,6 +355,7 @@ class EditActivity : BaseActivity() {
             this@EditActivity,
             onConfirm = {
                 AnalyticsManager.clearAllEvents()
+                FireStoreManager.resetSession()
                 finish()
             }
         )
@@ -372,26 +388,33 @@ class EditActivity : BaseActivity() {
             onConfirm = {
                 binding.apply {
                     deselect()
-                    editViewModel.captureFinalImage(flMain, drawImageView) { bitMapSaved ->
-                        bitMapSaved?.let {
-                            uriImageSaved = editViewModel.saveBitmapToGallery(bitMapSaved)
-                            toast(R.string.toast_save_success)
-                            // Show preview fragment
-                            val previewFragment =
-                                PreviewFragment.newInstance(uriImageSaved.toString())
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.fragment_preview_edit, previewFragment)
-                                .addToBackStack(null)
-                                .commit()
-                            fragmentPreviewEdit.visibility = View.VISIBLE
-                            AnalyticsManager.flushEvents()
-                        } ?: run {
-                            toast(R.string.toast_save_fail)
-                        }
-                    }
+                    FireStoreManager.resetSession()
+                    saveImage()
                 }
             }
         )
+    }
+
+    private fun saveImage() {
+        binding.apply {
+            editViewModel.captureFinalImage(flMain, drawImageView) { bitMapSaved ->
+                bitMapSaved?.let {
+                    uriImageSaved = editViewModel.saveBitmapToGallery(bitMapSaved)
+                    toast(R.string.toast_save_success)
+                    // Show preview fragment
+                    val previewFragment =
+                        PreviewFragment.newInstance(uriImageSaved.toString())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_preview_edit, previewFragment)
+                        .addToBackStack(null)
+                        .commit()
+                    fragmentPreviewEdit.visibility = View.VISIBLE
+                    AnalyticsManager.flushEvents()
+                } ?: run {
+                    toast(R.string.toast_save_fail)
+                }
+            }
+        }
     }
 
     override fun onStart() {
@@ -402,5 +425,37 @@ class EditActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    private fun loadInterstitialAd() {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            this@EditActivity, getString(R.string.banner_interstitial), adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                    mInterstitialAd?.show(this@EditActivity)
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                }
+            }
+        )
+    }
+
+    override fun onPause() {
+        adView.pause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adView.resume()
+    }
+
+    override fun onDestroy() {
+        adView.destroy()
+        super.onDestroy()
     }
 }

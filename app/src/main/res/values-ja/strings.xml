@@ -92,4 +92,6 @@
     <string name="lb_sticker_basic">基本</string>
     <string name="lb_sticker_festival">祝祭</string>
     <string name="lb_sticker_creative">クリエイティブ</string>
+    <string name="lb_interact">交流する: %1$d</string>
+    <string name="lb_analytics">分析</string>
 </resources>

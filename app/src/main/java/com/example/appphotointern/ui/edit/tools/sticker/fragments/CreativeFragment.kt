@@ -13,6 +13,7 @@ import com.example.appphotointern.ui.edit.tools.sticker.StickerAdapter
 import com.example.appphotointern.ui.edit.tools.sticker.StickerViewModel
 import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.utils.FEATURE_STICKER
+import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.utils.RESULT_STICKER
 import kotlin.getValue
 
@@ -40,6 +41,7 @@ class CreativeFragment : Fragment() {
 
     private fun initUI() {
         stickerAdapter = StickerAdapter(emptyList()) { sticker ->
+            FireStoreManager.tryIncrementSticker(sticker.name, sticker.folder)
             if (sticker.isPremium) {
                 val intent = Intent(requireContext(), PurchaseActivity::class.java)
                 startActivity(intent)

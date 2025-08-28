@@ -1,9 +1,12 @@
 package com.example.appphotointern
 
+import android.app.AppOpsManager
 import android.app.Application
 import android.content.Context
 import com.example.appphotointern.utils.AnalyticsManager
+import com.example.appphotointern.utils.AppOpenManager
 import com.example.appphotointern.utils.LanguageManager
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -19,6 +22,9 @@ class MainApplication : Application() {
         FirebaseAppCheck.getInstance().installAppCheckProviderFactory(
             DebugAppCheckProviderFactory.getInstance()
         )
+
+        MobileAds.initialize(this)
+//        AppOpenManager(this)
     }
 
     override fun attachBaseContext(base: Context) {

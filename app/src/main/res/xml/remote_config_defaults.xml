@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>banner</key>
+        <value>
+            {
+            "show_banner": false,
+            "title": "Default Title",
+            "message": "This is the default banner message.",
+            "image_url": ""
+            }
+        </value>
+    </entry>
+</defaultsMap>

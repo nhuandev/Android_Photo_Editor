@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_8"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/dimen_10"
+    android:paddingVertical="@dimen/dimen_4"
+    android:weightSum="10">
+
+    <TextView
+        android:id="@+id/tv_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="start"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/tv_analytics"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="4"
+        android:gravity="start"
+        android:text="@string/lb_text"
+        tools:text="Sticker Name" />
+
+    <ImageView
+        android:id="@+id/img_sticker"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_40"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="3"
+        android:gravity="end"
+        tools:text="123" />
+
+</LinearLayout>

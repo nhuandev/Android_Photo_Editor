@@ -13,6 +13,7 @@ import com.example.appphotointern.ui.edit.EditViewModel
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_FILTER_SELECTED
 import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_FILTER_NAME
+import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.views.ImageOnView
 
 class FilterToolFragment() : Fragment() {
@@ -46,6 +47,7 @@ class FilterToolFragment() : Fragment() {
                     EVENT_FILTER_SELECTED,
                     mapOf(PARAM_FILTER_NAME to filter.name)
                 )
+                FireStoreManager.tryIncrementFilter(filter.name)
                 applyFilter(filter.type)
             }
             rvFilter.adapter = filterAdapter

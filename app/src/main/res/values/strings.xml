@@ -92,4 +92,10 @@
     <string name="lb_sticker_basic">Basic</string>
     <string name="lb_sticker_festival">Festival</string>
     <string name="lb_sticker_creative">Creative</string>
+    <string name="lb_interact">Interact - %1$d</string>
+
+    <string name="lb_analytics">Analytics</string>
+    <string name="banner_home_footer" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
+    <string name="banner_collapsible" translatable="false">ca-app-pub-3940256099942544/2014213617</string>
+    <string name="banner_interstitial" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

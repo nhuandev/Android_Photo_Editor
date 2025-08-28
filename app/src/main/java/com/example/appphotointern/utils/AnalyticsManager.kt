@@ -5,12 +5,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 
 object AnalyticsManager {
     data object LogEvent{
-        const val EVENT_EDIT_IMAGE = "edit_image"
         const val EVENT_FILTER_SELECTED = "filter_selected"
         const val EVENT_FRAME_SELECTED = "frame_selected"
         const val EVENT_STICKER_SELECTED = "sticker_selected"
 
-        const val PARAM_IMAGE_URI = "image_uri"
         const val PARAM_FILTER_NAME = "filter_name"
         const val PARAM_FRAME_NAME = "frame_name"
         const val PARAM_STICKER_NAME = "sticker_name"

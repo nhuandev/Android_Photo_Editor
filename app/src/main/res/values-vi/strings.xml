@@ -92,4 +92,6 @@
     <string name="lb_sticker_basic">Cơ bản</string>
     <string name="lb_sticker_festival">Lễ hội</string>
     <string name="lb_sticker_creative">Sáng tạo</string>
+    <string name="lb_interact">Tương tác: %1$d</string>
+    <string name="lb_analytics">Phân tích</string>
 </resources>

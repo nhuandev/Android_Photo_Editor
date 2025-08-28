@@ -13,6 +13,8 @@ import com.example.appphotointern.models.Language
 import com.example.appphotointern.ui.welcome.WelcomeActivity
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.utils.LanguageManager
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 import kotlin.getValue
 
 class LanguageActivity : BaseActivity() {
@@ -47,6 +49,7 @@ class LanguageActivity : BaseActivity() {
         binding.btnDoneLanguage.setOnClickListener {
             val selected = languageAdapter.getSelectedLanguage()
             selected?.let {
+                Firebase.analytics.setUserProperty("language", selected.code)
                 LanguageManager.setLanguage(this, selected.code)
                 LanguageManager.applyLanguage(this, selected.code)
 

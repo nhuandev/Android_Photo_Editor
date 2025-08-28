@@ -6,199 +6,194 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ImageView
-        android:id="@+id/btn_close"
-        android:layout_width="@dimen/dimen_28"
-        android:layout_height="@dimen/dimen_28"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/dimen_10"
-        android:elevation="@dimen/dimen_20"
-        android:src="@mipmap/ic_close"
-        android:tint="@color/white"
-        tools:ignore="ContentDescription,UseAppTint" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/img_purchase"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/dimen_320"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             android:src="@drawable/img_fea_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription,MissingConstraints" />
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tv_title_unlimited"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24"
             android:gravity="center"
             android:text="@string/lb_title_unlimited"
             android:textSize="@dimen/font_24"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/tv_title_access"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_purchase"
-            tools:ignore="MissingConstraints,SpUsage" />
+            tools:ignore="SpUsage" />
 
         <TextView
             android:id="@+id/tv_title_access"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_12"
             android:gravity="center"
             android:text="@string/lb_title_access"
             android:textSize="@dimen/font_20"
-            app:layout_constraintBottom_toTopOf="@id/ly_free"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title_unlimited"
-            tools:ignore="MissingConstraints,SpUsage" />
+            tools:ignore="SpUsage" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_free"
-            android:layout_width="@dimen/dimen_140"
-            android:layout_height="@dimen/dimen_152"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_176"
+            android:layout_marginStart="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:layout_marginEnd="@dimen/dimen_8"
             android:background="@drawable/bg_border_purchase"
-            app:layout_constraintBottom_toBottomOf="@id/ly_fee"
             app:layout_constraintEnd_toStartOf="@id/ly_fee"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title_access"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toBottomOf="@id/tv_title_access">
 
             <ImageView
                 android:id="@+id/btn_check_free"
                 android:layout_width="@dimen/dimen_24"
                 android:layout_height="@dimen/dimen_24"
-                android:layout_gravity="end|top"
                 android:layout_margin="@dimen/dimen_10"
-                android:elevation="@dimen/dimen_24"
                 android:src="@drawable/ic_check_circle"
                 android:tint="@color/sky_300"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription,UseAppTint" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/dimen_6"
-                tools:ignore="UselessParent">
+            <TextView
+                android:id="@+id/tv_free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_free"
+                android:textSize="@dimen/font_20"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_check_free"
+                tools:ignore="SpUsage" />
 
-                <TextView
-                    android:id="@+id/tv_free"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    android:text="@string/lb_free"
-                    android:textSize="@dimen/font_20"
-                    android:textStyle="bold"
-                    tools:ignore="SpUsage" />
+            <TextView
+                android:id="@+id/tv_free_trial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_free_trial"
+                android:textColor="@color/sky_300"
+                android:textSize="@dimen/font_18"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_free"
+                tools:ignore="SpUsage" />
 
-                <TextView
-                    android:id="@+id/tv_free_trial"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/lb_free_trial"
-                    android:textColor="@color/sky_300"
-                    android:textSize="@dimen/font_18"
-                    android:textStyle="bold"
-                    tools:ignore="SpUsage" />
+            <TextView
+                android:id="@+id/tv_desc_free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_12"
+                android:text="@string/lb_desc_free"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_free_trial" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/tv_desc_free"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dimen_12"
-                    android:text="@string/lb_desc_free"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray" />
-            </LinearLayout>
-
-        </FrameLayout>
-
-        <FrameLayout
+        <!-- Gói Fee -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_fee"
-            android:layout_width="@dimen/dimen_140"
-            android:layout_height="@dimen/dimen_152"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_176"
+            android:layout_marginStart="@dimen/dimen_8"
+            android:layout_marginEnd="@dimen/dimen_20"
             android:background="@drawable/bg_border_purchase"
             app:layout_constraintBottom_toBottomOf="@id/ly_free"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ly_free"
-            app:layout_constraintTop_toTopOf="@id/ly_free"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toTopOf="@id/ly_free">
 
             <ImageView
                 android:id="@+id/btn_check_fee"
                 android:layout_width="@dimen/dimen_24"
                 android:layout_height="@dimen/dimen_24"
-                android:layout_gravity="end|top"
                 android:layout_margin="@dimen/dimen_10"
-                android:elevation="@dimen/dimen_24"
                 android:src="@drawable/ic_uncheck_circle"
                 android:tint="@color/sky_300"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription,UseAppTint" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10000.00"
+                android:textSize="@dimen/font_20"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_check_fee"
+                tools:ignore="HardcodedText,SpUsage" />
 
-                <TextView
-                    android:id="@+id/tv_fee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    android:text="10000.00"
-                    android:textSize="@dimen/font_20"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText,SpUsage" />
+            <TextView
+                android:id="@+id/tv_fee_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_fee_yearly"
+                android:textSize="@dimen/font_18"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_fee"
+                tools:ignore="SpUsage" />
 
-                <TextView
-                    android:id="@+id/tv_fee_"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/lb_fee_yearly"
-                    android:textSize="@dimen/font_18"
-                    android:textStyle="bold"
-                    tools:ignore="SpUsage" />
-
-                <TextView
-                    android:id="@+id/tv_desc_fee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dimen_12"
-                    android:text="@string/lb_desc_yearly"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray" />
-            </LinearLayout>
-
-        </FrameLayout>
+            <TextView
+                android:id="@+id/tv_desc_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_12"
+                android:text="@string/lb_desc_yearly"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_fee_" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btn_continue"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dimen_48"
-            android:layout_marginTop="@dimen/dimen_20"
+            android:layout_marginHorizontal="@dimen/dimen_10"
             android:backgroundTint="@color/sky_300"
             android:text="@string/lb_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_free"
-            tools:ignore="MissingConstraints" />
-
+            app:layout_constraintVertical_bias="0.9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ImageView
+        android:id="@+id/btn_close_overlay"
+        android:layout_width="@dimen/dimen_28"
+        android:layout_height="@dimen/dimen_28"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:layout_marginEnd="@dimen/dimen_20"
+        android:src="@mipmap/ic_close"
+        android:tint="@color/white"
+        tools:ignore="ContentDescription,UseAppTint" />
 </FrameLayout>

@@ -12,6 +12,8 @@ import com.example.appphotointern.databinding.FragmentLanguageBinding
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.models.Language
 import com.example.appphotointern.utils.LanguageManager
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 
 class LanguageFragment : DialogFragment() {
     private var _binding: FragmentLanguageBinding? = null
@@ -58,6 +60,7 @@ class LanguageFragment : DialogFragment() {
         binding.btnDoneLanguage.setOnClickListener {
             val selected = languageAdapter.getSelectedLanguage()
             selected?.let {
+                Firebase.analytics.setUserProperty("language", selected.code)
                 LanguageManager.setLanguage(requireContext(), selected.code)
                 LanguageManager.applyLanguage(requireContext(), selected.code)
                 requireActivity().recreate()
