@@ -3,7 +3,6 @@ package com.example.appphotointern.ui.language
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appphotointern.R

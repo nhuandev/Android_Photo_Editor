@@ -51,40 +51,43 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.afs.native)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    val hilt_version = "2.50"
     val hilt_navigation_compose_version = "1.2.0"
+    val compose_material_icons_version = "1.6.0"
+    val coroutine_play_services_version = "1.6.4"
     val viewpager2_version = "1.1.0"
     val core_ktx_version = "1.13.1"
     val material_version = "1.11.0"
-    val compose_material_icons_version = "1.6.0"
-    val coroutine_play_services_version = "1.6.4"
     val camerax_version = "1.4.2"
+    val billing_version = "8.0.0"
+    val hilt_version = "2.50"
 
-    implementation("androidx.camera:camera-core:${camerax_version}")
-    implementation("androidx.camera:camera-camera2:${camerax_version}")
-    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
-    implementation("androidx.camera:camera-view:${camerax_version}")
+
     implementation("androidx.camera:camera-extensions:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
     // Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
-    implementation("com.google.firebase:firebase-storage")
-    implementation("com.google.firebase:firebase-appcheck")
     implementation("com.google.firebase:firebase-appcheck-interop")
-    implementation("com.google.firebase:firebase-appcheck-debug")
     implementation("com.google.firebase:firebase-appcheck-playintegrity")
+    implementation("com.google.firebase:firebase-appcheck-debug")
+    implementation("com.google.firebase:firebase-appcheck")
+    implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-config")
-    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
+    implementation("com.google.firebase:firebase-database")
 
     // --- Dependency Injection (Hilt) ---
     implementation("com.google.dagger:hilt-android:$hilt_version")
@@ -120,9 +123,9 @@ dependencies {
     // --- ExifInterface ---
     implementation("androidx.exifinterface:exifinterface:1.3.7")
 
+    // --- Ads ---
     implementation("com.google.android.gms:play-services-ads:23.2.0")
 
-    implementation("com.stripe:stripe-android:20.48.0")
-    implementation("androidx.lifecycle:lifecycle-process:2.8.3")
-
+    // --- Billing ---
+    implementation("com.android.billingclient:billing:$billing_version")
 }

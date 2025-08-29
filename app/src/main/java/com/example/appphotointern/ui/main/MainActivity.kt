@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -34,24 +36,28 @@ import com.example.appphotointern.utils.KEY_BANNER_IMAGE_URL
 import com.example.appphotointern.utils.KEY_BANNER_MESSAGE
 import com.example.appphotointern.utils.KEY_BANNER_TITLE
 import com.example.appphotointern.utils.KEY_SHOW_BANNER
+import com.example.appphotointern.utils.PresenceManager
 import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
 import com.example.appphotointern.utils.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
+import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.firebase.Firebase
-import com.google.firebase.remoteconfig.ConfigUpdate
-import com.google.firebase.remoteconfig.ConfigUpdateListener
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import org.json.JSONObject
+import com.google.android.gms.ads.AdListener
 
 class MainActivity : BaseActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val remoteConfig by lazy { Firebase.remoteConfig }
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapterHome: MainAdapter
+    private var nativeAd: NativeAd? = null
 
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
@@ -80,6 +86,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initPermissionLaunchers()
+        loadNativeAd()
         initUI()
         initEvent()
         initObserver()
@@ -226,7 +233,7 @@ class MainActivity : BaseActivity() {
 
     private fun remoteConfigBanner() {
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 0
+            minimumFetchIntervalInSeconds = 3600
         }
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.setConfigSettingsAsync(configSettings)
@@ -239,19 +246,19 @@ class MainActivity : BaseActivity() {
                 }
             }
 
-        remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
-            override fun onUpdate(configUpdate: ConfigUpdate) {
-                if (configUpdate.updatedKeys.contains(KEY_BANNER)) {
-                    remoteConfig.activate().addOnCompleteListener {
-                        displayBanner()
-                    }
-                }
-            }
-
-            override fun onError(error: FirebaseRemoteConfigException) {
-                Log.e("RemoteConfig", "Config update error: ${error.message}")
-            }
-        })
+//        remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
+//            override fun onUpdate(configUpdate: ConfigUpdate) {
+//                if (configUpdate.updatedKeys.contains(KEY_BANNER)) {
+//                    remoteConfig.activate().addOnCompleteListener {
+//                        displayBanner()
+//                    }
+//                }
+//            }
+//
+//            override fun onError(error: FirebaseRemoteConfigException) {
+//                Log.e("RemoteConfig", "Config update error: ${error.message}")
+//            }
+//        })
     }
 
     fun displayBanner() {
@@ -309,5 +316,69 @@ class MainActivity : BaseActivity() {
         )
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    private fun loadNativeAd() {
+        val builder = AdLoader.Builder(this, getString(R.string.banner_native_ad))
+
+        builder.forNativeAd { ad: NativeAd ->
+            nativeAd?.destroy()
+            nativeAd = ad
+
+            val adView = layoutInflater.inflate(R.layout.ad_native, null) as NativeAdView
+            populateNativeAdView(ad, adView)
+
+            binding.flNativeBanner.removeAllViews()
+            binding.flNativeBanner.addView(adView)
+        }
+        val adLoader = builder
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    Log.e("AdMob", "Failed to load native ad: ${error.message}")
+                }
+            }).build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+    }
+
+    private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
+        adView.headlineView = adView.findViewById(R.id.ad_headline)
+        adView.mediaView = adView.findViewById(R.id.ad_media)
+        adView.bodyView = adView.findViewById(R.id.ad_body)
+        adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
+
+        (adView.headlineView as TextView).text = nativeAd.headline
+        adView.mediaView?.setMediaContent(nativeAd.mediaContent)
+
+        if (nativeAd.body == null) {
+            adView.bodyView?.visibility = View.GONE
+        } else {
+            adView.bodyView?.visibility = View.VISIBLE
+            (adView.bodyView as TextView).text = nativeAd.body
+        }
+
+        if (nativeAd.callToAction == null) {
+            adView.callToActionView?.visibility = View.GONE
+        } else {
+            adView.callToActionView?.visibility = View.VISIBLE
+            (adView.callToActionView as Button).text = nativeAd.callToAction
+        }
+
+        adView.setNativeAd(nativeAd)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        PresenceManager.setUserOnline(this)
+
+        PresenceManager.listenOnlineUsers { onlineUsers ->
+            Log.d("OnlineUsers", "Online users: $onlineUsers")
+            binding.tvUserOnline.text = getString(R.string.lb_user_online, onlineUsers.size)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        PresenceManager.setUserOffline(this)
     }
 }

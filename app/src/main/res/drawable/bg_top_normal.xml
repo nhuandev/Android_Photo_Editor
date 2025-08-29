@@ -5,9 +5,4 @@
         android:endColor="@color/normal_start"
         android:startColor="@color/normal_end" />
     <corners android:radius="@dimen/dimen_12" />
-    <padding
-        android:bottom="@dimen/dimen_8"
-        android:left="@dimen/dimen_8"
-        android:right="@dimen/dimen_8"
-        android:top="@dimen/dimen_8" />
 </shape>

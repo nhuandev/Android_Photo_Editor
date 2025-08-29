@@ -1,0 +1,46 @@
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nativeAdView"
+    android:layout_width="match_parent"
+    android:background="@color/normal_start"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ad_headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_16"
+            android:textStyle="bold"
+            tools:ignore="SpUsage" />
+
+        <com.google.android.gms.ads.nativead.MediaView
+            android:id="@+id/ad_media"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_120"
+            android:layout_marginTop="@dimen/dimen_8" />
+
+        <TextView
+            android:id="@+id/ad_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_4"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/font_14"
+            tools:ignore="SpUsage" />
+
+        <Button
+            android:id="@+id/ad_call_to_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_6"
+            android:backgroundTint="@color/feature_background"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</com.google.android.gms.ads.nativead.NativeAdView>

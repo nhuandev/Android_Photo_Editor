@@ -51,6 +51,7 @@ const val KEY_BANNER_TITLE = "title"
 const val KEY_BANNER_MESSAGE = "message"
 const val KEY_BANNER_IMAGE_URL = "image_url"
 const val KEY_STICKER = "sticker_main"
+const val KEY_STICKER_PREMIUM = "sticker_main_premium"
 const val KEY_FRAME = "frame_main"
 
 // Sticker fragment
@@ -61,3 +62,8 @@ const val STICKER_CREATIVE = 2
 // Analytics fragment
 const val ANALYTICS_FILTER = 0
 const val ANALYTICS_STICKER = 1
+
+// In‑app billing
+const val KEY_IS_PREMIUM = "is_premium_user"
+const val PRODUCT_ID_PREMIUM_LIFETIME = "premium_lifetime"
+const val PRODUCT_ID_PREMIUM_MONTHLY = "premium_monthly"

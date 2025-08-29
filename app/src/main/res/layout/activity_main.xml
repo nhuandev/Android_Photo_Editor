@@ -56,15 +56,35 @@
                 tools:ignore="ContentDescription" />
         </androidx.appcompat.widget.Toolbar>
 
+        <TextView
+            android:id="@+id/tv_user_online"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/dimen_4"
+            android:textSize="@dimen/font_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            tools:ignore="MissingConstraints,SpUsage" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_feature"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/adView"
+            app:layout_constraintBottom_toTopOf="@+id/fl_native_banner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_online"
+            tools:ignore="MissingConstraints" />
+
+        <FrameLayout
+            android:id="@+id/fl_native_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/adView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -72,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_home_footer"
+            ads:adUnitId="@string/banner_adaptive"
             ads:layout_constraintBottom_toBottomOf="parent"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"

@@ -14,6 +14,7 @@ import com.example.appphotointern.R
 import androidx.core.graphics.toColorInt
 
 class CustomDialog() {
+    private var loadingDialog: AlertDialog? = null
     fun dialogConfirm(
         title: String,
         message: String,
@@ -79,5 +80,22 @@ class CustomDialog() {
 
         overlay.addView(bannerView, params)
         activity.addContentView(overlay, overlay.layoutParams)
+    }
+
+    fun showLoadingAd(context: Context) {
+        if (loadingDialog?.isShowing == true) return
+
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_loading_ad, null)
+        loadingDialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        loadingDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        loadingDialog?.show()
+    }
+
+    fun dismissLoadingAd() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
     }
 }

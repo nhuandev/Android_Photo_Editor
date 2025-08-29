@@ -41,9 +41,6 @@ import com.example.appphotointern.views.ObjectOnView
 import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -55,7 +52,6 @@ class EditActivity : BaseActivity() {
     private lateinit var imageLayer: FrameLayer
     private lateinit var adView: AdView
 
-    private var mInterstitialAd: InterstitialAd? = null
     private var objectOnView: ObjectOnView? = null
     private var uriImageSaved: String? = null
     private var currentTool: ToolType? = null
@@ -136,8 +132,7 @@ class EditActivity : BaseActivity() {
             }
         } else {
             onBackPressedDispatcher.addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
+                this, object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
                         showExitDialog()
                     }
@@ -425,23 +420,6 @@ class EditActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
-    }
-
-    private fun loadInterstitialAd() {
-        val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(
-            this@EditActivity, getString(R.string.banner_interstitial), adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    mInterstitialAd = interstitialAd
-                    mInterstitialAd?.show(this@EditActivity)
-                }
-
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mInterstitialAd = null
-                }
-            }
-        )
     }
 
     override fun onPause() {

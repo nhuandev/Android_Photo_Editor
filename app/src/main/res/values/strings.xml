@@ -82,11 +82,14 @@
 
     <string name="lb_title_unlimited">UNLIMITED</string>
     <string name="lb_title_access">ACCESS</string>
-    <string name="lb_free">FREE</string>
-    <string name="lb_free_trial">FREE TRIAL</string>
-    <string name="lb_desc_free">After 3 days, weekly plan will start</string>
-    <string name="lb_fee_yearly">YEARLY</string>
-    <string name="lb_desc_yearly">Best value.\nCancel Anytime</string>
+
+    <string name="lb_monthly">Premium Monthly</string>
+    <string name="lb_sub_monthly_price">$10.99 / month</string>
+    <string name="lb_desc_free">Unlimited stickers premium features</string>
+
+    <string name="lb_inapp_one">Premium One Time</string>
+    <string name="lb_inapp_price">$19.99 one-time</string>
+    <string name="lb_desc_yearly">Pay once, enjoy ad-free experience forever</string>
     <string name="lb_continue">Continue</string>
 
     <string name="lb_sticker_basic">Basic</string>
@@ -94,8 +97,13 @@
     <string name="lb_sticker_creative">Creative</string>
     <string name="lb_interact">Interact - %1$d</string>
 
+    <string name="lb_user_online">User Online %1$d</string>
+
     <string name="lb_analytics">Analytics</string>
-    <string name="banner_home_footer" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
+    <string name="lb_loading_ad">Loading Ad...</string>
+    <string name="banner_native_ad" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="banner_app_open" translatable="false">ca-app-pub-3940256099942544/9257395921</string>
+    <string name="banner_adaptive" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
     <string name="banner_collapsible" translatable="false">ca-app-pub-3940256099942544/2014213617</string>
     <string name="banner_interstitial" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

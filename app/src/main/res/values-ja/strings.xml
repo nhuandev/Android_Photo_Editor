@@ -82,16 +82,21 @@
     <string name="lb_please_select_language">言語を選択してください</string>
     <string name="lb_title_unlimited">無制限</string>
     <string name="lb_title_access">アクセス</string>
-    <string name="lb_free">無料</string>
-    <string name="lb_free_trial">無料トライアル</string>
-    <string name="lb_desc_free">3日経過すると、週ごとのプランが始まります</string>
-    <string name="lb_fee_yearly">年間</string>
-    <string name="lb_desc_yearly">ベスト値。いつでもキャンセル</string>
+
+    <string name="lb_monthly">プレミアム月額</string>
+    <string name="lb_sub_monthly_price">月額10.99ドル</string>
+    <string name="lb_desc_free">無制限のステッカープレミアム機能</string>
+
+    <string name="lb_inapp_one">プレミアムワンタイム</string>
+    <string name="lb_inapp_price">1回限り 19.99 ドル</string>
+    <string name="lb_desc_yearly">一度支払えば、広告なしでずっと楽しめます</string>
     <string name="lb_continue">続ける</string>
 
     <string name="lb_sticker_basic">基本</string>
     <string name="lb_sticker_festival">祝祭</string>
     <string name="lb_sticker_creative">クリエイティブ</string>
-    <string name="lb_interact">交流する: %1$d</string>
+    <string name="lb_interact">交流する - %1$d</string>
+    <string name="lb_user_online">ユーザーオンライン %1$d</string>
     <string name="lb_analytics">分析</string>
+    <string name="lb_loading_ad">広告を読み込んでいます...</string>
 </resources>

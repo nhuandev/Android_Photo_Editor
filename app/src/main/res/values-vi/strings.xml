@@ -82,16 +82,20 @@
     <string name="lb_please_select_language">Vui lòng chọn ngôn ngữ</string>
     <string name="lb_title_unlimited">Không giới hạn</string>
     <string name="lb_title_access">Truy cập</string>
-    <string name="lb_free">Miễn phí</string>
-    <string name="lb_free_trial">Miễn phí thử nghiệm</string>
-    <string name="lb_desc_free">Sau 3 ngày, sẽ bắt đầu plan tuần</string>
-    <string name="lb_fee_yearly">Năm</string>
-    <string name="lb_desc_yearly">Giá tốt nhất. Hủy bất cứ lúc nào</string>
+    <string name="lb_monthly">Premium Monthly</string>
+    <string name="lb_sub_monthly_price">291,630Đ / tháng</string>
+    <string name="lb_desc_free">Mở khóa tất cả các tính năng premium</string>
+
+    <string name="lb_inapp_one">Premium One Time</string>
+    <string name="lb_inapp_price">530,454Đ / vĩnh viễn</string>
+    <string name="lb_desc_yearly">Thanh toán một lần, trải nghiệm miễn phí vĩnh viễn</string>
     <string name="lb_continue">Tiếp tục</string>
 
     <string name="lb_sticker_basic">Cơ bản</string>
     <string name="lb_sticker_festival">Lễ hội</string>
     <string name="lb_sticker_creative">Sáng tạo</string>
-    <string name="lb_interact">Tương tác: %1$d</string>
+    <string name="lb_interact">Tương tác - %1$d</string>
+    <string name="lb_user_online">Đang Online %1$d</string>
     <string name="lb_analytics">Phân tích</string>
+    <string name="lb_loading_ad">Đang tải quảng cáo...</string>
 </resources>

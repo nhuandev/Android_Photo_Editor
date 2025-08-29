@@ -30,9 +30,8 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val jsonString = remoteConfig.getString(KEY_STICKER)
             val gson = Gson()
-            val allStickerCategories =
-                gson.fromJson(jsonString, Array<StickerCategory>::class.java).toList()
-            val selectedCategory = allStickerCategories.find { it.categoryId == categoryId }
+            val stickerJs = gson.fromJson(jsonString, Array<StickerCategory>::class.java).toList()
+            val selectedCategory = stickerJs.find { it.categoryId == categoryId }
             val filteredStickers = selectedCategory?.stickers ?: emptyList()
             withContext(Dispatchers.Main) {
                 _stickers.value = filteredStickers

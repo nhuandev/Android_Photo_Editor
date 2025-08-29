@@ -30,7 +30,7 @@
 
     <ImageView
         android:id="@+id/img_sticker"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dimen_40"
         android:layout_height="@dimen/dimen_40"
         android:layout_gravity="center"
         android:layout_weight="2"
