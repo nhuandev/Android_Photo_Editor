@@ -82,13 +82,18 @@
     <string name="lb_please_select_language">Vui lòng chọn ngôn ngữ</string>
     <string name="lb_title_unlimited">Không giới hạn</string>
     <string name="lb_title_access">Truy cập</string>
-    <string name="lb_monthly">Premium Monthly</string>
-    <string name="lb_sub_monthly_price">291,630Đ / tháng</string>
-    <string name="lb_desc_free">Mở khóa tất cả các tính năng premium</string>
 
-    <string name="lb_inapp_one">Premium One Time</string>
-    <string name="lb_inapp_price">530,454Đ / vĩnh viễn</string>
-    <string name="lb_desc_yearly">Thanh toán một lần, trải nghiệm miễn phí vĩnh viễn</string>
+    <string name="lb_monthly">Theo tháng</string>
+    <string name="lb_sub_monthly_price">119.000₫</string>
+    <string name="lb_desc_monthly">Dùng không giới hạn sticker tính năng cao cấp</string>
+
+    <string name="lb_yearly">Theo năm</string>
+    <string name="lb_sub_yearly_price">699.000₫</string>
+    <string name="lb_desc_yearly">Tiết kiệm hơn với gói 12 tháng</string>
+
+    <string name="lb_lifetime">Trọn đời</string>
+    <string name="lb_sub_lifetime_price">1.399.000₫</string>
+    <string name="lb_desc_lifetime">Thanh toán một lần, dùng mãi mãi không quảng cáo</string>
     <string name="lb_continue">Tiếp tục</string>
 
     <string name="lb_sticker_basic">Cơ bản</string>

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.ui.edit.EditActivity
+import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.IMAGE_URI
 import com.google.android.gms.ads.AdError
@@ -29,8 +30,6 @@ class PreviewFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val customDialog by lazy { CustomDialog() }
-    private var mInterstitialAd: InterstitialAd? = null
-    private var adIsLoading: Boolean = false
     private var imageUri: String? = null
 
     override fun onCreateView(
@@ -48,7 +47,13 @@ class PreviewFragment : Fragment() {
         binding.root.setOnTouchListener { _, _ -> true }
         initUI()
         initEvent()
-        loadInterstitialAd()
+        customDialog.showLoadingAd(requireActivity())
+        AdManager.loadInterstitial(requireContext()) {
+            customDialog.dismissLoadingAd()
+            AdManager.showInterstitial(requireActivity()) {
+                customDialog.dismissLoadingAd()
+            }
+        }
     }
 
     private fun initUI() {
@@ -97,69 +102,11 @@ class PreviewFragment : Fragment() {
         }
     }
 
-    private fun loadInterstitialAd() {
-        if (adIsLoading || mInterstitialAd != null) return
-
-        adIsLoading = true
-        customDialog.showLoadingAd(requireContext())
-
-        val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(
-            requireContext(),
-            getString(R.string.banner_interstitial),
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdLoaded(ad: InterstitialAd) {
-                    mInterstitialAd = ad
-                    adIsLoading = false
-                    customDialog.dismissLoadingAd()
-                    showInterstitialAd()
-                }
-
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mInterstitialAd = null
-                    adIsLoading = false
-                    customDialog.dismissLoadingAd()
-                }
-            }
-        )
-    }
-
-    private fun showInterstitialAd() {
-        mInterstitialAd?.let {
-            it.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdClicked() {
-                    super.onAdClicked()
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    super.onAdShowedFullScreenContent()
-                }
-
-                override fun onAdImpression() {
-                    super.onAdImpression()
-                }
-
-                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    super.onAdFailedToShowFullScreenContent(p0)
-                    mInterstitialAd = null
-                }
-
-                override fun onAdDismissedFullScreenContent() {
-                    super.onAdDismissedFullScreenContent()
-                    mInterstitialAd = null
-                }
-            }
-            mInterstitialAd?.show(requireActivity())
-        } ?: run {
-            Toast.makeText(requireContext(), "mInterstitialAd null", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         customDialog.dismissLoadingAd()
         _binding = null
+        AdManager.destroy()
     }
 
     companion object {

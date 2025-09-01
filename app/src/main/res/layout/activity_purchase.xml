@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/bg_top_normal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/img_purchase"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_320"
+            android:layout_height="@dimen/dimen_192"
             android:scaleType="centerCrop"
             android:src="@drawable/img_fea_2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,40 +48,101 @@
             tools:ignore="SpUsage" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ly_free"
-            android:layout_width="0dp"
+            android:id="@+id/ly_life_premium"
+            android:layout_width="@dimen/dimen_152"
             android:layout_height="@dimen/dimen_176"
-            android:layout_marginStart="@dimen/dimen_20"
             android:layout_marginTop="@dimen/dimen_20"
-            android:layout_marginEnd="@dimen/dimen_8"
             android:background="@drawable/bg_border_purchase"
-            app:layout_constraintEnd_toStartOf="@id/ly_fee"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title_access">
 
-            <ImageView
-                android:id="@+id/btn_check_free"
-                android:layout_width="@dimen/dimen_24"
-                android:layout_height="@dimen/dimen_24"
-                android:layout_margin="@dimen/dimen_10"
-                android:src="@drawable/ic_check_circle"
-                android:tint="@color/sky_300"
+            <CheckBox
+                android:id="@+id/btn_check_life"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/selector_checkbox"
+                android:buttonTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription,UseAppTint" />
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_package_life_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:gravity="center"
+                android:text="@string/lb_lifetime"
+                android:textSize="@dimen/font_16"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_check_life"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/tv_life_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/lb_sub_lifetime_price"
+                android:textColor="@color/sky_300"
+                android:textSize="@dimen/font_18"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_package_life_time"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/tv_desc_life"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_12"
+                android:paddingHorizontal="@dimen/dimen_10"
+                android:text="@string/lb_desc_lifetime"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_life_price" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_package_monthly"
+            android:layout_width="@dimen/dimen_140"
+            android:layout_height="@dimen/dimen_140"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:background="@drawable/bg_border_purchase"
+            app:layout_constraintEnd_toStartOf="@id/ly_package_yearly"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_life_premium">
+
+            <CheckBox
+                android:id="@+id/btn_check_monthly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/selector_checkbox"
+                android:buttonTint="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/tv_free"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_10"
                 android:gravity="center"
                 android:text="@string/lb_monthly"
                 android:textSize="@dimen/font_16"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_check_free"
+                app:layout_constraintTop_toBottomOf="@id/btn_check_monthly"
                 tools:ignore="SpUsage" />
 
             <TextView
@@ -101,59 +162,58 @@
                 android:id="@+id/tv_desc_free"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_12"
                 android:paddingHorizontal="@dimen/dimen_10"
-                android:text="@string/lb_desc_free"
+
+                android:text="@string/lb_desc_monthly"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
+                android:textSize="@dimen/font_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_free_trial" />
+                app:layout_constraintTop_toBottomOf="@id/tv_free_trial"
+                tools:ignore="SpUsage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Gói Fee -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ly_fee"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_176"
-            android:layout_marginStart="@dimen/dimen_8"
-            android:layout_marginEnd="@dimen/dimen_20"
+            android:id="@+id/ly_package_yearly"
+            android:layout_width="@dimen/dimen_140"
+            android:layout_height="@dimen/dimen_140"
             android:background="@drawable/bg_border_purchase"
-            app:layout_constraintBottom_toBottomOf="@id/ly_free"
+            app:layout_constraintBottom_toBottomOf="@+id/ly_package_monthly"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ly_free"
-            app:layout_constraintTop_toTopOf="@id/ly_free">
+            app:layout_constraintStart_toEndOf="@id/ly_package_monthly"
+            app:layout_constraintTop_toTopOf="@id/ly_package_monthly">
 
-            <ImageView
-                android:id="@+id/btn_check_fee"
-                android:layout_width="@dimen/dimen_24"
-                android:layout_height="@dimen/dimen_24"
-                android:layout_margin="@dimen/dimen_10"
-                android:src="@drawable/ic_uncheck_circle"
-                android:tint="@color/sky_300"
+            <CheckBox
+                android:id="@+id/btn_check_yearly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/selector_checkbox"
+                android:buttonTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription,UseAppTint" />
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/tv_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_10"
-                android:text="@string/lb_inapp_one"
+                android:text="@string/lb_yearly"
                 android:textSize="@dimen/font_16"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_check_fee"
+                app:layout_constraintTop_toBottomOf="@id/btn_check_yearly"
                 tools:ignore="HardcodedText,SpUsage" />
 
             <TextView
                 android:id="@+id/tv_fee_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/lb_inapp_price"
+                android:text="@string/lb_sub_yearly_price"
                 android:textColor="@color/sky_300"
                 android:textSize="@dimen/font_18"
                 android:textStyle="bold"
@@ -166,16 +226,28 @@
                 android:id="@+id/tv_desc_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_12"
                 android:paddingHorizontal="@dimen/dimen_10"
                 android:text="@string/lb_desc_yearly"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
+                android:textSize="@dimen/font_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_fee_" />
+                app:layout_constraintTop_toBottomOf="@id/tv_fee_"
+                tools:ignore="SpUsage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/btn_continue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_package_yearly" />
 
         <Button
             android:id="@+id/btn_continue"
@@ -187,7 +259,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ly_free"
+            app:layout_constraintTop_toBottomOf="@id/ly_package_yearly"
             app:layout_constraintVertical_bias="0.9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,4 +273,5 @@
         android:src="@mipmap/ic_close"
         android:tint="@color/white"
         tools:ignore="ContentDescription,UseAppTint" />
+
 </FrameLayout>

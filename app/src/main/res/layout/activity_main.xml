@@ -56,17 +56,6 @@
                 tools:ignore="ContentDescription" />
         </androidx.appcompat.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/tv_user_online"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/dimen_4"
-            android:textSize="@dimen/font_14"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tool_bar"
-            tools:ignore="MissingConstraints,SpUsage" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_feature"
             android:layout_width="match_parent"
@@ -75,7 +64,7 @@
             app:layout_constraintBottom_toTopOf="@+id/fl_native_banner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_online"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
             tools:ignore="MissingConstraints" />
 
         <FrameLayout

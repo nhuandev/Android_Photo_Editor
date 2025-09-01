@@ -82,13 +82,17 @@
     <string name="lb_please_select_language">Please select language</string>
     <string name="lb_title_unlimited">UNLIMITED</string>
     <string name="lb_title_access">ACCESS</string>
-    <string name="lb_monthly">Premium Monthly</string>
-    <string name="lb_sub_monthly_price">$10.99 / month</string>
-    <string name="lb_desc_free">Unlimited stickers premium features</string>
+    <string name="lb_monthly">Monthly</string>
+    <string name="lb_sub_monthly_price">$4.99</string>
+    <string name="lb_desc_monthly">Unlimited stickers premium features</string>
 
-    <string name="lb_inapp_one">Premium One Time</string>
-    <string name="lb_inapp_price">$19.99 one-time</string>
-    <string name="lb_desc_yearly">Pay once, enjoy ad-free experience forever</string>
+    <string name="lb_yearly">Yearly</string>
+    <string name="lb_sub_yearly_price">$29.99</string>
+    <string name="lb_desc_yearly">Best value! Save more with yearly plan</string>
+
+    <string name="lb_lifetime">Lifetime</string>
+    <string name="lb_sub_lifetime_price">$59.99</string>
+    <string name="lb_desc_lifetime">Pay once, enjoy forever with no ads</string>
     <string name="lb_continue">Continue</string>
 
     <string name="lb_sticker_basic">Basic</string>

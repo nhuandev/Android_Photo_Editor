@@ -15,7 +15,7 @@ const val IMAGE_URI = "imageUri"
 const val outputDirectory = "/PhotoIntern"
 
 // Url firebase storage
-const val URL_STORAGE = "app_editor"
+const val URL_STORAGE = "app_editor_snapmagic"
 
 // Tag feature
 const val TAG_FEATURE_EDIT = 1
@@ -64,6 +64,6 @@ const val ANALYTICS_FILTER = 0
 const val ANALYTICS_STICKER = 1
 
 // In‑app billing
-const val KEY_IS_PREMIUM = "is_premium_user"
-const val PRODUCT_ID_PREMIUM_LIFETIME = "premium_lifetime"
-const val PRODUCT_ID_PREMIUM_MONTHLY = "premium_monthly"
+const val PREMIUM_WEEKLY_ID = "premium_weekly"
+const val PREMIUM_LIFETIME_ID = "lifetime_premium"
+const val PREMIUM_YEARLY_ID = "premium_yearly"

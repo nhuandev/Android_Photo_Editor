@@ -27,13 +27,13 @@ object PresenceManager {
 
         val onlineStatus = Device(
             deviceStatus = true,
-            deviceTime = System.currentTimeMillis()
+            deviceTime = System.currentTimeMillis().toString()
         )
         userStatusRef.setValue(onlineStatus)
         userStatusRef.onDisconnect().setValue(
             Device(
                 deviceStatus = false,
-                deviceTime = System.currentTimeMillis()
+                deviceTime = System.currentTimeMillis().toString()
             )
         )
     }
@@ -45,7 +45,7 @@ object PresenceManager {
 
         val offlineStatus = Device(
             deviceStatus = false,
-            deviceTime = System.currentTimeMillis()
+            deviceTime = System.currentTimeMillis().toString()
         )
         userStatusRef.setValue(offlineStatus)
     }

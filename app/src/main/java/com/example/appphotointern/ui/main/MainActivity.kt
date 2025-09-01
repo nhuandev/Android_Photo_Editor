@@ -30,6 +30,7 @@ import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.ui.analytics.AnalyticsActivity
 import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
+import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.KEY_BANNER
 import com.example.appphotointern.utils.KEY_BANNER_IMAGE_URL
@@ -57,7 +58,6 @@ class MainActivity : BaseActivity() {
     private val remoteConfig by lazy { Firebase.remoteConfig }
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapterHome: MainAdapter
-    private var nativeAd: NativeAd? = null
 
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
@@ -86,10 +86,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initPermissionLaunchers()
-        loadNativeAd()
         initUI()
         initEvent()
         initObserver()
+        AdManager.loadNative(this, binding.flNativeBanner)
     }
 
     private fun initPermissionLaunchers() {
@@ -198,11 +198,6 @@ class MainActivity : BaseActivity() {
                     R.id.nav_menu_language -> {
                         val languageFragment = LanguageFragment()
                         languageFragment.show(supportFragmentManager, languageFragment.tag)
-                    }
-
-                    R.id.nav_menu_sticker -> {
-                        val intent = Intent(this@MainActivity, StickerActivity::class.java)
-                        startActivity(intent)
                     }
 
                     R.id.nav_menu_dev -> {
@@ -318,67 +313,20 @@ class MainActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    private fun loadNativeAd() {
-        val builder = AdLoader.Builder(this, getString(R.string.banner_native_ad))
-
-        builder.forNativeAd { ad: NativeAd ->
-            nativeAd?.destroy()
-            nativeAd = ad
-
-            val adView = layoutInflater.inflate(R.layout.ad_native, null) as NativeAdView
-            populateNativeAdView(ad, adView)
-
-            binding.flNativeBanner.removeAllViews()
-            binding.flNativeBanner.addView(adView)
-        }
-        val adLoader = builder
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    Log.e("AdMob", "Failed to load native ad: ${error.message}")
-                }
-            }).build()
-
-        adLoader.loadAd(AdRequest.Builder().build())
-    }
-
-    private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
-        adView.headlineView = adView.findViewById(R.id.ad_headline)
-        adView.mediaView = adView.findViewById(R.id.ad_media)
-        adView.bodyView = adView.findViewById(R.id.ad_body)
-        adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
-
-        (adView.headlineView as TextView).text = nativeAd.headline
-        adView.mediaView?.setMediaContent(nativeAd.mediaContent)
-
-        if (nativeAd.body == null) {
-            adView.bodyView?.visibility = View.GONE
-        } else {
-            adView.bodyView?.visibility = View.VISIBLE
-            (adView.bodyView as TextView).text = nativeAd.body
-        }
-
-        if (nativeAd.callToAction == null) {
-            adView.callToActionView?.visibility = View.GONE
-        } else {
-            adView.callToActionView?.visibility = View.VISIBLE
-            (adView.callToActionView as Button).text = nativeAd.callToAction
-        }
-
-        adView.setNativeAd(nativeAd)
-    }
-
     override fun onStart() {
         super.onStart()
         PresenceManager.setUserOnline(this)
-
+        AdManager.showAppOpen(this)
         PresenceManager.listenOnlineUsers { onlineUsers ->
-            Log.d("OnlineUsers", "Online users: $onlineUsers")
-            binding.tvUserOnline.text = getString(R.string.lb_user_online, onlineUsers.size)
+            val count = onlineUsers.size
+            val menuItem = binding.drawerMain.menu.findItem(R.id.nav_menu_users)
+            menuItem.title = getString(R.string.lb_user_online, count)
         }
+
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         PresenceManager.setUserOffline(this)
     }
 }

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.appphotointern" />
-                  <option name="mobileSdkAppId" value="1:694014930157:android:577fb0082565d8d03a70e4" />
-                  <option name="projectId" value="appfood-10eb9" />
-                  <option name="projectNumber" value="694014930157" />
+                  <option name="appId" value="com.azmobile.phonemirror" />
+                  <option name="mobileSdkAppId" value="1:413476744177:android:1470365e7a064ec64af250" />
+                  <option name="projectId" value="internship-project-86ee1" />
+                  <option name="projectNumber" value="413476744177" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

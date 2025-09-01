@@ -13,7 +13,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.appphotointern"
+        applicationId = "com.azmobile.phonemirror"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -29,6 +29,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["analyticsCollectionEnabled"] = false
+        }
+
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            manifestPlaceholders["analyticsCollectionEnabled"] = false
         }
     }
     compileOptions {
@@ -63,7 +73,7 @@ dependencies {
     val core_ktx_version = "1.13.1"
     val material_version = "1.11.0"
     val camerax_version = "1.4.2"
-    val billing_version = "8.0.0"
+    val billing_version = "6.2.0"
     val hilt_version = "2.50"
 
 

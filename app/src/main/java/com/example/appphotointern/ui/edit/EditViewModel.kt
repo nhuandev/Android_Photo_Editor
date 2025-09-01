@@ -16,7 +16,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.appphotointern.models.Filter
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.models.Frame
-import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.utils.FilterManager
 import com.example.appphotointern.utils.KEY_FRAME
 import com.example.appphotointern.utils.URL_STORAGE

@@ -60,10 +60,13 @@ class LanguageFragment : DialogFragment() {
         binding.btnDoneLanguage.setOnClickListener {
             val selected = languageAdapter.getSelectedLanguage()
             selected?.let {
-                Firebase.analytics.setUserProperty("language", selected.code)
-                LanguageManager.setLanguage(requireContext(), selected.code)
-                LanguageManager.applyLanguage(requireContext(), selected.code)
-                requireActivity().recreate()
+                val currentCode = LanguageManager.getLanguage(requireContext())
+                if (selected.code != currentCode) {
+                    Firebase.analytics.setUserProperty("language", selected.code)
+                    LanguageManager.setLanguage(requireContext(), selected.code)
+                    LanguageManager.applyLanguage(requireContext(), selected.code)
+                    requireActivity().recreate()
+                }
                 dismiss()
             } ?: run {
                 requireContext().toast(R.string.lb_please_select_language)
