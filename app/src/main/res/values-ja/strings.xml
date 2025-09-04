@@ -83,16 +83,14 @@
     <string name="lb_title_unlimited">無制限</string>
     <string name="lb_title_access">アクセス</string>
 
-    <string name="lb_monthly">月額プラン</string>
-    <string name="lb_sub_monthly_price">¥600</string>
-    <string name="lb_desc_monthly">無制限スタンプ＆プレミアム機能</string>
-
+    <string name="lb_weekly">月額プラン</string>
+    <string name="lb_sub_weekly_price">¥2,294</string>
+    <string name="lb_desc_weekly">無制限スタンプ＆プレミアム機能</string>
     <string name="lb_yearly">年間プラン</string>
-    <string name="lb_sub_yearly_price">¥3,600</string>
+    <string name="lb_sub_yearly_price">¥5,876</string>
     <string name="lb_desc_yearly">年間契約でお得に利用できます</string>
-
     <string name="lb_lifetime">買い切り</string>
-    <string name="lb_sub_lifetime_price">¥7,200</string>
+    <string name="lb_sub_lifetime_price">¥7,941</string>
     <string name="lb_desc_lifetime">一度の支払いで広告なし、永久利用</string>
     <string name="lb_continue">続ける</string>
 

@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -29,8 +27,8 @@ import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.ui.analytics.AnalyticsActivity
-import com.example.appphotointern.ui.edit.tools.sticker.StickerActivity
 import com.example.appphotointern.utils.AdManager
+import com.example.appphotointern.utils.BillingManager
 import com.example.appphotointern.utils.CustomDialog
 import com.example.appphotointern.utils.KEY_BANNER
 import com.example.appphotointern.utils.KEY_BANNER_IMAGE_URL
@@ -42,22 +40,19 @@ import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
 import com.example.appphotointern.utils.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
 import com.example.appphotointern.utils.TAG_FEATURE_EDIT
-import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import org.json.JSONObject
-import com.google.android.gms.ads.AdListener
 
 class MainActivity : BaseActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val remoteConfig by lazy { Firebase.remoteConfig }
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapterHome: MainAdapter
+    private lateinit var billingManager: BillingManager
+    private var checkPremium = true
 
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
@@ -89,7 +84,19 @@ class MainActivity : BaseActivity() {
         initUI()
         initEvent()
         initObserver()
-        AdManager.loadNative(this, binding.flNativeBanner)
+        billingManager = BillingManager(this)
+        checkPremium = billingManager.isPremiumSync()
+        if (checkPremium) {
+            Log.d("CHECK PREMIUM ", "$checkPremium")
+            binding.flNativeBanner.visibility = View.GONE
+            binding.adView.visibility = View.GONE
+        } else {
+            Log.d("CHECK PREMIUM ", "$checkPremium")
+            AdManager.loadNative(this, binding.flNativeBanner)
+            binding.adView.loadAd(AdRequest.Builder().build())
+            AdManager.loadAppOpen(this)
+            AdManager.showAppOpen(this)
+        }
     }
 
     private fun initPermissionLaunchers() {
@@ -118,9 +125,6 @@ class MainActivity : BaseActivity() {
 
     private fun initUI() {
         remoteConfigBanner()
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
-
         adapterHome = MainAdapter(emptyList(), onItemClick = { feature ->
             when (feature.featureType) {
                 TAG_FEATURE_EDIT -> {
@@ -182,8 +186,12 @@ class MainActivity : BaseActivity() {
             drawerMain.setNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.nav_menu_premium -> {
-                        val intent = Intent(this@MainActivity, PurchaseActivity::class.java)
-                        startActivity(intent)
+                        if (checkPremium) {
+                            CustomDialog().showPremiumDialog(this@MainActivity)
+                        } else {
+                            val intent = Intent(this@MainActivity, PurchaseActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
 
                     R.id.nav_menu_album -> {
@@ -316,13 +324,15 @@ class MainActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         PresenceManager.setUserOnline(this)
-        AdManager.showAppOpen(this)
         PresenceManager.listenOnlineUsers { onlineUsers ->
             val count = onlineUsers.size
             val menuItem = binding.drawerMain.menu.findItem(R.id.nav_menu_users)
             menuItem.title = getString(R.string.lb_user_online, count)
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroy() {

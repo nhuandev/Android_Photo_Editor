@@ -6,7 +6,6 @@ import android.os.Looper
 import android.content.Intent
 import android.os.Handler
 import com.example.appphotointern.ui.main.MainActivity
-import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivitySplashBinding
 import com.example.appphotointern.repository.impl.SplashRepository
 import com.example.appphotointern.ui.language.LanguageActivity

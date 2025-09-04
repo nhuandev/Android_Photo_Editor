@@ -112,7 +112,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ly_package_monthly"
+            android:id="@+id/ly_package_weekly"
             android:layout_width="@dimen/dimen_140"
             android:layout_height="@dimen/dimen_140"
             android:layout_marginTop="@dimen/dimen_20"
@@ -122,7 +122,7 @@
             app:layout_constraintTop_toBottomOf="@id/ly_life_premium">
 
             <CheckBox
-                android:id="@+id/btn_check_monthly"
+                android:id="@+id/btn_check_weekly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -137,19 +137,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/lb_monthly"
+                android:text="@string/lb_weekly"
                 android:textSize="@dimen/font_16"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_check_monthly"
+                app:layout_constraintTop_toBottomOf="@id/btn_check_weekly"
                 tools:ignore="SpUsage" />
 
             <TextView
                 android:id="@+id/tv_free_trial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/lb_sub_monthly_price"
+                android:text="@string/lb_sub_weekly_price"
                 android:textColor="@color/sky_300"
                 android:textSize="@dimen/font_18"
                 android:textStyle="bold"
@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/dimen_10"
 
-                android:text="@string/lb_desc_monthly"
+                android:text="@string/lb_desc_weekly"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/font_12"
@@ -181,10 +181,10 @@
             android:layout_width="@dimen/dimen_140"
             android:layout_height="@dimen/dimen_140"
             android:background="@drawable/bg_border_purchase"
-            app:layout_constraintBottom_toBottomOf="@+id/ly_package_monthly"
+            app:layout_constraintBottom_toBottomOf="@+id/ly_package_weekly"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ly_package_monthly"
-            app:layout_constraintTop_toTopOf="@id/ly_package_monthly">
+            app:layout_constraintStart_toEndOf="@id/ly_package_weekly"
+            app:layout_constraintTop_toTopOf="@id/ly_package_weekly">
 
             <CheckBox
                 android:id="@+id/btn_check_yearly"
@@ -275,3 +275,4 @@
         tools:ignore="ContentDescription,UseAppTint" />
 
 </FrameLayout>
+

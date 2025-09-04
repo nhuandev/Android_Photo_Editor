@@ -1,4 +1,4 @@
-package com.example.appphotointern
+package com.azmobile.phonemirror
 
 import android.app.Activity
 import android.app.Application

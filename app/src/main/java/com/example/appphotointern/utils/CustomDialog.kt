@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.example.appphotointern.R
 import androidx.core.graphics.toColorInt
+import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CustomDialog() {
     private var loadingDialog: AlertDialog? = null
@@ -92,6 +95,33 @@ class CustomDialog() {
             .create()
         loadingDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         loadingDialog?.show()
+    }
+
+    fun showPremiumDialog(activity: Activity) {
+        val dialogView = activity.layoutInflater.inflate(R.layout.dialog_premium, null)
+
+        val tvMessage = dialogView.findViewById<TextView>(R.id.tvMessage)
+        val btnOk = dialogView.findViewById<Button>(R.id.btnOk)
+        val animationView = dialogView.findViewById<LottieAnimationView>(R.id.animationView)
+
+        tvMessage.text = activity.getString(R.string.lb_premium)
+
+        val dialog = MaterialAlertDialogBuilder(activity)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setOnShowListener {
+            dialogView.scaleX = 0.5f
+            dialogView.scaleY = 0.5f
+            dialogView.animate().scaleX(1f).scaleY(1f).setDuration(300).start()
+            animationView.playAnimation()
+        }
+        dialog.show()
     }
 
     fun dismissLoadingAd() {

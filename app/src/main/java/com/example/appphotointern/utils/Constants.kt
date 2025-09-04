@@ -62,8 +62,3 @@ const val STICKER_CREATIVE = 2
 // Analytics fragment
 const val ANALYTICS_FILTER = 0
 const val ANALYTICS_STICKER = 1
-
-// In‑app billing
-const val PREMIUM_WEEKLY_ID = "premium_weekly"
-const val PREMIUM_LIFETIME_ID = "lifetime_premium"
-const val PREMIUM_YEARLY_ID = "premium_yearly"

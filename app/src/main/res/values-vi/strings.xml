@@ -83,16 +83,14 @@
     <string name="lb_title_unlimited">Không giới hạn</string>
     <string name="lb_title_access">Truy cập</string>
 
-    <string name="lb_monthly">Theo tháng</string>
-    <string name="lb_sub_monthly_price">119.000₫</string>
-    <string name="lb_desc_monthly">Dùng không giới hạn sticker tính năng cao cấp</string>
-
+    <string name="lb_weekly">Tuần</string>
+    <string name="lb_sub_weekly_price">390,000₫</string>
+    <string name="lb_desc_weekly">Dùng không giới hạn sticker tính năng cao cấp</string>
     <string name="lb_yearly">Theo năm</string>
-    <string name="lb_sub_yearly_price">699.000₫</string>
+    <string name="lb_sub_yearly_price">999,000₫</string>
     <string name="lb_desc_yearly">Tiết kiệm hơn với gói 12 tháng</string>
-
     <string name="lb_lifetime">Trọn đời</string>
-    <string name="lb_sub_lifetime_price">1.399.000₫</string>
+    <string name="lb_sub_lifetime_price">1,350,000₫</string>
     <string name="lb_desc_lifetime">Thanh toán một lần, dùng mãi mãi không quảng cáo</string>
     <string name="lb_continue">Tiếp tục</string>
 
