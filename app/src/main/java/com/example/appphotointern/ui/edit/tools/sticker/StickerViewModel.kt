@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.models.StickerCategory
-import com.example.appphotointern.utils.KEY_STICKER
-import com.example.appphotointern.utils.URL_STORAGE
+import com.example.appphotointern.common.KEY_STICKER
+import com.example.appphotointern.common.URL_STORAGE
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson

@@ -3,8 +3,8 @@ package com.example.appphotointern.ui.analytics.fragments
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.appphotointern.utils.ANALYTICS_FILTER
-import com.example.appphotointern.utils.ANALYTICS_STICKER
+import com.example.appphotointern.common.ANALYTICS_FILTER
+import com.example.appphotointern.common.ANALYTICS_STICKER
 
 class AnalyticsViewPager(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {

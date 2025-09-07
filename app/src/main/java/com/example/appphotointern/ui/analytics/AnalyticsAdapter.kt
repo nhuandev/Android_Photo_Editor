@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemAnalyticsBinding
 import com.example.appphotointern.models.AnalyticsItem
-import com.example.appphotointern.utils.URL_STORAGE
+import com.example.appphotointern.common.URL_STORAGE
 import com.google.firebase.storage.FirebaseStorage
 
 class AnalyticsAdapter(

@@ -3,9 +3,9 @@ package com.example.appphotointern.ui.edit.tools.sticker.fragments
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.appphotointern.utils.STICKER_BASIC
-import com.example.appphotointern.utils.STICKER_CREATIVE
-import com.example.appphotointern.utils.STICKER_FESTIVAL
+import com.example.appphotointern.common.STICKER_BASIC
+import com.example.appphotointern.common.STICKER_CREATIVE
+import com.example.appphotointern.common.STICKER_FESTIVAL
 
 class StickerViewPager(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {

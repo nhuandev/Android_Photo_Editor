@@ -2,9 +2,9 @@ package com.example.appphotointern.repository.impl
 
 import android.content.Context
 import com.example.appphotointern.repository.ISplashRepository
-import com.example.appphotointern.utils.KEY_CHOOSE_LANGUAGE
-import com.example.appphotointern.utils.KEY_SEEN_WELCOME
-import com.example.appphotointern.utils.PREFS_NAME
+import com.example.appphotointern.common.KEY_CHOOSE_LANGUAGE
+import com.example.appphotointern.common.KEY_SEEN_WELCOME
+import com.example.appphotointern.common.PREFS_NAME
 
 class SplashRepository(context: Context) : ISplashRepository {
     private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

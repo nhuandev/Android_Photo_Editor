@@ -12,9 +12,10 @@ import com.example.appphotointern.databinding.FragmentStickerFestivalBinding
 import com.example.appphotointern.ui.edit.tools.sticker.StickerAdapter
 import com.example.appphotointern.ui.edit.tools.sticker.StickerViewModel
 import com.example.appphotointern.ui.purchase.PurchaseActivity
-import com.example.appphotointern.utils.FEATURE_STICKER
+import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.utils.FireStoreManager
-import com.example.appphotointern.utils.RESULT_STICKER
+import com.example.appphotointern.common.RESULT_STICKER
+import com.example.appphotointern.utils.PurchasePrefs
 
 class FestivalFragment : Fragment() {
     private var _binding: FragmentStickerFestivalBinding? = null
@@ -41,17 +42,17 @@ class FestivalFragment : Fragment() {
     private fun initUI() {
         stickerAdapter = StickerAdapter(emptyList()) { sticker ->
             FireStoreManager.tryIncrementSticker(sticker.name, sticker.folder)
-            if (sticker.isPremium) {
-                val intent = Intent(requireContext(), PurchaseActivity::class.java)
-                startActivity(intent)
-            } else {
-                viewModel.downloadStickerToInternalStorage(sticker) { file ->
-                    val intent = Intent().apply {
-                        putExtra(FEATURE_STICKER, file?.absolutePath)
-                    }
-                    requireActivity().setResult(RESULT_STICKER, intent)
-                    requireActivity().finish()
+            val checkPremium = PurchasePrefs(requireContext()).hasPremium
+            if (sticker.isPremium && !checkPremium) {
+                startActivity(Intent(requireContext(), PurchaseActivity::class.java))
+                return@StickerAdapter
+            }
+            viewModel.downloadStickerToInternalStorage(sticker) { file ->
+                val intent = Intent().apply {
+                    putExtra(FEATURE_STICKER, file?.absolutePath)
                 }
+                requireActivity().setResult(RESULT_STICKER, intent)
+                requireActivity().finish()
             }
         }
         binding.recStickerFestival.layoutManager = GridLayoutManager(requireContext(), 4)

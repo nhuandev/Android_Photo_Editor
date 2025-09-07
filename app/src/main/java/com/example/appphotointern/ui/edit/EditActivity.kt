@@ -28,15 +28,17 @@ import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.ui.edit.tools.frame.FrameLayer
 import com.example.appphotointern.utils.AnalyticsManager
-import com.example.appphotointern.utils.CROP_CLOSED
-import com.example.appphotointern.utils.CustomDialog
-import com.example.appphotointern.utils.FEATURE_STICKER
-import com.example.appphotointern.utils.FEATURE_TEXT
+import com.example.appphotointern.common.CROP_CLOSED
+import com.example.appphotointern.common.CustomDialog
+import com.example.appphotointern.common.FEATURE_STICKER
+import com.example.appphotointern.common.FEATURE_TEXT
 import com.example.appphotointern.utils.FireStoreManager
-import com.example.appphotointern.utils.IMAGE_URI
+import com.example.appphotointern.common.IMAGE_URI
 import com.example.appphotointern.utils.ImageOrientation
-import com.example.appphotointern.utils.RESULT_STICKER
-import com.example.appphotointern.utils.RESULT_TEXT
+import com.example.appphotointern.common.RESULT_STICKER
+import com.example.appphotointern.common.RESULT_TEXT
+import com.example.appphotointern.ui.purchase.BillingManager
+import com.example.appphotointern.utils.PurchasePrefs
 import com.example.appphotointern.views.ObjectOnView
 import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
@@ -50,6 +52,7 @@ class EditActivity : BaseActivity() {
     private val editViewModel by viewModels<EditViewModel>()
     private lateinit var editAdapter: EditAdapter
     private lateinit var imageLayer: FrameLayer
+    private lateinit var billingManager: BillingManager
     private lateinit var adView: AdView
 
     private var objectOnView: ObjectOnView? = null
@@ -143,12 +146,19 @@ class EditActivity : BaseActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initUI() {
+        billingManager = BillingManager(this)
         adView = binding.adView
-        val adRequest = AdRequest.Builder()
-            .addNetworkExtrasBundle(AdMobAdapter::class.java, Bundle().apply {
-                putString("collapsible", "bottom")
-            }).build()
-        adView.loadAd(adRequest)
+        val checkPremium = PurchasePrefs(this).hasPremium
+        if (checkPremium) {
+            adView.visibility = View.GONE
+        } else {
+            adView = binding.adView
+            val adRequest = AdRequest.Builder()
+                .addNetworkExtrasBundle(AdMobAdapter::class.java, Bundle().apply {
+                    putString("collapsible", "bottom")
+                }).build()
+            adView.loadAd(adRequest)
+        }
 
         binding.apply {
             imageLayer = FrameLayer(flMain)

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import com.example.appphotointern.ui.purchase.BillingManager
 import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.LanguageManager
@@ -14,8 +15,12 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 
 class MainApplication : Application(), Application.ActivityLifecycleCallbacks {
+    private lateinit var billingManager: BillingManager
     override fun onCreate() {
         super.onCreate()
+        billingManager = BillingManager(this)
+        billingManager.startBillingConnect()
+
         FirebaseApp.initializeApp(this)
         val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         AnalyticsManager.init(firebaseAnalytics)

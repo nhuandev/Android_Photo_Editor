@@ -8,22 +8,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.AdManager
-import com.example.appphotointern.utils.CustomDialog
-import com.example.appphotointern.utils.IMAGE_URI
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.example.appphotointern.common.CustomDialog
+import com.example.appphotointern.common.IMAGE_URI
+import com.example.appphotointern.utils.PurchasePrefs
 
 class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
@@ -47,11 +40,16 @@ class PreviewFragment : Fragment() {
         binding.root.setOnTouchListener { _, _ -> true }
         initUI()
         initEvent()
-        customDialog.showLoadingAd(requireActivity())
-        AdManager.loadInterstitial(requireContext()) {
-            customDialog.dismissLoadingAd()
-            AdManager.showInterstitial(requireActivity()) {
-                customDialog.dismissLoadingAd()
+        val checkPremium = PurchasePrefs(requireContext()).hasPremium
+        if (checkPremium) {
+            customDialog.dismissDialog()
+        } else {
+            customDialog.showLoadingAd(requireActivity())
+            AdManager.loadInterstitial(requireContext()) {
+                customDialog.dismissDialog()
+                AdManager.showInterstitial(requireActivity()) {
+                    customDialog.dismissDialog()
+                }
             }
         }
     }
@@ -104,7 +102,7 @@ class PreviewFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        customDialog.dismissLoadingAd()
+        customDialog.dismissDialog()
         _binding = null
         AdManager.destroy()
     }

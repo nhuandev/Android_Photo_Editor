@@ -14,7 +14,8 @@ import com.bumptech.glide.request.target.Target
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemStickerBinding
 import com.example.appphotointern.models.Sticker
-import com.example.appphotointern.utils.URL_STORAGE
+import com.example.appphotointern.common.URL_STORAGE
+import com.example.appphotointern.utils.PurchasePrefs
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
@@ -31,8 +32,8 @@ class StickerAdapter(
             val context = binding.root.context
             val stickerDir = File(context.filesDir, sticker.folder)
             val localFile = File(stickerDir, "${sticker.name}.webp")
-            binding.imgPremium.visibility = if (sticker.isPremium) View.VISIBLE else View.GONE
-            var isError = false
+            val isPremium = PurchasePrefs(context).hasPremium
+            binding.imgPremium.visibility = if (sticker.isPremium && !isPremium) View.VISIBLE else View.GONE
             binding.progressSticker.visibility = View.VISIBLE
 
             val glideRequest = if (localFile.exists()) {
@@ -42,7 +43,7 @@ class StickerAdapter(
                 val imageRef = storage.reference.child(path)
                 Glide.with(context).load(imageRef)
             }
-
+            var isError = false
             glideRequest
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(R.drawable.ic_error)

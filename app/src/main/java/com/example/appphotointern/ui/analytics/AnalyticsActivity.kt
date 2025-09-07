@@ -5,8 +5,8 @@ import com.example.appphotointern.R
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.databinding.ActivityAnalyticsBinding
 import com.example.appphotointern.ui.analytics.fragments.AnalyticsViewPager
-import com.example.appphotointern.utils.ANALYTICS_FILTER
-import com.example.appphotointern.utils.ANALYTICS_STICKER
+import com.example.appphotointern.common.ANALYTICS_FILTER
+import com.example.appphotointern.common.ANALYTICS_STICKER
 import com.google.android.material.tabs.TabLayoutMediator
 
 class AnalyticsActivity : BaseActivity() {

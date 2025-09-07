@@ -17,9 +17,9 @@ import com.example.appphotointern.models.Filter
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.utils.FilterManager
-import com.example.appphotointern.utils.KEY_FRAME
-import com.example.appphotointern.utils.URL_STORAGE
-import com.example.appphotointern.utils.outputDirectory
+import com.example.appphotointern.common.KEY_FRAME
+import com.example.appphotointern.common.URL_STORAGE
+import com.example.appphotointern.common.outputDirectory
 import com.example.appphotointern.views.ImageOnView
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage

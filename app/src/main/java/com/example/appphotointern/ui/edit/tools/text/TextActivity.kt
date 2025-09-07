@@ -5,8 +5,8 @@ import android.os.Bundle
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityTextBinding
 import com.example.appphotointern.common.BaseActivity
-import com.example.appphotointern.utils.FEATURE_TEXT
-import com.example.appphotointern.utils.RESULT_TEXT
+import com.example.appphotointern.common.FEATURE_TEXT
+import com.example.appphotointern.common.RESULT_TEXT
 
 class TextActivity : BaseActivity() {
     private val binding by lazy { ActivityTextBinding.inflate(layoutInflater) }

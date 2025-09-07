@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.appphotointern.databinding.FragmentToolTextBinding
 import com.example.appphotointern.ui.edit.tools.text.TextAdapterPager
-import com.example.appphotointern.utils.TEXT_COLOR
-import com.example.appphotointern.utils.TEXT_DATA_COLOR
-import com.example.appphotointern.utils.TEXT_DATA_FONT
-import com.example.appphotointern.utils.TEXT_FONT
+import com.example.appphotointern.common.TEXT_COLOR
+import com.example.appphotointern.common.TEXT_DATA_COLOR
+import com.example.appphotointern.common.TEXT_DATA_FONT
+import com.example.appphotointern.common.TEXT_FONT
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TextToolFragment : Fragment() {

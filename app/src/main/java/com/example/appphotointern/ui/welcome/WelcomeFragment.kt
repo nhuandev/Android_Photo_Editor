@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.appphotointern.databinding.FragmentWelcomePageBinding
-import com.example.appphotointern.utils.ARG_DESCRIPTION
-import com.example.appphotointern.utils.ARG_IMAGE_RESOURCE
-import com.example.appphotointern.utils.ARG_TITLE
+import com.example.appphotointern.common.ARG_DESCRIPTION
+import com.example.appphotointern.common.ARG_IMAGE_RESOURCE
+import com.example.appphotointern.common.ARG_TITLE
 
 class WelcomeFragment : Fragment() {
     private lateinit var binding : FragmentWelcomePageBinding

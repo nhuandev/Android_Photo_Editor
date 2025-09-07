@@ -101,4 +101,13 @@
     <string name="lb_user_online">ユーザーオンライン %1$d</string>
     <string name="lb_analytics">分析</string>
     <string name="lb_loading_ad">広告を読み込んでいます...</string>
+
+    <string name="lb_toast_purchase_success">購入に成功しました</string>
+    <string name="lb_toast_purchase_fail">購入に失敗しました</string>
+    <string name="lb_toast_purchase_cancel">購入がキャンセルされました</string>
+    <string name="lb_toast_purchase_error">購入エラー</string>
+    <string name="lb_toast_purchase_disconnect">購入が切断されました</string>
+    <string name="lb_toast_network_error">ネットワークエラー</string>
+    <string name="lb_toast_purchase_already_purchased">すでに購入済み</string>
+    <string name="lb_toast_purchase_not_ready">準備中</string>
 </resources>

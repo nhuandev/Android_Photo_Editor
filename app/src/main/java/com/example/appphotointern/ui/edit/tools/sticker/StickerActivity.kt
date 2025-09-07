@@ -5,9 +5,9 @@ import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityStickerBinding
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.ui.edit.tools.sticker.fragments.StickerViewPager
-import com.example.appphotointern.utils.STICKER_BASIC
-import com.example.appphotointern.utils.STICKER_CREATIVE
-import com.example.appphotointern.utils.STICKER_FESTIVAL
+import com.example.appphotointern.common.STICKER_BASIC
+import com.example.appphotointern.common.STICKER_CREATIVE
+import com.example.appphotointern.common.STICKER_FESTIVAL
 import com.google.android.material.tabs.TabLayoutMediator
 
 class StickerActivity : BaseActivity() {

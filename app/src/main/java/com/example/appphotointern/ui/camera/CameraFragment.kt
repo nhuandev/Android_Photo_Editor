@@ -59,10 +59,10 @@ import com.example.appphotointern.ui.edit.EditViewModel
 import com.example.appphotointern.ui.edit.tools.frame.FrameAdapter
 import com.example.appphotointern.ui.main.MainActivity
 import com.example.appphotointern.ui.preview.PreviewFragment
-import com.example.appphotointern.utils.CUSTOM_FULL
-import com.example.appphotointern.utils.CUSTOM_RATIO_1_1
+import com.example.appphotointern.common.CUSTOM_FULL
+import com.example.appphotointern.common.CUSTOM_RATIO_1_1
 import com.example.appphotointern.utils.ImageOrientation
-import com.example.appphotointern.utils.outputDirectory
+import com.example.appphotointern.common.outputDirectory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

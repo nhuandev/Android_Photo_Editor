@@ -11,7 +11,7 @@ import com.example.appphotointern.repository.impl.SplashRepository
 import com.example.appphotointern.ui.language.LanguageActivity
 import com.example.appphotointern.ui.welcome.WelcomeActivity
 import com.example.appphotointern.common.BaseActivity
-import com.example.appphotointern.utils.SPLASH_DELAY
+import com.example.appphotointern.common.SPLASH_DELAY
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {

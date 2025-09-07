@@ -28,22 +28,26 @@ import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.extention.toast
 import com.example.appphotointern.ui.analytics.AnalyticsActivity
 import com.example.appphotointern.utils.AdManager
-import com.example.appphotointern.utils.BillingManager
-import com.example.appphotointern.utils.CustomDialog
-import com.example.appphotointern.utils.KEY_BANNER
-import com.example.appphotointern.utils.KEY_BANNER_IMAGE_URL
-import com.example.appphotointern.utils.KEY_BANNER_MESSAGE
-import com.example.appphotointern.utils.KEY_BANNER_TITLE
-import com.example.appphotointern.utils.KEY_SHOW_BANNER
+import com.example.appphotointern.common.CustomDialog
+import com.example.appphotointern.common.KEY_BANNER
+import com.example.appphotointern.common.KEY_BANNER_IMAGE_URL
+import com.example.appphotointern.common.KEY_BANNER_MESSAGE
+import com.example.appphotointern.common.KEY_BANNER_TITLE
+import com.example.appphotointern.common.KEY_SHOW_BANNER
+import com.example.appphotointern.common.PURCHASED
 import com.example.appphotointern.utils.PresenceManager
-import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
-import com.example.appphotointern.utils.TAG_FEATURE_ANALYTICS
-import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
-import com.example.appphotointern.utils.TAG_FEATURE_EDIT
+import com.example.appphotointern.common.TAG_FEATURE_ALBUM
+import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
+import com.example.appphotointern.common.TAG_FEATURE_CAMERA
+import com.example.appphotointern.common.TAG_FEATURE_EDIT
+import com.example.appphotointern.utils.PurchasePrefs
 import com.google.android.gms.ads.AdRequest
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 
 class MainActivity : BaseActivity() {
@@ -51,8 +55,6 @@ class MainActivity : BaseActivity() {
     private val remoteConfig by lazy { Firebase.remoteConfig }
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapterHome: MainAdapter
-    private lateinit var billingManager: BillingManager
-    private var checkPremium = true
 
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
@@ -84,19 +86,8 @@ class MainActivity : BaseActivity() {
         initUI()
         initEvent()
         initObserver()
-        billingManager = BillingManager(this)
-        checkPremium = billingManager.isPremiumSync()
-        if (checkPremium) {
-            Log.d("CHECK PREMIUM ", "$checkPremium")
-            binding.flNativeBanner.visibility = View.GONE
-            binding.adView.visibility = View.GONE
-        } else {
-            Log.d("CHECK PREMIUM ", "$checkPremium")
-            AdManager.loadNative(this, binding.flNativeBanner)
-            binding.adView.loadAd(AdRequest.Builder().build())
-            AdManager.loadAppOpen(this)
-            AdManager.showAppOpen(this)
-        }
+        checkShowBanner()
+        checkPremium()
     }
 
     private fun initPermissionLaunchers() {
@@ -124,7 +115,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initUI() {
-        remoteConfigBanner()
         adapterHome = MainAdapter(emptyList(), onItemClick = { feature ->
             when (feature.featureType) {
                 TAG_FEATURE_EDIT -> {
@@ -186,11 +176,12 @@ class MainActivity : BaseActivity() {
             drawerMain.setNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.nav_menu_premium -> {
+                        val checkPremium = PurchasePrefs(this@MainActivity).hasPremium
+                        Log.d("TAG", "initEvent: $checkPremium")
                         if (checkPremium) {
                             CustomDialog().showPremiumDialog(this@MainActivity)
                         } else {
-                            val intent = Intent(this@MainActivity, PurchaseActivity::class.java)
-                            startActivity(intent)
+                            startActivity(Intent(this@MainActivity, PurchaseActivity::class.java))
                         }
                     }
 
@@ -277,8 +268,14 @@ class MainActivity : BaseActivity() {
                         message = banner.getString(KEY_BANNER_MESSAGE),
                         imageUrl = banner.getString(KEY_BANNER_IMAGE_URL),
                         onClick = {
-                            val intent = Intent(this@MainActivity, PurchaseActivity::class.java)
-                            startActivity(intent)
+                            val checkPremium = PurchasePrefs(this).hasPremium
+                            if (checkPremium) {
+                                CustomDialog().showPremiumDialog(this@MainActivity)
+                            } else {
+                                startActivity(
+                                    Intent(this@MainActivity, PurchaseActivity::class.java)
+                                )
+                            }
                         }
                     )
                 }
@@ -321,8 +318,51 @@ class MainActivity : BaseActivity() {
         startActivity(intent)
     }
 
+    private fun checkPremium() {
+        val checkPremium = PurchasePrefs(this).hasPremium
+        Log.d("TAG", "checkPremium: $checkPremium")
+        if (checkPremium) {
+            hideAds()
+        } else {
+            showAds()
+        }
+    }
+
+    private fun showAds() {
+        AdManager.loadNative(this, binding.flNativeBanner)
+        binding.adView.loadAd(AdRequest.Builder().build())
+        AdManager.loadAppOpen(this)
+        AdManager.showAppOpen(this)
+    }
+
+    private fun hideAds() {
+        binding.flNativeBanner.visibility = View.GONE
+        binding.adView.visibility = View.GONE
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun purchaseSuccess(event: String) {
+        if (event == PURCHASED) {
+            Log.d("TAG", "purchaseSuccess: $event")
+            hideAds()
+            CustomDialog().showPremiumDialog(this)
+        }
+    }
+
+    private fun checkShowBanner() {
+        val checkPremium = PurchasePrefs(this).hasPremium
+        if (checkPremium) {
+            CustomDialog().showPremiumDialog(this)
+        } else {
+            remoteConfigBanner()
+        }
+    }
+
     override fun onStart() {
         super.onStart()
+        binding.flNativeBanner.visibility = View.VISIBLE
+        binding.adView.visibility = View.VISIBLE
+        EventBus.getDefault().register(this)
         PresenceManager.setUserOnline(this)
         PresenceManager.listenOnlineUsers { onlineUsers ->
             val count = onlineUsers.size
@@ -331,8 +371,14 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
     override fun onResume() {
         super.onResume()
+        checkPremium()
     }
 
     override fun onDestroy() {

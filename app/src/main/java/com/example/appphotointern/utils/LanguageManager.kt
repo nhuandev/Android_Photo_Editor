@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.preference.PreferenceManager
 import androidx.core.content.edit
+import com.example.appphotointern.common.KEY_LANGUAGE
 import java.util.Locale
 
 object LanguageManager {

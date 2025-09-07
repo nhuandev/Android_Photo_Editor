@@ -101,4 +101,13 @@
     <string name="lb_user_online">Đang Online %1$d</string>
     <string name="lb_analytics">Phân tích</string>
     <string name="lb_loading_ad">Đang tải quảng cáo...</string>
+
+    <string name="lb_toast_purchase_success">Mua hàng thành công</string>
+    <string name="lb_toast_purchase_fail">Mua hàng thất bại</string>
+    <string name="lb_toast_purchase_cancel">Đã hủy mua hàng</string>
+    <string name="lb_toast_purchase_error">Lỗi mua hàng</string>
+    <string name="lb_toast_purchase_disconnect">Mất kết nối khi mua hàng</string>
+    <string name="lb_toast_network_error">Lỗi kết nối mạng</string>
+    <string name="lb_toast_purchase_already_purchased">Đã mua hàng</string>
+    <string name="lb_toast_purchase_not_ready">Chưa sẵn sàng</string>
 </resources>

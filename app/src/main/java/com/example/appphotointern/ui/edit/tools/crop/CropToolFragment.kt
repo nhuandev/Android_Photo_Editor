@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.appphotointern.databinding.FragmentCropBinding
 import com.example.appphotointern.ui.edit.EditViewModel
-import com.example.appphotointern.utils.CROP_CLOSED
+import com.example.appphotointern.common.CROP_CLOSED
 import org.greenrobot.eventbus.EventBus
 
 class CropToolFragment : Fragment() {

@@ -14,7 +14,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ItemFrameBinding
 import com.example.appphotointern.models.Frame
-import com.example.appphotointern.utils.URL_STORAGE
+import com.example.appphotointern.common.URL_STORAGE
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 

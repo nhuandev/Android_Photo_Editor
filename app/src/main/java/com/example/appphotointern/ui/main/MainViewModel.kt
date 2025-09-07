@@ -8,10 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appphotointern.R
 import com.example.appphotointern.models.Feature
-import com.example.appphotointern.utils.TAG_FEATURE_ALBUM
-import com.example.appphotointern.utils.TAG_FEATURE_ANALYTICS
-import com.example.appphotointern.utils.TAG_FEATURE_CAMERA
-import com.example.appphotointern.utils.TAG_FEATURE_EDIT
+import com.example.appphotointern.common.TAG_FEATURE_ALBUM
+import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
+import com.example.appphotointern.common.TAG_FEATURE_CAMERA
+import com.example.appphotointern.common.TAG_FEATURE_EDIT
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
