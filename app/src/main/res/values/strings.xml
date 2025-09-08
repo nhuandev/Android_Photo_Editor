@@ -88,7 +88,7 @@
     <string name="lb_desc_weekly">Unlimited stickers premium features</string>
     <string name="lb_yearly">Yearly</string>
     <string name="lb_sub_yearly_price">$40.8</string>
-    <string name="lb_desc_yearly">Best value! Save more with yearly plan</string>
+    <string name="lb_desc_yearly">Best value! Save more with weekly plan</string>
     <string name="lb_lifetime">Lifetime</string>
     <string name="lb_sub_lifetime_price">$55.1</string>
     <string name="lb_desc_lifetime">Pay once, enjoy forever with no ads</string>
@@ -117,4 +117,7 @@
     <string name="lb_toast_purchase_already_purchased">Already purchased</string>
     <string name="lb_toast_purchase_not_ready">Not ready</string>
     <string name="lb_toast_network_error">Network error</string>
+
+    <string name="lb_premium_celebration">Congratulations!</string>
+    <string name="lb_upgrade_package_success">Upgrade package success</string>
 </resources>

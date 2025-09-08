@@ -53,6 +53,7 @@ const val KEY_BANNER_MESSAGE = "message"
 const val KEY_BANNER_IMAGE_URL = "image_url"
 const val KEY_STICKER = "sticker_main"
 const val KEY_FRAME = "frame_main"
+const val KEY_FRAME_CAMERA = "fea_frame_camera"
 
 // Sticker fragment
 const val STICKER_BASIC = 0

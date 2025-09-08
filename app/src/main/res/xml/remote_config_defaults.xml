@@ -4,10 +4,12 @@
         <key>banner</key>
         <value>
             {
+            "banner_id": "default_banner",
             "show_banner": false,
-            "title": "Default Title",
+            "title": "Welcome!",
             "message": "This is the default banner message.",
-            "image_url": ""
+            "image_url": "",
+            "action": ""
             }
         </value>
     </entry>

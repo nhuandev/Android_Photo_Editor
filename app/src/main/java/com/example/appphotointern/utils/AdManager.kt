@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.RatingBar
 import android.widget.TextView
 import com.example.appphotointern.R
 import com.google.android.gms.ads.*
@@ -29,7 +30,6 @@ object AdManager {
         AdRequest.Builder().build()
     }
 
-    /** ---------------- Interstitial ---------------- */
     fun loadInterstitial(context: Context, onLoaded: (() -> Unit)? = null) {
         InterstitialAd.load(
             context,
@@ -69,7 +69,6 @@ object AdManager {
         }
     }
 
-    /** ---------------- Native ---------------- */
     fun loadNative(context: Context, container: FrameLayout) {
         val builder = AdLoader.Builder(context, NATIVE_AD_ID)
         builder.forNativeAd { ad: NativeAd ->
@@ -86,26 +85,25 @@ object AdManager {
     }
 
     private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
+        adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
+        adView.starRatingView = adView.findViewById(R.id.rating_bar)
         adView.headlineView = adView.findViewById(R.id.ad_headline)
         adView.mediaView = adView.findViewById(R.id.ad_media)
         adView.bodyView = adView.findViewById(R.id.ad_body)
-        adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
 
+        (adView.callToActionView as? Button)?.text = nativeAd.callToAction
+        (adView.starRatingView as? RatingBar)?.rating = nativeAd.starRating!!.toFloat()
         (adView.headlineView as? TextView)?.text = nativeAd.headline
         adView.mediaView?.setMediaContent(nativeAd.mediaContent)
         (adView.bodyView as? TextView)?.text = nativeAd.body
-        (adView.callToActionView as? Button)?.text = nativeAd.callToAction
-
         adView.setNativeAd(nativeAd)
     }
 
-    /** ---------------- App Open ---------------- */
     fun loadAppOpen(context: Context) {
         AppOpenAd.load(
             context,
             APP_OPEN_AD_ID,
             adRequest,
-            AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     appOpenAd = ad
@@ -127,7 +125,7 @@ object AdManager {
                 override fun onAdDismissedFullScreenContent() {
                     isShowingAd = false
                     appOpenAd = null
-                    loadAppOpen(activity) // preload next ad
+                    loadAppOpen(activity)
                     onDismiss?.invoke()
                 }
 

@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -61,8 +62,16 @@ import com.example.appphotointern.ui.main.MainActivity
 import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.common.CUSTOM_FULL
 import com.example.appphotointern.common.CUSTOM_RATIO_1_1
+import com.example.appphotointern.common.KEY_FRAME_CAMERA
 import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.common.outputDirectory
+import com.example.appphotointern.utils.PurchasePrefs
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -92,6 +101,8 @@ class CameraFragment : Fragment() {
     private var currentFrameBm: Bitmap? = null
     private var currentFrame: Frame? = null
 
+    private val remoteConfig by lazy { Firebase.remoteConfig }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -112,6 +123,7 @@ class CameraFragment : Fragment() {
 
     private fun initUI() {
         binding.apply {
+            checkFrameRemote()
             btnTakePicture.isEnabled = isCapturing == false
 
             btnGrid.setImageResource(if (hasGrid) R.drawable.ic_grid_on else R.drawable.ic_grid_off)
@@ -247,6 +259,22 @@ class CameraFragment : Fragment() {
 
         editViewModel.loading.observe(viewLifecycleOwner) {
             binding.progressFrame.visibility = if (it) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun checkFrameRemote() {
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
+            if (it.isSuccessful) {
+                val isCheck = remoteConfig.getBoolean(KEY_FRAME_CAMERA)
+                if (isCheck) binding.btnFrame.visibility =
+                    View.VISIBLE else binding.btnFrame.visibility = View.GONE
+            } else {
+                requireContext().toast(R.string.toast_load_fail)
+            }
         }
     }
 

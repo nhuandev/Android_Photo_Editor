@@ -11,12 +11,34 @@
 
     <ImageView
         android:id="@+id/btnCloseCelebrate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimen_24"
+        android:layout_height="@dimen/dimen_24"
         android:layout_gravity="right"
         android:src="@mipmap/ic_close"
         android:tint="@color/white"
         tools:ignore="ContentDescription,RtlHardcoded,UseAppTint" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:layout_marginBottom="@dimen/dimen_8"
+        android:gravity="center"
+        android:text="@string/lb_premium_celebration"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_20"
+        android:textStyle="bold"
+        tools:ignore="SpUsage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen_20"
+        android:text="@string/lb_upgrade_package_success"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_16"
+        tools:ignore="SpUsage" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -25,27 +47,5 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/celebration" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_16"
-        android:text="🎉"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/font_24"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText,SpUsage" />
-
-    <TextView
-        android:id="@+id/tvMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_8"
-        android:layout_marginBottom="@dimen/dimen_20"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/font_16"
-        tools:ignore="SpUsage" />
 
 </LinearLayout>

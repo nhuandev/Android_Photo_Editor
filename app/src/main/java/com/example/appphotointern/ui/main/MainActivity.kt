@@ -55,6 +55,7 @@ class MainActivity : BaseActivity() {
     private val remoteConfig by lazy { Firebase.remoteConfig }
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapterHome: MainAdapter
+    private val customDialog = CustomDialog()
 
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
@@ -82,6 +83,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        checkPremiumFlow()
         initPermissionLaunchers()
         initUI()
         initEvent()
@@ -179,8 +181,9 @@ class MainActivity : BaseActivity() {
                         val checkPremium = PurchasePrefs(this@MainActivity).hasPremium
                         Log.d("TAG", "initEvent: $checkPremium")
                         if (checkPremium) {
-                            CustomDialog().showPremiumDialog(this@MainActivity)
+                            customDialog.showPremiumDialog(this@MainActivity)
                         } else {
+                            customDialog.dismissDialog()
                             startActivity(Intent(this@MainActivity, PurchaseActivity::class.java))
                         }
                     }
@@ -239,20 +242,6 @@ class MainActivity : BaseActivity() {
                     toast(R.string.toast_load_fail)
                 }
             }
-
-//        remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
-//            override fun onUpdate(configUpdate: ConfigUpdate) {
-//                if (configUpdate.updatedKeys.contains(KEY_BANNER)) {
-//                    remoteConfig.activate().addOnCompleteListener {
-//                        displayBanner()
-//                    }
-//                }
-//            }
-//
-//            override fun onError(error: FirebaseRemoteConfigException) {
-//                Log.e("RemoteConfig", "Config update error: ${error.message}")
-//            }
-//        })
     }
 
     fun displayBanner() {
@@ -262,20 +251,15 @@ class MainActivity : BaseActivity() {
                 val banner = JSONObject(bannerJson)
                 val show = banner.getBoolean(KEY_SHOW_BANNER)
                 if (show) {
-                    CustomDialog().showBannerUI(
-                        this@MainActivity,
+                    customDialog.showBannerUI(
+                        this,
                         title = banner.getString(KEY_BANNER_TITLE),
                         message = banner.getString(KEY_BANNER_MESSAGE),
                         imageUrl = banner.getString(KEY_BANNER_IMAGE_URL),
                         onClick = {
                             val checkPremium = PurchasePrefs(this).hasPremium
-                            if (checkPremium) {
-                                CustomDialog().showPremiumDialog(this@MainActivity)
-                            } else {
-                                startActivity(
-                                    Intent(this@MainActivity, PurchaseActivity::class.java)
-                                )
-                            }
+                            if (checkPremium) customDialog.showPremiumDialog(this)
+                            else startActivity(Intent(this, PurchaseActivity::class.java))
                         }
                     )
                 }
@@ -331,8 +315,8 @@ class MainActivity : BaseActivity() {
     private fun showAds() {
         AdManager.loadNative(this, binding.flNativeBanner)
         binding.adView.loadAd(AdRequest.Builder().build())
-        AdManager.loadAppOpen(this)
-        AdManager.showAppOpen(this)
+//        AdManager.loadAppOpen(this)
+//        AdManager.showAppOpen(this)
     }
 
     private fun hideAds() {
@@ -345,16 +329,21 @@ class MainActivity : BaseActivity() {
         if (event == PURCHASED) {
             Log.d("TAG", "purchaseSuccess: $event")
             hideAds()
-            CustomDialog().showPremiumDialog(this)
+            customDialog.showPremiumDialog(this)
         }
     }
 
     private fun checkShowBanner() {
         val checkPremium = PurchasePrefs(this).hasPremium
-        if (checkPremium) {
-            CustomDialog().showPremiumDialog(this)
-        } else {
+        if (!checkPremium) {
             remoteConfigBanner()
+        }
+    }
+
+    private fun checkPremiumFlow() {
+        val checkPremium = PurchasePrefs(this).hasPremium
+        if (!checkPremium) {
+            startActivity(Intent(this, PurchaseActivity::class.java))
         }
     }
 
@@ -374,6 +363,11 @@ class MainActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        customDialog.dismissDialog()
     }
 
     override fun onResume() {

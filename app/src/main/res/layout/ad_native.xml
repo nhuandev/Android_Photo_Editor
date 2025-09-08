@@ -1,9 +1,10 @@
 <com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nativeAdView"
     android:layout_width="match_parent"
-    android:background="@color/normal_start"
     android:layout_height="wrap_content"
+    android:background="@color/normal_start"
     android:padding="@dimen/dimen_8">
 
     <LinearLayout
@@ -20,11 +21,40 @@
             android:textStyle="bold"
             tools:ignore="SpUsage" />
 
-        <com.google.android.gms.ads.nativead.MediaView
-            android:id="@+id/ad_media"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_120"
-            android:layout_marginTop="@dimen/dimen_8" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:orientation="horizontal">
+
+            <com.google.android.gms.ads.nativead.MediaView
+                android:id="@+id/ad_media"
+                android:layout_width="@dimen/dimen_100"
+                android:layout_height="@dimen/dimen_100"
+                android:layout_marginEnd="@dimen/dimen_10" />
+
+            <TextView
+                android:id="@+id/ad_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:background="@drawable/border_view"
+                android:paddingStart="@dimen/dimen_4"
+                android:paddingEnd="@dimen/dimen_4"
+                android:text="Ad"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_12"
+                tools:ignore="HardcodedText,SpUsage" />
+
+            <RatingBar
+                android:id="@+id/rating_bar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/ad_body"
@@ -35,12 +65,14 @@
             android:textSize="@dimen/font_14"
             tools:ignore="SpUsage" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/ad_call_to_action"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_6"
             android:backgroundTint="@color/feature_background"
-            android:textColor="@android:color/white" />
+            android:stateListAnimator="@null"
+            android:textColor="@android:color/white"
+            app:cornerRadius="0dp" />
     </LinearLayout>
 </com.google.android.gms.ads.nativead.NativeAdView>

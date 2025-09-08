@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_top_normal">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,6 +24,7 @@
             android:id="@+id/tv_title_unlimited"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20"
             android:gravity="center"
             android:text="@string/lb_title_unlimited"
             android:textSize="@dimen/font_24"
@@ -56,22 +56,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title_access">
 
-            <CheckBox
+            <RadioButton
                 android:id="@+id/btn_check_life"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:button="@drawable/selector_checkbox"
-                android:buttonTint="@null"
+                android:layout_width="@dimen/dimen_26"
+                android:layout_height="@dimen/dimen_26"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:background="@drawable/selector_checkbox"
+                android:button="@null"
+                android:padding="@dimen/dimen_10"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_package_life_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_10"
                 android:gravity="center"
                 android:text="@string/lb_lifetime"
                 android:textSize="@dimen/font_16"
@@ -113,23 +113,25 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_package_weekly"
             android:layout_width="@dimen/dimen_140"
-            android:layout_height="@dimen/dimen_140"
+            android:layout_height="@dimen/dimen_152"
             android:layout_marginTop="@dimen/dimen_20"
             android:background="@drawable/bg_border_purchase"
             app:layout_constraintEnd_toStartOf="@id/ly_package_yearly"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_life_premium">
 
-            <CheckBox
+            <RadioButton
                 android:id="@+id/btn_check_weekly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:button="@drawable/selector_checkbox"
-                android:buttonTint="@null"
+                android:layout_width="@dimen/dimen_26"
+                android:layout_height="@dimen/dimen_26"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:background="@drawable/selector_checkbox"
+                android:button="@null"
+                android:checked="true"
+                android:padding="@dimen/dimen_10"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_free"
@@ -161,8 +163,8 @@
                 android:id="@+id/tv_desc_free"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_12"
                 android:paddingHorizontal="@dimen/dimen_10"
-
                 android:text="@string/lb_desc_weekly"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
@@ -174,27 +176,27 @@
                 tools:ignore="SpUsage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Gói Fee -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_package_yearly"
             android:layout_width="@dimen/dimen_140"
-            android:layout_height="@dimen/dimen_140"
+            android:layout_height="@dimen/dimen_152"
             android:background="@drawable/bg_border_purchase"
             app:layout_constraintBottom_toBottomOf="@+id/ly_package_weekly"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ly_package_weekly"
             app:layout_constraintTop_toTopOf="@id/ly_package_weekly">
 
-            <CheckBox
+            <RadioButton
                 android:id="@+id/btn_check_yearly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:button="@drawable/selector_checkbox"
-                android:buttonTint="@null"
+                android:layout_width="@dimen/dimen_26"
+                android:layout_height="@dimen/dimen_26"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:background="@drawable/selector_checkbox"
+                android:button="@null"
+                android:padding="@dimen/dimen_10"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_fee"
@@ -225,6 +227,7 @@
                 android:id="@+id/tv_desc_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_12"
                 android:paddingHorizontal="@dimen/dimen_10"
                 android:text="@string/lb_desc_yearly"
                 android:textAlignment="center"
@@ -237,7 +240,6 @@
                 tools:ignore="SpUsage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
@@ -248,17 +250,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_package_yearly" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_continue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dimen_16"
             android:backgroundTint="@color/sky_300"
+            android:padding="@dimen/dimen_16"
             android:text="@string/lb_continue"
+            app:cornerRadius="@dimen/dimen_8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:padding="@dimen/dimen_16"
             app:layout_constraintTop_toBottomOf="@id/ly_package_yearly"
             app:layout_constraintVertical_bias="0.9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -272,6 +275,7 @@
         android:layout_marginEnd="@dimen/dimen_20"
         android:src="@mipmap/ic_close"
         android:tint="@color/white"
+        android:visibility="gone"
         tools:ignore="ContentDescription,UseAppTint" />
 
 </FrameLayout>

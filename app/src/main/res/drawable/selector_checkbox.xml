@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true"
-        android:drawable="@drawable/ic_checked" />
-    <item android:drawable="@drawable/ic_uncheck"/>
-</selector>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@android:color/white"
+    android:radius="50dp">
+    <item>
+        <selector>
+            <item
+                android:drawable="@drawable/bg_purchase_checked"
+                android:state_checked="true" />
+            <item
+                android:drawable="@drawable/bg_purchase_unchecked"
+                android:state_checked="false" />
+        </selector>
+    </item>
+</ripple>

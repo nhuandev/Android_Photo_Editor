@@ -40,14 +40,14 @@ class BillingManager(private val context: Context) {
         PurchasesUpdatedListener { blResult, purchases ->
             when (blResult.responseCode) {
                 BillingResponseCode.OK -> {
-                    if (purchases != null) {
+                    purchases?.let {
                         handlePurchase(blResult, purchases)
                     }
                 }
 
                 BillingResponseCode.USER_CANCELED -> {
                     context.toast(R.string.lb_toast_purchase_cancel)
-                    _purchaseStatus.postValue(null) // Reset status
+                    _purchaseStatus.postValue(null)
                 }
 
                 BillingResponseCode.NETWORK_ERROR -> {
@@ -98,9 +98,9 @@ class BillingManager(private val context: Context) {
 
         if (productDetails.productType == ProductType.SUBS) {
             val tokenSubs = productDetails.subscriptionOfferDetails?.firstOrNull()?.offerToken
-            if (tokenSubs != null) {
+            tokenSubs?.let {
                 params.setOfferToken(tokenSubs)
-            } else {
+            } ?: run {
                 context.toast(R.string.lb_toast_purchase_error)
                 return
             }
@@ -182,6 +182,7 @@ class BillingManager(private val context: Context) {
         purchases.forEach { purchase ->
             when (purchase.purchaseState) {
                 PurchaseState.PURCHASED -> {
+                    Log.d(TAG, "Purchase acknowledged ${purchase.isAcknowledged}")
                     if (!purchase.isAcknowledged) {
                         val ackParams = AcknowledgePurchaseParams
                             .newBuilder()
@@ -194,11 +195,12 @@ class BillingManager(private val context: Context) {
                                 _purchaseStatus.postValue(true)
                                 context.toast(R.string.lb_toast_purchase_success)
                             } else {
-                                _purchaseStatus.postValue(false)
-                                context.toast(R.string.lb_toast_purchase_error)
+                                _purchaseStatus.postValue(true)
+                                Log.e(TAG, "Acknowledge failed: ${ackResult.debugMessage}")
                             }
                         }
                     } else {
+                        Log.d(TAG, "Purchase already acknowledged")
                         PurchasePrefs(context).hasPremium = true
                         _purchaseStatus.postValue(true)
                         context.toast(R.string.lb_toast_purchase_success)

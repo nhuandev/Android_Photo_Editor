@@ -86,9 +86,9 @@
     <string name="lb_weekly">Tuần</string>
     <string name="lb_sub_weekly_price">390,000₫</string>
     <string name="lb_desc_weekly">Dùng không giới hạn sticker tính năng cao cấp</string>
-    <string name="lb_yearly">Theo năm</string>
+    <string name="lb_yearly">Năm</string>
     <string name="lb_sub_yearly_price">999,000₫</string>
-    <string name="lb_desc_yearly">Tiết kiệm hơn với gói 12 tháng</string>
+    <string name="lb_desc_yearly">Tiết kiệm hơn với gói tuần</string>
     <string name="lb_lifetime">Trọn đời</string>
     <string name="lb_sub_lifetime_price">1,350,000₫</string>
     <string name="lb_desc_lifetime">Thanh toán một lần, dùng mãi mãi không quảng cáo</string>
@@ -110,4 +110,7 @@
     <string name="lb_toast_network_error">Lỗi kết nối mạng</string>
     <string name="lb_toast_purchase_already_purchased">Đã mua hàng</string>
     <string name="lb_toast_purchase_not_ready">Chưa sẵn sàng</string>
+
+    <string name="lb_premium_celebration">Chúc mừng!</string>
+    <string name="lb_upgrade_package_success">Nâng cấp gói thành công</string>
 </resources>

@@ -110,4 +110,7 @@
     <string name="lb_toast_network_error">ネットワークエラー</string>
     <string name="lb_toast_purchase_already_purchased">すでに購入済み</string>
     <string name="lb_toast_purchase_not_ready">準備中</string>
+
+    <string name="lb_premium_celebration">おめでとうございます！</string>
+    <string name="lb_upgrade_package_success">パッケージのアップグレードに成功しました</string>
 </resources>

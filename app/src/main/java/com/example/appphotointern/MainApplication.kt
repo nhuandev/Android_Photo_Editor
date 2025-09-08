@@ -14,8 +14,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 
-class MainApplication : Application(), Application.ActivityLifecycleCallbacks {
+class MainApplication : Application(), Application.ActivityLifecycleCallbacks{
     private lateinit var billingManager: BillingManager
+
     override fun onCreate() {
         super.onCreate()
         billingManager = BillingManager(this)

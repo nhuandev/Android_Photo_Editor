@@ -1,6 +1,8 @@
 package com.example.appphotointern.common
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,6 +15,7 @@ import androidx.core.graphics.toColorInt
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.appphotointern.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CustomDialog() {
     private var dialog: AlertDialog? = null
@@ -101,23 +104,23 @@ class CustomDialog() {
         val tvMessage = dialogView.findViewById<TextView>(R.id.tvMessage)
         val btnClose = dialogView.findViewById<ImageView>(R.id.btnCloseCelebrate)
         val animationView = dialogView.findViewById<LottieAnimationView>(R.id.animationView)
-        tvMessage.text = activity.getString(R.string.lb_premium)
-        dialog = AlertDialog.Builder(activity)
+        tvMessage.text = activity.getString(R.string.lb_premium_celebration)
+        val dialog = MaterialAlertDialogBuilder(activity)
             .setView(dialogView)
             .setCancelable(false)
             .create()
 
         btnClose.setOnClickListener {
-            dialog?.dismiss()
+            dialog.dismiss()
         }
 
-        dialog?.setOnShowListener {
+        dialog.setOnShowListener {
             dialogView.scaleX = 0.5f
             dialogView.scaleY = 0.5f
             dialogView.animate().scaleX(1f).scaleY(1f).setDuration(300).start()
             animationView.playAnimation()
         }
-        dialog?.show()
+        dialog.show()
     }
 
     fun dismissDialog() {

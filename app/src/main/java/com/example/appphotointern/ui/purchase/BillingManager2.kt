@@ -22,7 +22,7 @@
 //import com.example.appphotointern.utils.PurchasePrefs
 //import com.google.common.collect.ImmutableList
 //
-//class BillingManager(private val context: Context) {
+//class BillingManager2(private val context: Context) {
 //    companion object {
 //        const val IN_APP_LIFE_TIME = "lifetime_premium"
 //        const val SUBS_PREMIUM_WEEKLY = "premium_weekly"
