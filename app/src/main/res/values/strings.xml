@@ -120,4 +120,6 @@
 
     <string name="lb_premium_celebration">Congratulations!</string>
     <string name="lb_upgrade_package_success">Upgrade package success</string>
+
+    <string name="lb_move_purchased">Move to purchased success</string>
 </resources>

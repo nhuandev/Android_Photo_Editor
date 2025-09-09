@@ -1,9 +1,8 @@
 package com.example.appphotointern.common
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.appphotointern.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.core.net.toUri
 
 class CustomDialog() {
     private var dialog: AlertDialog? = null
@@ -57,7 +57,6 @@ class CustomDialog() {
 
         val bannerView = inflater.inflate(R.layout.layout_banner, overlay, false)
         val bannerRoot = bannerView.findViewById<FrameLayout>(R.id.bannerRoot)
-        bannerRoot.setBackgroundResource(R.drawable.bg_banner)
         val titleView = bannerView.findViewById<TextView>(R.id.bannerTitle)
         val messageView = bannerView.findViewById<TextView>(R.id.bannerMessage)
         val imageView = bannerView.findViewById<ImageView>(R.id.bannerImage)
@@ -65,6 +64,7 @@ class CustomDialog() {
 
         titleView.text = title
         messageView.text = message
+        bannerRoot.setBackgroundResource(R.drawable.bg_banner)
         Glide.with(context).load(imageUrl).into(imageView)
 
         bannerView.setOnClickListener { onClick() }
@@ -102,6 +102,7 @@ class CustomDialog() {
         val dialogView = activity.layoutInflater.inflate(R.layout.dialog_premium, null)
 
         val tvMessage = dialogView.findViewById<TextView>(R.id.tvMessage)
+        val btnPackage = dialogView.findViewById<TextView>(R.id.btn_package)
         val btnClose = dialogView.findViewById<ImageView>(R.id.btnCloseCelebrate)
         val animationView = dialogView.findViewById<LottieAnimationView>(R.id.animationView)
         tvMessage.text = activity.getString(R.string.lb_premium_celebration)
@@ -114,6 +115,10 @@ class CustomDialog() {
             dialog.dismiss()
         }
 
+        btnPackage.setOnClickListener {
+            openPlayStoreSub(activity)
+        }
+
         dialog.setOnShowListener {
             dialogView.scaleX = 0.5f
             dialogView.scaleY = 0.5f
@@ -121,6 +126,14 @@ class CustomDialog() {
             animationView.playAnimation()
         }
         dialog.show()
+    }
+
+    private fun openPlayStoreSub(context: Context) {
+        val subUrl = "https://play.google.com/store/account/subscriptions"
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = subUrl.toUri()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 
     fun dismissDialog() {

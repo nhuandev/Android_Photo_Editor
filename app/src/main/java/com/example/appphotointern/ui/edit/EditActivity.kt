@@ -50,9 +50,9 @@ import org.greenrobot.eventbus.ThreadMode
 class EditActivity : BaseActivity() {
     private val binding by lazy { ActivityEditBinding.inflate(layoutInflater) }
     private val editViewModel by viewModels<EditViewModel>()
+    private lateinit var billingManager: BillingManager
     private lateinit var editAdapter: EditAdapter
     private lateinit var imageLayer: FrameLayer
-    private lateinit var billingManager: BillingManager
     private lateinit var adView: AdView
 
     private var objectOnView: ObjectOnView? = null

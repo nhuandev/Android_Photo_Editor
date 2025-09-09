@@ -2,11 +2,13 @@ package com.example.appphotointern.ui.edit.tools.frame
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.load.engine.GlideException
@@ -23,6 +25,7 @@ class FrameAdapter(
     private val onItemClick: (Frame) -> Unit
 ) : RecyclerView.Adapter<FrameAdapter.FrameViewHolder>() {
     private val storage = FirebaseStorage.getInstance()
+    private var isNetworkAvailable: Boolean = true
 
     inner class FrameViewHolder(private val binding: ItemFrameBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -32,17 +35,22 @@ class FrameAdapter(
             val frameDir = File(context.filesDir, frame.folder)
             val localFile = File(frameDir, "${frame.name}.webp")
 
-            var isError = false
-            binding.progressLoading.visibility = View.VISIBLE
-
-            val glideRequest = if (localFile.exists()) {
-                Glide.with(context).load(localFile)
-            } else {
+            if (localFile.exists()) {
+                loadFrames(Glide.with(context).load(localFile), frame)
+            } else if (isNetworkAvailable) {
                 val path = "${URL_STORAGE}/${frame.folder}/${frame.name}.webp"
                 val imageRef = storage.reference.child(path)
-                Glide.with(context).load(imageRef)
+                loadFrames(Glide.with(context).load(imageRef), frame)
+            } else {
+                binding.progressLoading.visibility = View.VISIBLE
+                binding.imgFrame.setImageResource(R.drawable.ic_error)
+                binding.root.setOnClickListener(null)
             }
+        }
 
+        private fun loadFrames(glideRequest: RequestBuilder<Drawable>, frame: Frame) {
+            var isError = false
+            binding.progressLoading.visibility = View.VISIBLE
             glideRequest
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(R.drawable.ic_error)
@@ -72,10 +80,16 @@ class FrameAdapter(
                 }).into(binding.imgFrame)
 
             binding.root.setOnClickListener {
-                if (!isError) {
-                    onItemClick(frame)
-                }
+                if (!isError) onItemClick(frame)
             }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setNetworkAvailability(isAvailable: Boolean) {
+        if (isNetworkAvailable != isAvailable) {
+            isNetworkAvailable = isAvailable
+            notifyDataSetChanged()
         }
     }
 

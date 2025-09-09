@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -24,38 +25,48 @@ class StickerAdapter(
     private val onStickerSelected: (Sticker) -> Unit
 ) : RecyclerView.Adapter<StickerAdapter.StickerViewHolder>() {
     private val storage = FirebaseStorage.getInstance()
+    private var isNetworkAvailable: Boolean = true
 
     inner class StickerViewHolder(
-        private val binding: ItemStickerBinding,
+        private val binding: ItemStickerBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(sticker: Sticker) {
             val context = binding.root.context
             val stickerDir = File(context.filesDir, sticker.folder)
             val localFile = File(stickerDir, "${sticker.name}.webp")
             val isPremium = PurchasePrefs(context).hasPremium
-            binding.imgPremium.visibility = if (sticker.isPremium && !isPremium) View.VISIBLE else View.GONE
-            binding.progressSticker.visibility = View.VISIBLE
 
-            val glideRequest = if (localFile.exists()) {
-                Glide.with(context).load(localFile)
-            } else {
+            binding.imgPremium.visibility =
+                if (sticker.isPremium && !isPremium) View.VISIBLE else View.GONE
+
+            if (localFile.exists()) {
+                loadStickerWithGlide(Glide.with(context).load(localFile), sticker)
+            } else if (isNetworkAvailable) {
                 val path = "$URL_STORAGE/sticker/${sticker.folder}/${sticker.name}.webp"
                 val imageRef = storage.reference.child(path)
-                Glide.with(context).load(imageRef)
+                loadStickerWithGlide(Glide.with(context).load(imageRef), sticker)
+            } else {
+                binding.progressSticker.visibility = View.VISIBLE
+                binding.root.setOnClickListener(null)
             }
-            var isError = false
+        }
+
+        private fun loadStickerWithGlide(
+            glideRequest: RequestBuilder<Drawable>, sticker: Sticker
+        ) {
+            var isLoadError = false
+            binding.progressSticker.visibility = View.VISIBLE
             glideRequest
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(R.drawable.ic_error)
-                .listener(object :
-                    RequestListener<Drawable> {
+                .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
                         target: Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        isError = true
+                        isLoadError = true
                         binding.progressSticker.visibility = View.GONE
                         return false
                     }
@@ -67,17 +78,23 @@ class StickerAdapter(
                         dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        isError = false
+                        isLoadError = false
                         binding.progressSticker.visibility = View.GONE
                         return false
                     }
                 }).into(binding.imgSticker)
 
             binding.root.setOnClickListener {
-                if (!isError) {
-                    onStickerSelected(sticker)
-                }
+                if (!isLoadError) onStickerSelected(sticker)
             }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setNetworkAvailability(isAvailable: Boolean) {
+        if (isNetworkAvailable != isAvailable) {
+            isNetworkAvailable = isAvailable
+            notifyDataSetChanged()
         }
     }
 

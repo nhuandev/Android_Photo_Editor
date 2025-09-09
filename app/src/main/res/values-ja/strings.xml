@@ -113,4 +113,6 @@
 
     <string name="lb_premium_celebration">おめでとうございます！</string>
     <string name="lb_upgrade_package_success">パッケージのアップグレードに成功しました</string>
+
+    <string name="lb_move_purchased">購入済みへ移動しました</string>
 </resources>

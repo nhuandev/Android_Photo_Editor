@@ -3,10 +3,8 @@ package com.example.appphotointern.ui.purchase
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.databinding.ActivityPurchaseBinding
 import androidx.lifecycle.Observer

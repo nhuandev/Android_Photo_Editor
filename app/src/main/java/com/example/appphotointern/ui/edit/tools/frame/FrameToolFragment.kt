@@ -15,6 +15,7 @@ import com.example.appphotointern.ui.edit.EditViewModel
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.AnalyticsManager.LogEvent.EVENT_FRAME_SELECTED
 import com.example.appphotointern.utils.AnalyticsManager.LogEvent.PARAM_FRAME_NAME
+import com.example.appphotointern.utils.NetworkReceiver
 
 class FrameToolFragment(
     private val imageLayerController: FrameLayer,
@@ -22,6 +23,7 @@ class FrameToolFragment(
 ) : Fragment() {
     private var _binding: FragmentToolFrameBinding? = null
     private val binding get() = _binding!!
+    private lateinit var networkReceiver: NetworkReceiver
     private lateinit var frameAdapter: FrameAdapter
     private var activeFrame: Frame? = null
 
@@ -41,6 +43,7 @@ class FrameToolFragment(
     }
 
     private fun initUI() {
+        networkReceiver = NetworkReceiver(requireActivity())
         binding.rvFrames.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -56,10 +59,12 @@ class FrameToolFragment(
     }
 
     private fun initObserver() {
-        editViewModel.apply {
-            frames.observe(viewLifecycleOwner) {
-                frameAdapter.updateFrames(it)
-            }
+        editViewModel.frames.observe(viewLifecycleOwner) {
+            frameAdapter.updateFrames(it)
+        }
+
+        networkReceiver.observe(requireActivity()) { isAvailable ->
+            frameAdapter.setNetworkAvailability(isAvailable)
         }
     }
 

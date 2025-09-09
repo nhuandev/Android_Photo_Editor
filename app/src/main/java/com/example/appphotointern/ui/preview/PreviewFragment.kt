@@ -16,12 +16,14 @@ import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.common.CustomDialog
 import com.example.appphotointern.common.IMAGE_URI
+import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 
 class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var networkReceiver: NetworkReceiver
     private val customDialog by lazy { CustomDialog() }
     private var imageUri: String? = null
 
@@ -40,21 +42,10 @@ class PreviewFragment : Fragment() {
         binding.root.setOnTouchListener { _, _ -> true }
         initUI()
         initEvent()
-        val checkPremium = PurchasePrefs(requireContext()).hasPremium
-        if (checkPremium) {
-            customDialog.dismissDialog()
-        } else {
-            customDialog.showLoadingAd(requireActivity())
-            AdManager.loadInterstitial(requireContext()) {
-                customDialog.dismissDialog()
-                AdManager.showInterstitial(requireActivity()) {
-                    customDialog.dismissDialog()
-                }
-            }
-        }
     }
 
     private fun initUI() {
+        networkReceiver = NetworkReceiver(requireContext())
         imageUri = arguments?.getString(IMAGE_URI)
         Glide.with(this)
             .load(imageUri)
@@ -72,7 +63,7 @@ class PreviewFragment : Fragment() {
 
     private fun initEvent() {
         binding.apply {
-            btnEdit.setOnClickListener { openEditScreen() }
+            btnEdit.setOnClickListener { handleEditClick() }
 
             btnClose.setOnClickListener {
                 parentFragmentManager.beginTransaction()
@@ -82,6 +73,28 @@ class PreviewFragment : Fragment() {
 
             btnShare.setOnClickListener {
                 imageUri?.let { uriString -> shareImage(uriString.toUri()) }
+            }
+        }
+    }
+
+    private fun handleEditClick() {
+        val isPremium = PurchasePrefs(requireContext()).hasPremium
+        if (isPremium) {
+            openEditScreen()
+        } else {
+            networkReceiver.observe(requireActivity()) { hasNetwork ->
+                if (hasNetwork) {
+                    customDialog.showLoadingAd(requireActivity())
+                    AdManager.loadInterstitial(requireContext()) {
+                        customDialog.dismissDialog()
+                        AdManager.showInterstitial(requireActivity()) {
+                            openEditScreen()
+                        }
+                    }
+                } else {
+                    openEditScreen()
+                }
+                networkReceiver.removeObservers(requireActivity())
             }
         }
     }

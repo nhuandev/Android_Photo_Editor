@@ -15,6 +15,7 @@ import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.RESULT_STICKER
+import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 import kotlin.getValue
 
@@ -23,6 +24,7 @@ class CreativeFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<StickerViewModel>()
     private lateinit var stickerAdapter: StickerAdapter
+    private lateinit var networkReceiver: NetworkReceiver
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +43,7 @@ class CreativeFragment : Fragment() {
     }
 
     private fun initUI() {
+        networkReceiver = NetworkReceiver(requireActivity())
         stickerAdapter = StickerAdapter(emptyList()) { sticker ->
             FireStoreManager.tryIncrementSticker(sticker.name, sticker.folder)
             val checkPremium = PurchasePrefs(requireContext()).hasPremium
@@ -67,6 +70,10 @@ class CreativeFragment : Fragment() {
 
         viewModel.loading.observe(viewLifecycleOwner) {
             binding.progressSticker.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
+        networkReceiver.observe(requireActivity()) { hasNetwork ->
+            stickerAdapter.setNetworkAvailability(hasNetwork)
         }
     }
 }

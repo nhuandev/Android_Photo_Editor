@@ -40,6 +40,7 @@ import com.example.appphotointern.common.TAG_FEATURE_ALBUM
 import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.common.TAG_FEATURE_CAMERA
 import com.example.appphotointern.common.TAG_FEATURE_EDIT
+import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 import com.google.android.gms.ads.AdRequest
 import com.google.firebase.Firebase
@@ -52,14 +53,16 @@ import org.json.JSONObject
 
 class MainActivity : BaseActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val cameraPermission: String = Manifest.permission.CAMERA
     private val remoteConfig by lazy { Firebase.remoteConfig }
-    private val viewModel: MainViewModel by viewModels()
-    private lateinit var adapterHome: MainAdapter
+    private val mainViewModel: MainViewModel by viewModels()
     private val customDialog = CustomDialog()
 
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
-    private val cameraPermission: String = Manifest.permission.CAMERA
+    private lateinit var networkReceiver: NetworkReceiver
+    private lateinit var adapterHome: MainAdapter
+
     private val storagePermission: String by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             Manifest.permission.READ_MEDIA_IMAGES
@@ -68,7 +71,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    val pickImageLauncher =
+    private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 val previewFragment = PreviewFragment.newInstance(it.toString())
@@ -117,6 +120,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initUI() {
+        networkReceiver = NetworkReceiver(this)
         adapterHome = MainAdapter(emptyList(), onItemClick = { feature ->
             when (feature.featureType) {
                 TAG_FEATURE_EDIT -> {
@@ -183,7 +187,6 @@ class MainActivity : BaseActivity() {
                         if (checkPremium) {
                             customDialog.showPremiumDialog(this@MainActivity)
                         } else {
-                            customDialog.dismissDialog()
                             startActivity(Intent(this@MainActivity, PurchaseActivity::class.java))
                         }
                     }
@@ -218,12 +221,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initObserver() {
-        viewModel.loadFeatures(this)
-        viewModel.features.observe(this) { features ->
+        mainViewModel.loadFeatures(this)
+        mainViewModel.features.observe(this) { features ->
             adapterHome.updateFeatures(features)
         }
 
-        viewModel.loading.observe(this) { isLoading ->
+        mainViewModel.loading.observe(this) { isLoading ->
             binding.progressCircular.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
@@ -308,7 +311,9 @@ class MainActivity : BaseActivity() {
         if (checkPremium) {
             hideAds()
         } else {
-            showAds()
+            networkReceiver.observe(this) {
+                if (it) showAds() else hideAds()
+            }
         }
     }
 
@@ -367,7 +372,6 @@ class MainActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        customDialog.dismissDialog()
     }
 
     override fun onResume() {

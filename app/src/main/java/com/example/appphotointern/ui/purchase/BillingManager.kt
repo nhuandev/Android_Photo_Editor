@@ -179,46 +179,37 @@ class BillingManager(private val context: Context) {
         }
 
         var purchaseProcessed = false
-        purchases.forEach { purchase ->
-            when (purchase.purchaseState) {
-                PurchaseState.PURCHASED -> {
-                    Log.d(TAG, "Purchase acknowledged ${purchase.isAcknowledged}")
-                    if (!purchase.isAcknowledged) {
-                        val ackParams = AcknowledgePurchaseParams
-                            .newBuilder()
-                            .setPurchaseToken(purchase.purchaseToken)
-                            .build()
+        val purchaseFirst = purchases.first()
+        when (purchaseFirst.purchaseState) {
+            PurchaseState.PURCHASED -> {
+                if (!purchaseFirst.isAcknowledged) {
+                    val ackParams = AcknowledgePurchaseParams
+                        .newBuilder()
+                        .setPurchaseToken(purchaseFirst.purchaseToken)
+                        .build()
 
-                        billingClient.acknowledgePurchase(ackParams) { ackResult ->
-                            if (ackResult.responseCode == BillingResponseCode.OK) {
-                                PurchasePrefs(context).hasPremium = true
-                                _purchaseStatus.postValue(true)
-                                context.toast(R.string.lb_toast_purchase_success)
-                            } else {
-                                _purchaseStatus.postValue(true)
-                                Log.e(TAG, "Acknowledge failed: ${ackResult.debugMessage}")
-                            }
+                    billingClient.acknowledgePurchase(ackParams) { ackResult ->
+                        if (ackResult.responseCode == BillingResponseCode.OK) {
+                            PurchasePrefs(context).hasPremium = true
+                            _purchaseStatus.postValue(true)
+                            context.toast(R.string.lb_toast_purchase_success)
+                            Log.d(TAG, "Acknowledge success")
+                        } else {
+                            _purchaseStatus.postValue(false)
+                            Log.e(TAG, "Acknowledge failed: ${ackResult.debugMessage}")
                         }
-                    } else {
-                        Log.d(TAG, "Purchase already acknowledged")
-                        PurchasePrefs(context).hasPremium = true
-                        _purchaseStatus.postValue(true)
-                        context.toast(R.string.lb_toast_purchase_success)
                     }
-                    purchaseProcessed = true
+                } else {
+                    Log.d(TAG, "Purchase already acknowledged")
+                    PurchasePrefs(context).hasPremium = true
+                    _purchaseStatus.postValue(true)
+                    context.toast(R.string.lb_toast_purchase_success)
                 }
+            }
 
-                PurchaseState.PENDING -> {
-                    _purchaseStatus.postValue(null)
-                    purchaseProcessed = true
-                }
-
-                else -> {
-                    if (!purchaseProcessed) {
-                        _purchaseStatus.postValue(false)
-                        context.toast(R.string.lb_toast_purchase_error)
-                    }
-                }
+            PurchaseState.PENDING -> {
+                _purchaseStatus.postValue(null)
+                purchaseProcessed = true
             }
         }
     }

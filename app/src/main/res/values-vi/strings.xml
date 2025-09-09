@@ -113,4 +113,6 @@
 
     <string name="lb_premium_celebration">Chúc mừng!</string>
     <string name="lb_upgrade_package_success">Nâng cấp gói thành công</string>
+
+    <string name="lb_move_purchased">Di chuyển sang gói mua hàng</string>
 </resources>

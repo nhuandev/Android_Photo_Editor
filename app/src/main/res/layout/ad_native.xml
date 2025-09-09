@@ -29,8 +29,8 @@
 
             <com.google.android.gms.ads.nativead.MediaView
                 android:id="@+id/ad_media"
-                android:layout_width="@dimen/dimen_100"
-                android:layout_height="@dimen/dimen_100"
+                android:layout_width="@dimen/dimen_120"
+                android:layout_height="@dimen/dimen_120"
                 android:layout_marginEnd="@dimen/dimen_10" />
 
             <TextView
