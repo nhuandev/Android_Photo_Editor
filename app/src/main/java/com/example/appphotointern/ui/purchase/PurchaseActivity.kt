@@ -3,12 +3,12 @@ package com.example.appphotointern.ui.purchase
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.databinding.ActivityPurchaseBinding
 import androidx.lifecycle.Observer
 import com.android.billingclient.api.ProductDetails
+import com.azmobile.phonemirror.MainApplication
 import com.example.appphotointern.R
 import com.example.appphotointern.common.PURCHASED
 import com.example.appphotointern.common.SPLASH_DELAY
@@ -27,44 +27,34 @@ class PurchaseActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        billingManager = BillingManager(this)
-        billingManager.startBillingConnect()
+        billingManager = (application as MainApplication).billingManager
         initUI()
         initEvents()
         initObserver()
     }
 
-    private fun initUI() {
-        binding.apply {
-            btnCheckWeekly.isChecked = true
-            btnCheckYearly.isChecked = false
-            btnCheckLife.isChecked = false
-
-            btnCheckWeekly.setOnClickListener {
-                btnCheckWeekly.isChecked = true
-                btnCheckYearly.isChecked = false
-                btnCheckLife.isChecked = false
-                selectedPlanId = SUBS_PREMIUM_WEEKLY
-            }
-
-            btnCheckYearly.setOnClickListener {
-                btnCheckWeekly.isChecked = false
-                btnCheckYearly.isChecked = true
-                btnCheckLife.isChecked = false
-                selectedPlanId = SUBS_PREMIUM_YEARLY
-            }
-
-            btnCheckLife.setOnClickListener {
-                btnCheckWeekly.isChecked = false
-                btnCheckYearly.isChecked = false
-                btnCheckLife.isChecked = true
-                selectedPlanId = IN_APP_LIFE_TIME
-            }
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                btnCloseOverlay.visibility = View.VISIBLE
-            }, SPLASH_DELAY)
+    private fun initUI() = with(binding) {
+        fun selectPlan(weekly: Boolean, yearly: Boolean, life: Boolean, planId: String) {
+            btnCheckWeekly.isChecked = weekly
+            btnCheckYearly.isChecked = yearly
+            btnCheckLife.isChecked = life
+            selectedPlanId = planId
         }
+
+        selectPlan(weekly = true, yearly = false, life = false, planId = SUBS_PREMIUM_WEEKLY)
+        btnCheckWeekly.setOnClickListener {
+            selectPlan(true, false, false, SUBS_PREMIUM_WEEKLY)
+        }
+        btnCheckYearly.setOnClickListener {
+            selectPlan(false, true, false, SUBS_PREMIUM_YEARLY)
+        }
+        btnCheckLife.setOnClickListener {
+            selectPlan(false, false, true, IN_APP_LIFE_TIME)
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            btnCloseOverlay.visibility = View.VISIBLE
+        }, SPLASH_DELAY)
     }
 
     private fun initEvents() {
@@ -89,18 +79,13 @@ class PurchaseActivity : BaseActivity() {
         })
 
         billingManager.purchaseStatus.observe(this, Observer { success ->
-            Log.d("STATE", "$success")
             if (success == true) {
+                toast(R.string.lb_toast_purchase_success)
                 EventBus.getDefault().post(PURCHASED)
                 finish()
             } else {
                 toast(R.string.lb_toast_purchase_fail)
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        billingManager.disconnect()
     }
 }

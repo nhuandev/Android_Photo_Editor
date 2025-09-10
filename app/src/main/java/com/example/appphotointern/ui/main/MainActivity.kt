@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.azmobile.phonemirror.MainApplication
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityMainBinding
 import com.example.appphotointern.databinding.NavHeaderBinding
@@ -26,7 +27,6 @@ import com.example.appphotointern.ui.preview.PreviewFragment
 import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.extention.toast
-import com.example.appphotointern.ui.analytics.AnalyticsActivity
 import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.common.CustomDialog
 import com.example.appphotointern.common.KEY_BANNER
@@ -40,6 +40,7 @@ import com.example.appphotointern.common.TAG_FEATURE_ALBUM
 import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.common.TAG_FEATURE_CAMERA
 import com.example.appphotointern.common.TAG_FEATURE_EDIT
+import com.example.appphotointern.ui.analytics.AnalyticsActivity
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 import com.google.android.gms.ads.AdRequest
@@ -153,8 +154,11 @@ class MainActivity : BaseActivity() {
                 }
 
                 TAG_FEATURE_ANALYTICS -> {
-                    val intent = Intent(this, AnalyticsActivity::class.java)
-                    startActivity(intent)
+                    val hasPremium = PurchasePrefs(this).hasPremium
+                    if(hasPremium) {
+                        startActivity(Intent(this, AnalyticsActivity::class.java))
+                    }
+                    AdManager.showReward(this@MainActivity)
                 }
 
                 else -> {
@@ -319,9 +323,9 @@ class MainActivity : BaseActivity() {
 
     private fun showAds() {
         AdManager.loadNative(this, binding.flNativeBanner)
+        AdManager.loadAdReward(this)
         binding.adView.loadAd(AdRequest.Builder().build())
-//        AdManager.loadAppOpen(this)
-//        AdManager.showAppOpen(this)
+        (application as? MainApplication)?.showAdIfAvailable(this)
     }
 
     private fun hideAds() {

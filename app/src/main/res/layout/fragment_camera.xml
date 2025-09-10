@@ -216,6 +216,7 @@
         android:layout_height="@dimen/button_size_small"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_filter_frames"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/view_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"

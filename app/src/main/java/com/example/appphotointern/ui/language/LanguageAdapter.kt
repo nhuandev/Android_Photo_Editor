@@ -74,8 +74,11 @@ class LanguageAdapter(
         if (index != -1) {
             val oldPos = selectedPosition
             selectedPosition = index
-            if (oldPos != RecyclerView.NO_POSITION) notifyItemChanged(oldPos)
-            notifyItemChanged(selectedPosition)
+            if (oldPos != RecyclerView.NO_POSITION) {
+                notifyItemChanged(oldPos)
+            } else {
+                notifyItemChanged(selectedPosition)
+            }
         }
     }
 }

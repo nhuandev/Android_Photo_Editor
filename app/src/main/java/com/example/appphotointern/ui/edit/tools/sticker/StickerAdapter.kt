@@ -40,6 +40,7 @@ class StickerAdapter(
                 if (sticker.isPremium && !isPremium) View.VISIBLE else View.GONE
 
             if (localFile.exists()) {
+                binding.imgPremium.visibility = View.GONE
                 loadStickerWithGlide(Glide.with(context).load(localFile), sticker)
             } else if (isNetworkAvailable) {
                 val path = "$URL_STORAGE/sticker/${sticker.folder}/${sticker.name}.webp"

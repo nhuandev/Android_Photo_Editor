@@ -47,11 +47,12 @@ class CreativeFragment : Fragment() {
         stickerAdapter = StickerAdapter(emptyList()) { sticker ->
             FireStoreManager.tryIncrementSticker(sticker.name, sticker.folder)
             val checkPremium = PurchasePrefs(requireContext()).hasPremium
-            if (sticker.isPremium && !checkPremium) {
-                startActivity(Intent(requireContext(), PurchaseActivity::class.java))
-                return@StickerAdapter
-            }
             viewModel.downloadStickerToInternalStorage(sticker) { file ->
+                if (file == null && sticker.isPremium && !checkPremium) {
+                    startActivity(Intent(requireContext(), PurchaseActivity::class.java))
+                    return@downloadStickerToInternalStorage
+                }
+
                 val intent = Intent().apply {
                     putExtra(FEATURE_STICKER, file?.absolutePath)
                 }

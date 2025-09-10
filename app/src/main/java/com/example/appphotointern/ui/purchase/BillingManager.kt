@@ -110,12 +110,11 @@ class BillingManager(private val context: Context) {
         billingClient.launchBillingFlow(activity, flowParams)
     }
 
-    fun productPurchased() {
+    private fun productPurchased() {
         if (!billingClient.isReady) {
             context.toast(R.string.lb_toast_purchase_not_ready)
             return
         }
-
         var inAppChecked = false
         var subsChecked = false
         var hasPremium = false
@@ -135,6 +134,9 @@ class BillingManager(private val context: Context) {
                 val hasValidSub = purchases.any {
                     it.purchaseState == PurchaseState.PURCHASED
                 }
+                purchases.forEach {
+                    handlePurchase(blResult, listOf(it))
+                }
                 Log.d(TAG, "Has valid subscription: $hasValidSub")
                 if (hasValidSub) hasPremium = true
             }
@@ -150,6 +152,9 @@ class BillingManager(private val context: Context) {
             if (blResult.responseCode == BillingResponseCode.OK && purchases.isNotEmpty()) {
                 val hasValidInApp = purchases.any {
                     it.purchaseState == PurchaseState.PURCHASED
+                }
+                purchases.forEach {
+                    handlePurchase(blResult, listOf(it))
                 }
                 Log.d(TAG, "Has valid in-app purchase: $hasValidInApp")
                 if (hasValidInApp) hasPremium = true
@@ -179,37 +184,40 @@ class BillingManager(private val context: Context) {
         }
 
         var purchaseProcessed = false
-        val purchaseFirst = purchases.first()
-        when (purchaseFirst.purchaseState) {
-            PurchaseState.PURCHASED -> {
-                if (!purchaseFirst.isAcknowledged) {
-                    val ackParams = AcknowledgePurchaseParams
-                        .newBuilder()
-                        .setPurchaseToken(purchaseFirst.purchaseToken)
-                        .build()
+        purchases.forEach { purchaseFirst ->
+            Log.d(TAG, "product=${purchaseFirst}")
+            when (purchaseFirst.purchaseState) {
+                PurchaseState.PURCHASED -> {
+                    if (!purchaseFirst.isAcknowledged) {
+                        val ackParams = AcknowledgePurchaseParams
+                            .newBuilder()
+                            .setPurchaseToken(purchaseFirst.purchaseToken)
+                            .build()
 
-                    billingClient.acknowledgePurchase(ackParams) { ackResult ->
-                        if (ackResult.responseCode == BillingResponseCode.OK) {
-                            PurchasePrefs(context).hasPremium = true
-                            _purchaseStatus.postValue(true)
-                            context.toast(R.string.lb_toast_purchase_success)
-                            Log.d(TAG, "Acknowledge success")
-                        } else {
-                            _purchaseStatus.postValue(false)
-                            Log.e(TAG, "Acknowledge failed: ${ackResult.debugMessage}")
+                        billingClient.acknowledgePurchase(ackParams) { ackResult ->
+                            if (ackResult.responseCode == BillingResponseCode.OK) {
+                                Log.d(TAG, "Acknowledge success")
+                                PurchasePrefs(context).hasPremium = true
+                                _purchaseStatus.postValue(true)
+                                context.toast(R.string.lb_toast_purchase_success)
+                            } else {
+                                _purchaseStatus.postValue(false)
+                                Log.e(TAG, "Acknowledge failed: ${ackResult.debugMessage}")
+                            }
                         }
+                    } else {
+                        Log.d(TAG, "Purchase already acknowledged")
+                        PurchasePrefs(context).hasPremium = true
+                        _purchaseStatus.postValue(true)
+                        context.toast(R.string.lb_toast_purchase_success)
                     }
-                } else {
-                    Log.d(TAG, "Purchase already acknowledged")
-                    PurchasePrefs(context).hasPremium = true
-                    _purchaseStatus.postValue(true)
-                    context.toast(R.string.lb_toast_purchase_success)
                 }
-            }
 
-            PurchaseState.PENDING -> {
-                _purchaseStatus.postValue(null)
-                purchaseProcessed = true
+                PurchaseState.PENDING -> {
+                    Log.d(TAG, "Purchase pending")
+                    _purchaseStatus.postValue(null)
+                    purchaseProcessed = true
+                }
             }
         }
     }
@@ -277,12 +285,6 @@ class BillingManager(private val context: Context) {
             }
             subsLoaded = true
             updateProductDetails()
-        }
-    }
-
-    fun disconnect() {
-        if (billingClient.isReady) {
-            billingClient.endConnection()
         }
     }
 }

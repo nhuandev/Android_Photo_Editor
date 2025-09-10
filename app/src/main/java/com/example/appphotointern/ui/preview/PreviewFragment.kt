@@ -82,19 +82,16 @@ class PreviewFragment : Fragment() {
         if (isPremium) {
             openEditScreen()
         } else {
-            networkReceiver.observe(requireActivity()) { hasNetwork ->
-                if (hasNetwork) {
-                    customDialog.showLoadingAd(requireActivity())
-                    AdManager.loadInterstitial(requireContext()) {
-                        customDialog.dismissDialog()
-                        AdManager.showInterstitial(requireActivity()) {
-                            openEditScreen()
-                        }
+            if (networkReceiver.isConnected()) {
+                customDialog.showLoadingAd(requireActivity())
+                AdManager.loadInterstitial(requireContext()) {
+                    customDialog.dismissDialog()
+                    AdManager.showInterstitial(requireActivity()) {
+                        openEditScreen()
                     }
-                } else {
-                    openEditScreen()
                 }
-                networkReceiver.removeObservers(requireActivity())
+            } else {
+                openEditScreen()
             }
         }
     }

@@ -87,8 +87,8 @@ class CameraFragment : Fragment() {
     private var preview: Preview? = null
     private var camera: Camera? = null
 
-    private var selectedAspectRatio = AspectRatio.RATIO_16_9
     private var lensFacing = CameraSelector.DEFAULT_BACK_CAMERA
+    private var selectedAspectRatio = AspectRatio.RATIO_16_9
     private var selectedTimer = CameraTimer.OFF
 
     private var imageLatest: Uri? = null
@@ -270,8 +270,17 @@ class CameraFragment : Fragment() {
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
                 val isCheck = remoteConfig.getBoolean(KEY_FRAME_CAMERA)
-                if (isCheck) binding.btnFrame.visibility =
-                    View.VISIBLE else binding.btnFrame.visibility = View.GONE
+                if (isCheck) {
+                    binding.btnFrame.visibility = View.VISIBLE
+                } else {
+                    val isPremium = PurchasePrefs(requireContext()).hasPremium
+                    if(isPremium) {
+                        Log.d("TAG", "checkFrameRemote: $isPremium")
+                        binding.btnFrame.visibility = View.VISIBLE
+                    } else {
+                        binding.btnFrame.visibility = View.GONE
+                    }
+                }
             } else {
                 requireContext().toast(R.string.toast_load_fail)
             }

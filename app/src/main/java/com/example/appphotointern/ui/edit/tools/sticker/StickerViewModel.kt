@@ -8,6 +8,7 @@ import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.models.StickerCategory
 import com.example.appphotointern.common.KEY_STICKER
 import com.example.appphotointern.common.URL_STORAGE
+import com.example.appphotointern.utils.PurchasePrefs
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
@@ -50,11 +51,17 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
         if (!stickerDir.exists()) {
             stickerDir.mkdirs()
         }
-
         val localFile = File(stickerDir, "${sticker.name}.webp")
+        val hasPremium = PurchasePrefs(application).hasPremium
         if (localFile.exists()) {
             onDownloaded(localFile)
             _loading.postValue(false)
+            return
+        }
+
+        if (sticker.isPremium && !hasPremium) {
+            _loading.postValue(false)
+            onDownloaded(null)
             return
         }
 

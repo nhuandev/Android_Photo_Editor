@@ -1,10 +1,8 @@
 package com.example.appphotointern.ui.album
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityAlbumBinding
