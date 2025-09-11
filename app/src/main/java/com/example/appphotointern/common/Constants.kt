@@ -51,9 +51,8 @@ const val KEY_SHOW_BANNER = "show_banner"
 const val KEY_BANNER_TITLE = "title"
 const val KEY_BANNER_MESSAGE = "message"
 const val KEY_BANNER_IMAGE_URL = "image_url"
-const val KEY_STICKER = "sticker_main"
-const val KEY_FRAME = "frame_main"
 const val KEY_FRAME_CAMERA = "fea_frame_camera"
+const val KEY_FRAME = "frame_main"
 
 // Sticker fragment
 const val STICKER_BASIC = 0
@@ -67,3 +66,5 @@ const val ANALYTICS_STICKER = 1
 // Share preference premium
 const val PREFS_NAME_BILLING = "billing_prefs"
 const val KEY_IS_PREMIUM = "key_is_premium"
+
+// Share preference version json

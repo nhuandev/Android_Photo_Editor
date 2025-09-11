@@ -28,6 +28,7 @@ object AdManager {
     private var rewardedAd: RewardedAd? = null
     private var nativeAd: NativeAd? = null
     private var isLoading = false
+    var isCheckReward = false // Check ad rewarded
 
     private val adRequest: AdRequest by lazy {
         AdRequest.Builder().build()
@@ -141,6 +142,7 @@ object AdManager {
             rewardedAd?.show(
                 activity,
                 OnUserEarnedRewardListener { rewardItem ->
+                    isCheckReward = true
                     isRewarded = true
                 },
             )

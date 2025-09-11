@@ -87,6 +87,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        AdManager.loadAdReward(this)
+        AdManager.loadNative(this, binding.flNativeBanner)
         checkPremiumFlow()
         initPermissionLaunchers()
         initUI()
@@ -155,10 +157,22 @@ class MainActivity : BaseActivity() {
 
                 TAG_FEATURE_ANALYTICS -> {
                     val hasPremium = PurchasePrefs(this).hasPremium
-                    if(hasPremium) {
-                        startActivity(Intent(this, AnalyticsActivity::class.java))
+                    val isConnect = networkReceiver.isConnected()
+                    val isCheckReward = AdManager.isCheckReward
+                    Log.d("TAG", "initUI: $isCheckReward")
+                    when {
+                        isCheckReward || (isConnect && hasPremium) -> {
+                            startActivity(Intent(this, AnalyticsActivity::class.java))
+                        }
+
+                        isConnect -> {
+                            AdManager.showReward(this)
+                        }
+
+                        else -> {
+                            toast(R.string.lb_toast_network_error)
+                        }
                     }
-                    AdManager.showReward(this@MainActivity)
                 }
 
                 else -> {
@@ -322,8 +336,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showAds() {
-        AdManager.loadNative(this, binding.flNativeBanner)
-        AdManager.loadAdReward(this)
         binding.adView.loadAd(AdRequest.Builder().build())
         (application as? MainApplication)?.showAdIfAvailable(this)
     }

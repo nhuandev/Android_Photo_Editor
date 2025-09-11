@@ -26,6 +26,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.min
@@ -35,6 +36,7 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     val currentBitmap = MutableLiveData<Bitmap>()
     val selectedFont = MutableLiveData<String>()
     private val remoteConfig = FirebaseRemoteConfig.getInstance()
+    private val storage = FirebaseStorage.getInstance()
 
     private val _frames = MutableLiveData<List<Frame>>()
     val frames: MutableLiveData<List<Frame>> = _frames
@@ -65,14 +67,17 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     }
 
     fun loadFramesFromAssets() {
-        val json = remoteConfig.getString(KEY_FRAME)
-        if (json.isNullOrEmpty()) {
-            _frames.postValue(emptyList())
-            return
+        viewModelScope.launch(Dispatchers.IO) {
+            val storageRef = storage.reference.child("$URL_STORAGE/file_json/frame.json")
+            val bytes = storageRef.getBytes(5 * 1024 * 1024).await()
+            val json = String(bytes, Charsets.UTF_8)
+            if (json.isEmpty()) {
+                _frames.postValue(emptyList())
+            }
+            val gson = Gson()
+            val frameList = gson.fromJson(json, Array<Frame>::class.java).toList()
+            _frames.postValue(frameList)
         }
-        val gson = Gson()
-        val frameList = gson.fromJson(json, Array<Frame>::class.java).toList()
-        _frames.postValue(frameList)
     }
 
     fun downloadFrameToInternalStorage(frame: Frame, onDownloaded: (File?) -> Unit) {

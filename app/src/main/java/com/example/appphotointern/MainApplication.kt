@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import com.example.appphotointern.ui.purchase.BillingManager
+import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.LanguageManager
 import com.google.android.gms.ads.AdRequest

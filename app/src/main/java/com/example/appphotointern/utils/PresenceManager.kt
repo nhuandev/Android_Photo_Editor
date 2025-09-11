@@ -11,7 +11,6 @@ import com.google.firebase.database.ValueEventListener
 
 object PresenceManager {
     private const val DB_REALTIME_DEVICE_STATUS = "device_status"
-
     @SuppressLint("HardwareIds")
     private fun getDeviceId(context: Context): String {
         return Settings.Secure.getString(

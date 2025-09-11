@@ -207,8 +207,6 @@ class BillingManager(private val context: Context) {
                         }
                     } else {
                         Log.d(TAG, "Purchase already acknowledged")
-                        PurchasePrefs(context).hasPremium = true
-                        _purchaseStatus.postValue(true)
                         context.toast(R.string.lb_toast_purchase_success)
                     }
                 }

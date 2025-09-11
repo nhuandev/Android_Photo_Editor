@@ -5,10 +5,10 @@
     <item>
         <selector>
             <item
-                android:drawable="@drawable/bg_purchase_checked"
+                android:drawable="@drawable/ic_checked"
                 android:state_checked="true" />
             <item
-                android:drawable="@drawable/bg_purchase_unchecked"
+                android:drawable="@drawable/ic_uncheck"
                 android:state_checked="false" />
         </selector>
     </item>

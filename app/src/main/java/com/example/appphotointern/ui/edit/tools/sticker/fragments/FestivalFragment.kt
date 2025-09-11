@@ -38,7 +38,7 @@ class FestivalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         initObserve()
-        viewModel.loadStickersFromAssets("sticker_festival")
+        viewModel.loadStickersFromAssets("sticker_festival", requireContext())
     }
 
     private fun initUI() {
