@@ -10,7 +10,6 @@ import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.models.StickerCategory
 import com.example.appphotointern.common.URL_STORAGE
 import com.example.appphotointern.utils.PurchasePrefs
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
-import androidx.core.content.edit
 
 class StickerViewModel(private val application: Application) : AndroidViewModel(application) {
     private val _stickers = MutableLiveData<List<Sticker>>()
@@ -28,57 +26,40 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
     val loading: MutableLiveData<Boolean> = _loading
 
     private val storage = FirebaseStorage.getInstance()
-    private val COLLECTION_FILE_JSON = "configs"
-    private val DOC_STICKER = "files_version"
-    private val FIELD_STICKER_VS = "sticker_version"
 
-    private val KEY_PREF = "file_version"
-    private val KEY_VERSION = "stickers_version"
-    private val KEY_JSON = "stickers_json"
+    private fun getFileAssets(): File {
+        return File(application.filesDir, "sticker.json")
+    }
 
-    fun loadStickersFromAssets(categoryId: String, context: Context) {
+    fun loadStickersFromAssets(categoryId: String) {
         _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val firestore = FirebaseFirestore.getInstance()
-                val docRef = firestore.collection(COLLECTION_FILE_JSON).document(DOC_STICKER)
-                val snapshot = docRef.get().await()
-                if (snapshot.exists()) {
-                    val remoteVersion = snapshot.getLong(FIELD_STICKER_VS)?.toInt() ?: 0
-                    val prefs = context.getSharedPreferences(KEY_PREF, Context.MODE_PRIVATE)
-                    val localVersion = prefs.getInt(KEY_VERSION, 0)
-                    if (remoteVersion > localVersion) {
-                        val storageRef = storage.reference.child("$URL_STORAGE/file_json/sticker.json")
-                        val bytes = storageRef.getBytes(5 * 1024 * 1024).await()
-                        val jsonString = String(bytes, Charsets.UTF_8)
+                val cacheFile = getFileAssets()
+                var jsonString: String
 
-                        val gson = Gson()
-                        val stickerJs = gson.fromJson(jsonString, Array<StickerCategory>::class.java).toList()
-                        val selectedCategory = stickerJs.find { it.categoryId == categoryId }
-                        val filteredStickers = selectedCategory?.stickers ?: emptyList()
+                if (cacheFile.exists()) {
+                    jsonString = cacheFile.readText(Charsets.UTF_8)
+                    Log.d("StickerViewModel", "Loaded sticker.json from cache")
+                } else {
+                    val storageRef = storage.reference.child("$URL_STORAGE/file_json/sticker.json")
+                    val metadata = storageRef.metadata.await()
+                    val fileSize = metadata.sizeBytes
 
-                        prefs.edit { putString(KEY_JSON, jsonString) }
-                        prefs.edit { putInt(KEY_VERSION, remoteVersion) }
-                        withContext(Dispatchers.Main) {
-                            _stickers.value = filteredStickers
-                            _loading.value = false
-                        }
-                    } else {
-                        val cachedJs = prefs.getString(KEY_JSON, null)
-                        cachedJs?.let {
-                            val gson = Gson()
-                            val stickerJs =
-                                gson.fromJson(cachedJs, Array<StickerCategory>::class.java).toList()
-                            val selectedCategory = stickerJs.find { it.categoryId == categoryId }
-                            val filteredStickers = selectedCategory?.stickers ?: emptyList()
-                            withContext(Dispatchers.Main) {
-                                _stickers.value = filteredStickers
-                                _loading.value = false
-                            }
-                        } ?: run {
-                            withContext(Dispatchers.Main) { _loading.value = false }
-                        }
-                    }
+                    val bytes = storageRef.getBytes(fileSize).await()
+                    jsonString = String(bytes, Charsets.UTF_8)
+
+                    cacheFile.writeText(jsonString, Charsets.UTF_8)
+                    Log.d("StickerViewModel", "Downloaded and cached sticker.json")
+                }
+
+                val gson = Gson()
+                val json = gson.fromJson(jsonString, Array<StickerCategory>::class.java).toList()
+                val selectedCategory = json.find { it.categoryId == categoryId }
+                val filteredStickers = selectedCategory?.stickers ?: emptyList()
+                withContext(Dispatchers.Main) {
+                    _stickers.value = filteredStickers
+                    _loading.value = false
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

@@ -122,4 +122,10 @@
     <string name="lb_upgrade_package_success">Upgrade package success</string>
 
     <string name="lb_move_purchased">Move to purchased success</string>
+    <string name="lb_package_premium">Premium</string>
+    <string name="lb_package_plus">Plus</string>
+    <string name="lb_package_basic">Basic</string>
+    <string name="lb_desc_policy">Yearly Plan will auto renew after 1 year, unless you cancel your subscription plan.</string>
+    <string name="lb_policy">Privacy Policy</string>
+    <string name="lb_terms">Terms of Service</string>
 </resources>

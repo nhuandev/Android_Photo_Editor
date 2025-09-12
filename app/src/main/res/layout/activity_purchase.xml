@@ -12,7 +12,7 @@
         <ImageView
             android:id="@+id/img_purchase"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_192"
+            android:layout_height="@dimen/dimen_152"
             android:scaleType="centerCrop"
             android:src="@drawable/img_fea_2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
             android:id="@+id/tv_title_unlimited"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_12"
             android:gravity="center"
             android:text="@string/lb_title_unlimited"
             android:textSize="@dimen/font_24"
@@ -50,11 +50,26 @@
             android:id="@+id/ly_life_premium"
             android:layout_width="@dimen/dimen_152"
             android:layout_height="@dimen/dimen_176"
-            android:layout_marginTop="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_16"
             android:background="@drawable/bg_border_purchase"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title_access">
+
+            <TextView
+                android:id="@+id/tv_discount_badge"
+                android:layout_width="@dimen/dimen_72"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_package_badge_lifetime"
+                android:gravity="center"
+                android:padding="@dimen/dimen_6"
+                android:text="@string/lb_package_premium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpUsage" />
 
             <RadioButton
                 android:id="@+id/btn_check_life"
@@ -119,6 +134,21 @@
             app:layout_constraintEnd_toStartOf="@id/ly_package_yearly"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_life_premium">
+
+            <TextView
+                android:id="@+id/tv_discount"
+                android:layout_width="@dimen/dimen_72"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_package_badge_weekly"
+                android:gravity="center"
+                android:padding="@dimen/dimen_6"
+                android:text="@string/lb_package_basic"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpUsage" />
 
             <RadioButton
                 android:id="@+id/btn_check_weekly"
@@ -185,6 +215,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ly_package_weekly"
             app:layout_constraintTop_toTopOf="@id/ly_package_weekly">
+
+            <TextView
+                android:id="@+id/tv_discount_badge_yearly"
+                android:layout_width="@dimen/dimen_72"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_package_badge_yearly"
+                android:gravity="center"
+                android:padding="@dimen/dimen_6"
+                android:text="@string/lb_package_plus"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_12"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpUsage" />
 
             <RadioButton
                 android:id="@+id/btn_check_yearly"
@@ -258,12 +303,54 @@
             android:backgroundTint="@color/sky_300"
             android:padding="@dimen/dimen_16"
             android:text="@string/lb_continue"
-            app:cornerRadius="@dimen/dimen_8"
+            app:cornerRadius="@dimen/dimen_12"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_package_yearly"
-            app:layout_constraintVertical_bias="0.9" />
+            app:layout_constraintVertical_bias="0.2" />
+
+        <TextView
+            android:id="@+id/tv_subscription_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/dimen_16"
+            android:paddingVertical="@dimen/dimen_8"
+            android:text="@string/lb_desc_policy"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/ly_policy"
+            app:layout_constraintTop_toBottomOf="@id/btn_continue" />
+
+        <RelativeLayout
+            android:id="@+id/ly_policy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dimen_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_subscription_info">
+
+            <TextView
+                android:id="@+id/tv_privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/lb_policy"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_terms_services"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/lb_terms"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView

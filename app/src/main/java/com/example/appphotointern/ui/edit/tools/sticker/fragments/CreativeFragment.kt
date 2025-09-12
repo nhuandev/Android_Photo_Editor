@@ -39,7 +39,7 @@ class CreativeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         initObserve()
-        viewModel.loadStickersFromAssets("sticker_creative", requireContext())
+        viewModel.loadStickersFromAssets("sticker_creative")
     }
 
     private fun initUI() {

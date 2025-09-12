@@ -115,4 +115,10 @@
     <string name="lb_upgrade_package_success">パッケージのアップグレードに成功しました</string>
 
     <string name="lb_move_purchased">購入済みへ移動しました</string>
+    <string name="lb_package_premium">プレミアム</string>
+    <string name="lb_package_plus">プラス</string>
+    <string name="lb_package_basic">基本</string>
+    <string name="lb_desc_policy">年間プランは、サブスクリプション プランをキャンセルしない限り、1 年後に自動更新されます。</string>
+    <string name="lb_policy">プライバシーポリシー</string>
+    <string name="lb_terms">利用規約</string>
 </resources>

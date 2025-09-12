@@ -38,7 +38,7 @@ class BasicFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         initObserver()
-        viewModel.loadStickersFromAssets("sticker_basic", requireContext())
+        viewModel.loadStickersFromAssets("sticker_basic")
     }
 
     private fun initUI() {

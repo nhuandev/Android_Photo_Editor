@@ -64,6 +64,10 @@ class MainActivity : BaseActivity() {
     private lateinit var networkReceiver: NetworkReceiver
     private lateinit var adapterHome: MainAdapter
 
+    companion object {
+        private var checkShowPurchase = false
+    }
+
     private val storagePermission: String by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             Manifest.permission.READ_MEDIA_IMAGES
@@ -363,7 +367,8 @@ class MainActivity : BaseActivity() {
 
     private fun checkPremiumFlow() {
         val checkPremium = PurchasePrefs(this).hasPremium
-        if (!checkPremium) {
+        if (!checkPremium && !checkShowPurchase) {
+            checkShowPurchase = true
             startActivity(Intent(this, PurchaseActivity::class.java))
         }
     }

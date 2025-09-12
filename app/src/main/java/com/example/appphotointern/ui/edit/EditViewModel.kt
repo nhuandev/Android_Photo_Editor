@@ -8,6 +8,7 @@ import android.graphics.Canvas
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -66,16 +67,32 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
         selectedFont.value = font
     }
 
+    private fun getFileAssets(): File {
+        return File(application.filesDir, "frame.json")
+    }
+
     fun loadFramesFromAssets() {
         viewModelScope.launch(Dispatchers.IO) {
-            val storageRef = storage.reference.child("$URL_STORAGE/file_json/frame.json")
-            val bytes = storageRef.getBytes(5 * 1024 * 1024).await()
-            val json = String(bytes, Charsets.UTF_8)
-            if (json.isEmpty()) {
+            val cacheFile = getFileAssets()
+            val jsonString: String
+
+            if (cacheFile.exists()) {
+                jsonString = cacheFile.readText(Charsets.UTF_8)
+                Log.d("EditViewModel", "Loaded frame.json from cache")
+            } else {
+                val storageRef = storage.reference.child("$URL_STORAGE/file_json/frame.json")
+                val metadata = storageRef.metadata.await()
+                val fileSize = metadata.sizeBytes
+                val bytes = storageRef.getBytes(fileSize).await()
+                jsonString = String(bytes, Charsets.UTF_8)
+                cacheFile.writeText(jsonString, Charsets.UTF_8)
+                Log.d("EditViewModel", "Downloaded and cached frame.json")
+            }
+            if (jsonString.isEmpty()) {
                 _frames.postValue(emptyList())
             }
             val gson = Gson()
-            val frameList = gson.fromJson(json, Array<Frame>::class.java).toList()
+            val frameList = gson.fromJson(jsonString, Array<Frame>::class.java).toList()
             _frames.postValue(frameList)
         }
     }
