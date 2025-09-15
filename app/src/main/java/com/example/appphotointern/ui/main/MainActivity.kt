@@ -257,7 +257,6 @@ class MainActivity : BaseActivity() {
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
         }
-        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener { task ->
@@ -269,7 +268,7 @@ class MainActivity : BaseActivity() {
             }
     }
 
-    fun displayBanner() {
+    private fun displayBanner() {
         val bannerJson = remoteConfig.getString(KEY_BANNER)
         if (bannerJson.isNotEmpty()) {
             try {

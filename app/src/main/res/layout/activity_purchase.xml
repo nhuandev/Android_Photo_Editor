@@ -318,9 +318,10 @@
             android:paddingVertical="@dimen/dimen_8"
             android:text="@string/lb_desc_policy"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="@dimen/font_12"
             app:layout_constraintBottom_toTopOf="@+id/ly_policy"
-            app:layout_constraintTop_toBottomOf="@id/btn_continue" />
+            app:layout_constraintTop_toBottomOf="@id/btn_continue"
+            tools:ignore="SpUsage" />
 
         <RelativeLayout
             android:id="@+id/ly_policy"
@@ -348,7 +349,8 @@
                 android:layout_alignParentEnd="true"
                 android:text="@string/lb_terms"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
