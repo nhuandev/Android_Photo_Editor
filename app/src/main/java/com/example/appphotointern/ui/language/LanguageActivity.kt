@@ -63,6 +63,9 @@ class LanguageActivity : BaseActivity() {
     private fun initObserver() {
         languageViewModel.languages.observe(this) { languages ->
             languageAdapter.updateLanguage(languages)
+
+            val saveCode = LanguageManager.getLanguage(this)
+            languageAdapter.setSelectedLanguage(saveCode)
         }
         languageViewModel.loading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

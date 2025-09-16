@@ -8,10 +8,12 @@ import com.example.appphotointern.ui.edit.tools.sticker.fragments.StickerViewPag
 import com.example.appphotointern.common.STICKER_BASIC
 import com.example.appphotointern.common.STICKER_CREATIVE
 import com.example.appphotointern.common.STICKER_FESTIVAL
+import com.example.appphotointern.extention.toast
 import com.google.android.material.tabs.TabLayoutMediator
 
 class StickerActivity : BaseActivity() {
     private val binding by lazy { ActivityStickerBinding.inflate(layoutInflater) }
+    private lateinit var stickerViewModel: StickerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,7 @@ class StickerActivity : BaseActivity() {
     }
 
     private fun initUI() {
+        stickerViewModel = StickerViewModel(application)
         val viewpager = StickerViewPager(this)
         binding.apply {
             viewpagerSticker.adapter = viewpager
@@ -38,6 +41,14 @@ class StickerActivity : BaseActivity() {
                     STICKER_CREATIVE -> tab.text = getString(R.string.lb_sticker_creative)
                 }
             }.attach()
+        }
+
+        stickerViewModel.loading.observe(this) { isLoading ->
+            if(isLoading) {
+                toast(R.string.lb_ok)
+            }else {
+                toast(R.string.lb_toast_network_error)
+            }
         }
     }
 

@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentStickerBasicBinding
 import com.example.appphotointern.ui.edit.tools.sticker.StickerAdapter
 import com.example.appphotointern.ui.edit.tools.sticker.StickerViewModel
@@ -15,6 +17,7 @@ import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.RESULT_STICKER
+import com.example.appphotointern.extention.toast
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 
@@ -50,6 +53,10 @@ class BasicFragment : Fragment() {
                 if (file == null && sticker.isPremium && !checkPremium) {
                     startActivity(Intent(requireContext(), PurchaseActivity::class.java))
                     return@downloadStickerToInternalStorage
+                }
+
+                if(file == null) {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
 
                 val intent = Intent().apply {
