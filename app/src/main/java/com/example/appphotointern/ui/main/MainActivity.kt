@@ -377,7 +377,6 @@ class MainActivity : BaseActivity() {
         binding.flNativeBanner.visibility = View.VISIBLE
         binding.adView.visibility = View.VISIBLE
         EventBus.getDefault().register(this)
-        PresenceManager.setUserOnline(this)
         PresenceManager.listenOnlineUsers { onlineUsers ->
             val count = onlineUsers.size
             val menuItem = binding.drawerMain.menu.findItem(R.id.nav_menu_users)
@@ -397,10 +396,5 @@ class MainActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         checkPremium()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        PresenceManager.setUserOffline(this)
     }
 }

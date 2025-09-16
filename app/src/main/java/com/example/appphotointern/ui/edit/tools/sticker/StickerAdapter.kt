@@ -40,14 +40,18 @@ class StickerAdapter(
                 if (sticker.isPremium && !isPremium) View.VISIBLE else View.GONE
 
             if (localFile.exists()) {
+                binding.root.setBackgroundResource(0)
                 binding.imgPremium.visibility = View.GONE
                 loadStickerWithGlide(Glide.with(context).load(localFile), sticker)
             } else if (isNetworkAvailable) {
+                binding.root.setBackgroundResource(0)
                 val path = "$URL_STORAGE/sticker/${sticker.folder}/${sticker.name}.webp"
                 val imageRef = storage.reference.child(path)
                 loadStickerWithGlide(Glide.with(context).load(imageRef), sticker)
             } else {
-                binding.progressSticker.visibility = View.VISIBLE
+                binding.root.setBackgroundResource(R.drawable.ic_error)
+                binding.progressSticker.visibility = View.GONE
+                binding.imgSticker.setImageDrawable(null)
                 binding.root.setOnClickListener(null)
             }
         }

@@ -55,7 +55,7 @@ class BasicFragment : Fragment() {
                     return@downloadStickerToInternalStorage
                 }
 
-                if(file == null) {
+                if (file == null) {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
 
@@ -80,6 +80,11 @@ class BasicFragment : Fragment() {
         }
 
         networkReceiver.observe(requireActivity()) { hasNetwork ->
+            if (hasNetwork) {
+                requireContext().toast(R.string.lb_toast_network_connected)
+            } else {
+                requireContext().toast(R.string.lb_toast_network_error)
+            }
             stickerAdapter.setNetworkAvailability(hasNetwork)
         }
     }

@@ -4,10 +4,12 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.example.appphotointern.ui.purchase.BillingManager
-import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.utils.AnalyticsManager
 import com.example.appphotointern.utils.LanguageManager
+import com.example.appphotointern.utils.PresenceManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
@@ -19,13 +21,13 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 
 private const val APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/9257395921"
 
-class MainApplication : Application(), Application.ActivityLifecycleCallbacks {
+class MainApplication : Application(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
     lateinit var billingManager: BillingManager
     private lateinit var currentActivity: Activity
     private lateinit var appOpenAdManager: AppOpenAdManager
 
     override fun onCreate() {
-        super.onCreate()
+        super<Application>.onCreate()
         registerActivityLifecycleCallbacks(this)
         MobileAds.initialize(this)
         appOpenAdManager = AppOpenAdManager()
@@ -40,6 +42,12 @@ class MainApplication : Application(), Application.ActivityLifecycleCallbacks {
         FirebaseAppCheck.getInstance().installAppCheckProviderFactory(
             DebugAppCheckProviderFactory.getInstance()
         )
+        PresenceManager.setUserOnline(this)
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        PresenceManager.setUserOffline(this)
     }
 
     override fun attachBaseContext(base: Context) {
