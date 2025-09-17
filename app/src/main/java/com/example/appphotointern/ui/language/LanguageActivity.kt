@@ -14,6 +14,7 @@ import com.example.appphotointern.common.BaseActivity
 import com.example.appphotointern.utils.LanguageManager
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
+import java.util.Locale
 import kotlin.getValue
 
 class LanguageActivity : BaseActivity() {
@@ -64,8 +65,8 @@ class LanguageActivity : BaseActivity() {
         languageViewModel.languages.observe(this) { languages ->
             languageAdapter.updateLanguage(languages)
 
-            val saveCode = LanguageManager.getLanguage(this)
-            languageAdapter.setSelectedLanguage(saveCode)
+            val systemLanguage = Locale.getDefault().language
+            languageAdapter.setSelectedLanguage(systemLanguage)
         }
         languageViewModel.loading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

@@ -44,14 +44,14 @@ class CropView @JvmOverloads constructor(
         alpha = 200
     }
 
-    private val dotRadius = 10f
-    private val imageRect = RectF()
     private var cropRect = RectF(200f, 200f, 800f, 800f)
+    private var activeHandle: Handle? = null
+    private val imageRect = RectF()
+    private val handleRadius = 10f
+    private val dotRadius = 10f
+    private val touchArea = 60f
     private var lastX = 0f
     private var lastY = 0f
-    private var activeHandle: Handle? = null
-    private val handleRadius = 10f
-    private val touchArea = 60f
 
     enum class Handle {
         LEFT, TOP, RIGHT, BOTTOM,

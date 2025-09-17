@@ -21,7 +21,8 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 
 private const val APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/9257395921"
 
-class MainApplication : Application(), Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+class MainApplication : Application(), Application.ActivityLifecycleCallbacks,
+    DefaultLifecycleObserver {
     lateinit var billingManager: BillingManager
     private lateinit var currentActivity: Activity
     private lateinit var appOpenAdManager: AppOpenAdManager

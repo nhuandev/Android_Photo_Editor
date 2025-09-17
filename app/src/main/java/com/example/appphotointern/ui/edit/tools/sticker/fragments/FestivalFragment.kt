@@ -14,6 +14,7 @@ import com.example.appphotointern.ui.edit.tools.sticker.StickerAdapter
 import com.example.appphotointern.ui.edit.tools.sticker.StickerViewModel
 import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.FEATURE_STICKER
+import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.RESULT_STICKER
 import com.example.appphotointern.utils.NetworkReceiver
@@ -75,6 +76,10 @@ class FestivalFragment : Fragment() {
 
         viewModel.loading.observe(viewLifecycleOwner) {
             binding.progressSticker.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
+        viewModel.notify.observe(viewLifecycleOwner) { notify ->
+            if(notify == LOAD_FAIL) binding.tvError.visibility = View.VISIBLE
         }
 
         networkReceiver.observe(requireActivity()) { hasNetwork ->

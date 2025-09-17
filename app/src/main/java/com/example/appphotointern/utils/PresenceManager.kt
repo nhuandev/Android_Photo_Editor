@@ -2,15 +2,21 @@ package com.example.appphotointern.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Looper
 import android.provider.Settings
+import android.util.Log
+import com.example.appphotointern.common.LOAD_FAIL
+import com.example.appphotointern.common.LOAD_SUCCESS
 import com.example.appphotointern.models.Device
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.logging.Handler
 
 object PresenceManager {
     private const val DB_REALTIME_DEVICE_STATUS = "device_status"
+
     @SuppressLint("HardwareIds")
     private fun getDeviceId(context: Context): String {
         return Settings.Secure.getString(
@@ -49,20 +55,29 @@ object PresenceManager {
         userStatusRef.setValue(offlineStatus)
     }
 
-    fun listenOnlineUsers(onResult: (List<Device>) -> Unit) {
+    fun listenOnlineUsers(onResult: (List<Device>, String) -> Unit) {
         val statusRef = FirebaseDatabase.getInstance().getReference(DB_REALTIME_DEVICE_STATUS)
-        statusRef.addValueEventListener(object : ValueEventListener {
+        val listener = (object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val onlineUsers = snapshot.children.mapNotNull { child ->
                     val device = child.getValue(Device::class.java)
                     if (device?.deviceStatus == true) device else null
                 }
-                onResult(onlineUsers)
+                onResult(onlineUsers, LOAD_SUCCESS)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                onResult(emptyList())
+                val code = when (error.code) {
+                    DatabaseError.PERMISSION_DENIED -> LOAD_FAIL
+                    else -> error.code.toString()
+                }
+                onResult(emptyList(), code)
             }
         })
+        statusRef.addValueEventListener(listener)
+        android.os.Handler(Looper.getMainLooper()).postDelayed({
+            onResult(emptyList(), LOAD_FAIL)
+            statusRef.removeEventListener(listener)
+        }, 5000)
     }
 }

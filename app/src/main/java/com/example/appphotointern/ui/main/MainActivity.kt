@@ -34,6 +34,7 @@ import com.example.appphotointern.common.KEY_BANNER_IMAGE_URL
 import com.example.appphotointern.common.KEY_BANNER_MESSAGE
 import com.example.appphotointern.common.KEY_BANNER_TITLE
 import com.example.appphotointern.common.KEY_SHOW_BANNER
+import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.common.PURCHASED
 import com.example.appphotointern.utils.PresenceManager
 import com.example.appphotointern.common.TAG_FEATURE_ALBUM
@@ -377,20 +378,24 @@ class MainActivity : BaseActivity() {
         binding.flNativeBanner.visibility = View.VISIBLE
         binding.adView.visibility = View.VISIBLE
         EventBus.getDefault().register(this)
-        PresenceManager.listenOnlineUsers { onlineUsers ->
-            val count = onlineUsers.size
+        PresenceManager.listenOnlineUsers { onlineUsers, status ->
+            val isConnect = networkReceiver.isConnected()
             val menuItem = binding.drawerMain.menu.findItem(R.id.nav_menu_users)
-            menuItem.title = getString(R.string.lb_user_online, count)
+            if (isConnect) {
+                if(status == LOAD_FAIL) {
+                    menuItem.title = getString(R.string.lb_user_online, 0)
+                }
+                val count = onlineUsers.size
+                menuItem.title = getString(R.string.lb_user_online, count)
+            } else {
+                menuItem.title = getString(R.string.lb_toast_network_error)
+            }
         }
     }
 
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onResume() {

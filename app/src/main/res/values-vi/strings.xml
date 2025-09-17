@@ -97,7 +97,7 @@
     <string name="lb_sticker_basic">Cơ bản</string>
     <string name="lb_sticker_festival">Lễ hội</string>
     <string name="lb_sticker_creative">Sáng tạo</string>
-    <string name="lb_interact">Tương tác - %1$d</string>
+    <string name="lb_interact">Tương tác: %1$d</string>
     <string name="lb_user_online">Đang Online %1$d</string>
     <string name="lb_analytics">Phân tích</string>
     <string name="lb_loading_ad">Đang tải quảng cáo...</string>
@@ -122,4 +122,5 @@
     <string name="lb_desc_policy">Gói hàng năm sẽ tự động gia hạn sau 1 năm, trừ khi bạn hủy gói đăng ký.</string>
     <string name="lb_policy">Chính sách bảo mật</string>
     <string name="lb_terms">Điều khoản sử dụng</string>
+    <string name="lb_error">Tải xuống gặp lỗi</string>
 </resources>

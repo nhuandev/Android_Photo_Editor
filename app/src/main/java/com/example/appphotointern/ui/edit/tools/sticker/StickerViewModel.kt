@@ -1,16 +1,14 @@
 package com.example.appphotointern.ui.edit.tools.sticker
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.appphotointern.R
+import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.models.Sticker
 import com.example.appphotointern.models.StickerCategory
 import com.example.appphotointern.common.URL_STORAGE
-import com.example.appphotointern.extention.toast
 import com.example.appphotointern.utils.PurchasePrefs
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
@@ -26,6 +24,9 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: MutableLiveData<Boolean> = _loading
+
+    private val _notify = MutableLiveData<String>()
+    val notify: MutableLiveData<String> = _notify
 
     private val storage = FirebaseStorage.getInstance()
 
@@ -66,6 +67,7 @@ class StickerViewModel(private val application: Application) : AndroidViewModel(
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _loading.value = false
+                    _notify.postValue(LOAD_FAIL)
                     Log.e("StickerViewModel", "Error loading stickers", e)
                 }
             }

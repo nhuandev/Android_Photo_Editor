@@ -97,7 +97,7 @@
     <string name="lb_sticker_basic">Basic</string>
     <string name="lb_sticker_festival">Festival</string>
     <string name="lb_sticker_creative">Creative</string>
-    <string name="lb_interact">Interact - %1$d</string>
+    <string name="lb_interact">Interact: %1$d</string>
 
     <string name="lb_user_online">User Online %1$d</string>
 
@@ -129,4 +129,5 @@
     <string name="lb_desc_policy">Yearly Plan will auto renew after 1 year, unless you cancel your subscription plan.</string>
     <string name="lb_policy">Privacy Policy</string>
     <string name="lb_terms">Terms of Service</string>
+    <string name="lb_error">Error while downloading</string>
 </resources>

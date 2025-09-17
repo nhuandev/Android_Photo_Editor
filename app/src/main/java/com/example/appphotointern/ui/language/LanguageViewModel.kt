@@ -9,6 +9,7 @@ import com.example.appphotointern.R
 import com.example.appphotointern.models.Language
 import com.example.appphotointern.repository.impl.LanguageRepository
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class LanguageViewModel(application: Application) : AndroidViewModel(application) {
     private val languageRepository = LanguageRepository(application)
@@ -26,12 +27,14 @@ class LanguageViewModel(application: Application) : AndroidViewModel(application
     fun loadLanguages() {
         viewModelScope.launch {
             _loading.value = true
+            val systemLanguage = Locale.getDefault().language
             val languageList = listOf(
-                Language("en", "English", R.drawable.img_flag_usa),
                 Language("vi", "Tiếng Việt", R.drawable.img_flag_vietnam),
+                Language("en", "English", R.drawable.img_flag_usa),
                 Language("ja", "日本語", R.drawable.img_flag_japan)
             )
-            _languages.value = languageList
+            val sortLanguage = languageList.sortedByDescending { it.code == systemLanguage }
+            _languages.value = sortLanguage
             _loading.value = false
         }
     }

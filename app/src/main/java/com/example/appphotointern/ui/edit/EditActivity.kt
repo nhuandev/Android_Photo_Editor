@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityEditBinding
 import com.example.appphotointern.extention.toast
@@ -34,6 +35,7 @@ import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.common.FEATURE_TEXT
 import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.IMAGE_URI
+import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.common.RESULT_STICKER
 import com.example.appphotointern.common.RESULT_TEXT
@@ -300,6 +302,10 @@ class EditActivity : BaseActivity() {
             // Set bitmap after crop
             editViewModel.currentBitmap.observe(this@EditActivity) { bm ->
                 drawImageView.setImageBitmap(bm)
+            }
+
+            editViewModel.notify.observe(this@EditActivity) { notify ->
+                if (notify == LOAD_FAIL) toast(R.string.toast_load_fail)
             }
         }
     }

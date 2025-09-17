@@ -97,7 +97,7 @@
     <string name="lb_sticker_basic">基本</string>
     <string name="lb_sticker_festival">祝祭</string>
     <string name="lb_sticker_creative">クリエイティブ</string>
-    <string name="lb_interact">交流する - %1$d</string>
+    <string name="lb_interact">交流する: %1$d</string>
     <string name="lb_user_online">ユーザーオンライン %1$d</string>
     <string name="lb_analytics">分析</string>
     <string name="lb_loading_ad">広告を読み込んでいます...</string>
@@ -122,4 +122,5 @@
     <string name="lb_desc_policy">年間プランは、サブスクリプション プランをキャンセルしない限り、1 年後に自動更新されます。</string>
     <string name="lb_policy">プライバシーポリシー</string>
     <string name="lb_terms">利用規約</string>
+    <string name="lb_error">ダウンロード中にエラーが発生しました</string>
 </resources>

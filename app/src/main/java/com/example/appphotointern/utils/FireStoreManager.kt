@@ -62,9 +62,11 @@ object FireStoreManager {
     fun incrementStickerCount(stickerName: String, folder: String) {
         val documentRef = db.collection(COLLECTION_NAME_STICKER).document(stickerName)
         documentRef.update(COUNT_STICKER, FieldValue.increment(1))
+            // Value already exists
             .addOnSuccessListener {
                 println("$stickerName clicked (incremented)")
             }
+            // Set value while data empty
             .addOnFailureListener {
                 val data = mapOf(
                     STICKER_NAME to stickerName,

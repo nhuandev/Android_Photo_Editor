@@ -19,6 +19,7 @@ import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.utils.FilterManager
 import com.example.appphotointern.common.KEY_FRAME
+import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.common.URL_STORAGE
 import com.example.appphotointern.common.outputDirectory
 import com.example.appphotointern.views.ImageOnView
@@ -48,6 +49,9 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     private val _filteredBitmap = MutableLiveData<Bitmap>()
     val filteredBitmap: LiveData<Bitmap> = _filteredBitmap
 
+    private val _notify = MutableLiveData<String>()
+    val notify: MutableLiveData<String> = _notify
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -74,26 +78,35 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     fun loadFramesFromAssets() {
         viewModelScope.launch(Dispatchers.IO) {
             val cacheFile = getFileAssets()
-            val jsonString: String
+            var jsonString: String? = null
 
             if (cacheFile.exists()) {
                 jsonString = cacheFile.readText(Charsets.UTF_8)
-                Log.d("EditViewModel", "Loaded frame.json from cache")
             } else {
-                val storageRef = storage.reference.child("$URL_STORAGE/file_json/frame.json")
-                val metadata = storageRef.metadata.await()
-                val fileSize = metadata.sizeBytes
-                val bytes = storageRef.getBytes(fileSize).await()
-                jsonString = String(bytes, Charsets.UTF_8)
-                cacheFile.writeText(jsonString, Charsets.UTF_8)
-                Log.d("EditViewModel", "Downloaded and cached frame.json")
+                try {
+                    val storageRef = storage.reference.child("$URL_STORAGE/file_json/frame.json")
+                    val metadata = storageRef.metadata.await()
+                    val fileSize = metadata.sizeBytes
+                    val bytes = storageRef.getBytes(fileSize).await()
+                    jsonString = String(bytes, Charsets.UTF_8)
+                    cacheFile.writeText(jsonString, Charsets.UTF_8)
+                } catch (e: Exception) {
+                    _notify.postValue(LOAD_FAIL)
+                }
             }
-            if (jsonString.isEmpty()) {
+
+            if (jsonString.isNullOrEmpty()) {
+                _frames.postValue(emptyList())
+                return@launch
+            }
+
+            try {
+                val gson = Gson()
+                val frameList = gson.fromJson(jsonString, Array<Frame>::class.java).toList()
+                _frames.postValue(frameList)
+            } catch (e: Exception) {
                 _frames.postValue(emptyList())
             }
-            val gson = Gson()
-            val frameList = gson.fromJson(jsonString, Array<Frame>::class.java).toList()
-            _frames.postValue(frameList)
         }
     }
 

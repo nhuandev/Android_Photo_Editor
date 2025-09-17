@@ -67,4 +67,6 @@ const val ANALYTICS_STICKER = 1
 const val PREFS_NAME_BILLING = "billing_prefs"
 const val KEY_IS_PREMIUM = "key_is_premium"
 
-// Share preference version json
+// Load fail/success
+const val LOAD_SUCCESS = "LOAD_SUCCESS"
+const val LOAD_FAIL = "LOAD_FAIL"

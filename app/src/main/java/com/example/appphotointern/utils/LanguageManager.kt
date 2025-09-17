@@ -15,7 +15,12 @@ object LanguageManager {
 
     fun getLanguage(context: Context): String {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(KEY_LANGUAGE, "en") ?: "en"
+        val saved = prefs.getString(KEY_LANGUAGE, null)
+        return saved ?: getSystemLanguage()
+    }
+
+    fun getSystemLanguage() : String {
+        return Locale.getDefault().language
     }
 
     fun applyLanguage(context: Context, langCode: String): Context {
