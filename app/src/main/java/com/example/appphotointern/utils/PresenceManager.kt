@@ -57,7 +57,7 @@ object PresenceManager {
 
     fun listenOnlineUsers(onResult: (List<Device>, String) -> Unit) {
         val statusRef = FirebaseDatabase.getInstance().getReference(DB_REALTIME_DEVICE_STATUS)
-        val listener = (object : ValueEventListener {
+        statusRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val onlineUsers = snapshot.children.mapNotNull { child ->
                     val device = child.getValue(Device::class.java)
@@ -74,10 +74,5 @@ object PresenceManager {
                 onResult(emptyList(), code)
             }
         })
-        statusRef.addValueEventListener(listener)
-        android.os.Handler(Looper.getMainLooper()).postDelayed({
-            onResult(emptyList(), LOAD_FAIL)
-            statusRef.removeEventListener(listener)
-        }, 5000)
     }
 }
