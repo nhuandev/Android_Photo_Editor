@@ -123,4 +123,11 @@
     <string name="lb_policy">Chính sách bảo mật</string>
     <string name="lb_terms">Điều khoản sử dụng</string>
     <string name="lb_error">Tải xuống gặp lỗi</string>
+
+    <string name="error_not_authorized">Bạn chưa được phép tải. Vui lòng nâng cấp gói premium.</string>
+    <string name="error_object_not_found">Không tìm thấy file trên máy chủ.</string>
+    <string name="error_quota_exceeded">Bạn đã vượt quá giới hạn tải. Vui lòng thử lại sau.</string>
+    <string name="error_storage">Đã xảy ra lỗi bộ nhớ.</string>
+    <string name="error_unknown">Lỗi không xác định.</string>
+
 </resources>

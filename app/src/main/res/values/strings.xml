@@ -130,4 +130,10 @@
     <string name="lb_policy">Privacy Policy</string>
     <string name="lb_terms">Terms of Service</string>
     <string name="lb_error">Error while downloading</string>
+
+    <string name="error_not_authorized">You are not authorized. Please upgrade to premium.</string>
+    <string name="error_object_not_found">File not found on server.</string>
+    <string name="error_quota_exceeded">Download quota exceeded. Try again later.</string>
+    <string name="error_storage">Storage error occurred.</string>
+    <string name="error_unknown">Unknown error.</string>
 </resources>

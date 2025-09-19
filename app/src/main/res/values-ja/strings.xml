@@ -123,4 +123,10 @@
     <string name="lb_policy">プライバシーポリシー</string>
     <string name="lb_terms">利用規約</string>
     <string name="lb_error">ダウンロード中にエラーが発生しました</string>
+
+    <string name="error_not_authorized">権限がありません。プレミアムにアップグレードしてください。</string>
+    <string name="error_object_not_found">サーバー上でファイルが見つかりません。</string>
+    <string name="error_quota_exceeded">ダウンロード制限を超えました。後でもう一度お試しください。</string>
+    <string name="error_storage">ストレージエラーが発生しました。</string>
+    <string name="error_unknown">不明なエラーが発生しました。</string>
 </resources>

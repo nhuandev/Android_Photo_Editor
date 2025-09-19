@@ -70,3 +70,6 @@ const val KEY_IS_PREMIUM = "key_is_premium"
 // Load fail/success
 const val LOAD_SUCCESS = "LOAD_SUCCESS"
 const val LOAD_FAIL = "LOAD_FAIL"
+
+// Down firebase worker
+const val FILE_NAME = "file_name"

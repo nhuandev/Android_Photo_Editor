@@ -9,6 +9,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.example.appphotointern.R
 import com.example.appphotointern.databinding.FragmentStickerFestivalBinding
 import com.example.appphotointern.ui.edit.tools.sticker.StickerAdapter
 import com.example.appphotointern.ui.edit.tools.sticker.StickerViewModel
@@ -17,6 +22,8 @@ import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.RESULT_STICKER
+import com.example.appphotointern.data.storage.worker.DownloadImageWorker
+import com.example.appphotointern.extention.toast
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 
@@ -46,24 +53,64 @@ class FestivalFragment : Fragment() {
     private fun initUI() {
         networkReceiver = NetworkReceiver(requireActivity())
         stickerAdapter = StickerAdapter(emptyList()) { sticker ->
-            FireStoreManager.tryIncrementSticker(sticker.name, sticker.folder)
-            val checkPremium = PurchasePrefs(requireContext()).hasPremium
-            viewModel.downloadStickerToInternalStorage(sticker) { file ->
-                if (file == null && sticker.isPremium && !checkPremium) {
-                    startActivity(Intent(requireContext(), PurchaseActivity::class.java))
-                    return@downloadStickerToInternalStorage
-                }
+            val request = OneTimeWorkRequestBuilder<DownloadImageWorker>()
+                .setInputData(
+                    workDataOf(
+                        "sticker_folder" to sticker.folder,
+                        "sticker_name" to sticker.name,
+                        "sticker_premium" to sticker.isPremium
+                    )
+                ).build()
+            WorkManager.getInstance(requireContext()).enqueue(request)
 
-                if(file == null) {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-                }
+            WorkManager.getInstance(requireContext())
+                .getWorkInfoByIdLiveData(request.id)
+                .observe(viewLifecycleOwner) { workInfo ->
+                    if (workInfo != null) {
+                        when (workInfo.state) {
+                            WorkInfo.State.ENQUEUED,
+                            WorkInfo.State.RUNNING -> {
+                                binding.progressSticker.visibility = View.VISIBLE
+                            }
 
-                val intent = Intent().apply {
-                    putExtra(FEATURE_STICKER, file?.absolutePath)
+                            WorkInfo.State.SUCCEEDED,
+                            WorkInfo.State.FAILED,
+                            WorkInfo.State.CANCELLED -> {
+                                binding.progressSticker.visibility = View.GONE
+                            }
+
+                            else -> {}
+                        }
+
+                        if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                            val path = workInfo.outputData.getString("path")
+                            path?.let {
+                                val intent = Intent().apply {
+                                    putExtra(FEATURE_STICKER, path)
+                                }
+                                requireActivity().setResult(RESULT_STICKER, intent)
+                                requireActivity().finish()
+                            }
+                        }
+
+                        if (workInfo.state == WorkInfo.State.FAILED) {
+                            val error = workInfo.outputData.getString("error")
+                            when (error) {
+                                "ObjectNotFound" -> requireContext().toast(R.string.error_object_not_found)
+                                "NotAuthorized" -> {
+                                    requireContext().toast(R.string.error_not_authorized)
+                                    startActivity(
+                                        Intent(requireContext(), PurchaseActivity::class.java)
+                                    )
+                                }
+
+                                "QuotaExceeded" -> requireContext().toast(R.string.error_quota_exceeded)
+                                "StorageError" -> requireContext().toast(R.string.error_storage)
+                                else -> requireContext().toast(R.string.error_unknown)
+                            }
+                        }
+                    }
                 }
-                requireActivity().setResult(RESULT_STICKER, intent)
-                requireActivity().finish()
-            }
         }
         binding.recStickerFestival.layoutManager = GridLayoutManager(requireContext(), 4)
         binding.recStickerFestival.adapter = stickerAdapter

@@ -44,9 +44,9 @@ class StickerActivity : BaseActivity() {
         }
 
         stickerViewModel.loading.observe(this) { isLoading ->
-            if(isLoading) {
+            if (isLoading) {
                 toast(R.string.lb_ok)
-            }else {
+            } else {
                 toast(R.string.lb_toast_network_error)
             }
         }

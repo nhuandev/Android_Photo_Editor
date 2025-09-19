@@ -104,6 +104,3 @@ fun ViewGroup.circularClose(button: ImageButton, action: () -> Unit = {}) {
         doOnEnd { visibility = GONE }
     }.start()
 }
-
-
-
