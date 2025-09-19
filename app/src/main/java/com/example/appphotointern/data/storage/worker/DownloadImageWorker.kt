@@ -24,10 +24,6 @@ class DownloadImageWorker(
         val isPremium = inputData.getBoolean("sticker_premium", false)
         val hasPremium = PurchasePrefs(applicationContext).hasPremium
 
-        if (isPremium && !hasPremium) {
-            return Result.failure(workDataOf("error" to "NotAuthorized"))
-        }
-
         return try {
             val path = "$URL_STORAGE/sticker/$folder/$name.webp"
             val imgRef = storage.reference.child(path)
@@ -38,6 +34,10 @@ class DownloadImageWorker(
 
             if (localFile.exists()) {
                 return Result.success(workDataOf("path" to localFile.absolutePath))
+            }
+
+            if (isPremium && !hasPremium) {
+                return Result.failure(workDataOf("error" to "NotAuthorized"))
             }
 
             imgRef.getFile(localFile).await()
@@ -52,7 +52,6 @@ class DownloadImageWorker(
             }
             Result.failure(workDataOf("error" to error))
         } catch (e: Exception) {
-            // Lỗi mạng thì retry
             if (e is IOException) {
                 return Result.retry()
             }

@@ -16,6 +16,7 @@ import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.common.CustomDialog
 import com.example.appphotointern.common.IMAGE_URI
+import com.example.appphotointern.ui.main.MainActivity
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 
@@ -66,9 +67,13 @@ class PreviewFragment : Fragment() {
             btnEdit.setOnClickListener { handleEditClick() }
 
             btnClose.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                    .remove(this@PreviewFragment)
-                    .commit()
+//                parentFragmentManager.beginTransaction()
+//                    .remove(this@PreviewFragment)
+//                    .commit()
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+                requireActivity().finish()
             }
 
             btnShare.setOnClickListener {
