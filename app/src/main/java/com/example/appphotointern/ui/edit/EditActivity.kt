@@ -8,12 +8,12 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
-import androidx.lifecycle.lifecycleScope
 import com.example.appphotointern.R
 import com.example.appphotointern.databinding.ActivityEditBinding
 import com.example.appphotointern.extention.toast
@@ -304,8 +304,10 @@ class EditActivity : BaseActivity() {
                 drawImageView.setImageBitmap(bm)
             }
 
-            editViewModel.notify.observe(this@EditActivity) { notify ->
-                if (notify == LOAD_FAIL) toast(R.string.toast_load_fail)
+            editViewModel.errorMessage.observe(this@EditActivity) { error ->
+                error?.let {
+                    Toast.makeText(this@EditActivity, error, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

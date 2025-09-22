@@ -108,7 +108,7 @@
     <string name="lb_toast_purchase_error">購入エラー</string>
     <string name="lb_toast_purchase_disconnect">購入が切断されました</string>
     <string name="lb_toast_network_connected">ネットワークに接続されました</string>
-    <string name="lb_toast_network_error">ネットワークエラー</string>
+    <string name="lb_toast_network_error">ネットワークに接続できません。もう一度お試しください。</string>
     <string name="lb_toast_purchase_already_purchased">すでに購入済み</string>
     <string name="lb_toast_purchase_not_ready">準備中</string>
 

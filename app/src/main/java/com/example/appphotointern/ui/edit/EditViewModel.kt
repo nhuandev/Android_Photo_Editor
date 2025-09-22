@@ -8,27 +8,30 @@ import android.graphics.Canvas
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.example.appphotointern.common.DOWN_FAIL
 import com.example.appphotointern.models.Filter
 import com.example.appphotointern.models.FilterType
 import com.example.appphotointern.models.Frame
 import com.example.appphotointern.utils.FilterManager
-import com.example.appphotointern.common.KEY_FRAME
-import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.common.URL_STORAGE
 import com.example.appphotointern.common.outputDirectory
+import com.example.appphotointern.workers.DownloadJsonWorker
 import com.example.appphotointern.views.ImageOnView
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.min
@@ -37,7 +40,6 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     val selectedColor = MutableLiveData<Int>()
     val currentBitmap = MutableLiveData<Bitmap>()
     val selectedFont = MutableLiveData<String>()
-    private val remoteConfig = FirebaseRemoteConfig.getInstance()
     private val storage = FirebaseStorage.getInstance()
 
     private val _frames = MutableLiveData<List<Frame>>()
@@ -49,11 +51,11 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
     private val _filteredBitmap = MutableLiveData<Bitmap>()
     val filteredBitmap: LiveData<Bitmap> = _filteredBitmap
 
-    private val _notify = MutableLiveData<String>()
-    val notify: MutableLiveData<String> = _notify
-
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> = _errorMessage
 
     init {
         loadFramesFromAssets()
@@ -71,48 +73,42 @@ class EditViewModel(private val application: Application) : AndroidViewModel(app
         selectedFont.value = font
     }
 
-    private fun getFileAssets(): File {
-        return File(application.filesDir, "frame.json")
-    }
-
     fun loadFramesFromAssets() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val cacheFile = getFileAssets()
-            var jsonString: String? = null
+        _loading.postValue(true)
+        val workRequest = OneTimeWorkRequestBuilder<DownloadJsonWorker>()
+            .setInputData(
+                workDataOf("filename" to "frame.json")
+            ).build()
 
-            if (cacheFile.exists()) {
-                jsonString = cacheFile.readText(Charsets.UTF_8)
-            } else {
-                try {
-                    val storageRef = storage.reference.child("$URL_STORAGE/file_json/frame.json")
-                    val metadata = storageRef.metadata.await()
-                    val fileSize = metadata.sizeBytes
-                    val bytes = storageRef.getBytes(fileSize).await()
-                    jsonString = String(bytes, Charsets.UTF_8)
-                    cacheFile.writeText(jsonString, Charsets.UTF_8)
-                } catch (e: Exception) {
-                    _notify.postValue(LOAD_FAIL)
+        val workManager = WorkManager.getInstance(getApplication())
+        workManager.enqueue(workRequest)
+        workManager.getWorkInfoByIdLiveData(workRequest.id).observeForever { info ->
+            if (info != null && info.state.isFinished) {
+                if (info.state == WorkInfo.State.SUCCEEDED) {
+                    val filePath = info.outputData.getString("filePath")
+                    if (filePath != null) {
+                        try {
+                            val jsonString = File(filePath).readText(Charsets.UTF_8)
+                            val gson = Gson()
+                            val frameList =
+                                gson.fromJson(jsonString, Array<Frame>::class.java).toList()
+                            _frames.postValue(frameList)
+                        } catch (e: Exception) {
+                            _errorMessage.postValue("ParseError: ${e.message}")
+                        }
+                    }
+                    _loading.postValue(false)
+                } else {
+                    val error = info.outputData.getString(DOWN_FAIL)
+                    _loading.postValue(false)
+                    _errorMessage.postValue(error)
                 }
-            }
-
-            if (jsonString.isNullOrEmpty()) {
-                _frames.postValue(emptyList())
-                return@launch
-            }
-
-            try {
-                val gson = Gson()
-                val frameList = gson.fromJson(jsonString, Array<Frame>::class.java).toList()
-                _frames.postValue(frameList)
-            } catch (e: Exception) {
-                _frames.postValue(emptyList())
             }
         }
     }
 
     fun downloadFrameToInternalStorage(frame: Frame, onDownloaded: (File?) -> Unit) {
         _loading.postValue(true)
-        val storage = FirebaseStorage.getInstance()
         val path = "${URL_STORAGE}/${frame.folder}/${frame.name}.webp"
         val imageRef = storage.reference.child(path)
 

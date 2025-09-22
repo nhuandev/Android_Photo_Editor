@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -45,21 +46,25 @@ class StickerAdapter(
                 loadStickerWithGlide(Glide.with(context).load(localFile), sticker)
             } else if (isNetworkAvailable) {
                 binding.root.setBackgroundResource(0)
+                binding.progressSticker.visibility = View.GONE
                 val path = "$URL_STORAGE/sticker/${sticker.folder}/${sticker.name}.webp"
                 val imageRef = storage.reference.child(path)
                 loadStickerWithGlide(Glide.with(context).load(imageRef), sticker)
             } else {
-                binding.root.setBackgroundResource(R.drawable.ic_error)
-                binding.progressSticker.visibility = View.GONE
-                binding.imgSticker.setImageDrawable(null)
-                binding.root.setOnClickListener(null)
+                binding.progressSticker.visibility = View.VISIBLE
+                binding.imgSticker.visibility = View.GONE
+                binding.root.setOnClickListener {
+                    Toast.makeText(
+                        context, context.getString(R.string.lb_toast_network_error),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
 
         private fun loadStickerWithGlide(
             glideRequest: RequestBuilder<Drawable>, sticker: Sticker
         ) {
-            var isLoadError = false
             binding.progressSticker.visibility = View.VISIBLE
             glideRequest
                 .placeholder(android.R.drawable.ic_menu_gallery)
@@ -71,7 +76,6 @@ class StickerAdapter(
                         target: Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        isLoadError = true
                         binding.progressSticker.visibility = View.GONE
                         return false
                     }
@@ -83,14 +87,13 @@ class StickerAdapter(
                         dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        isLoadError = false
                         binding.progressSticker.visibility = View.GONE
                         return false
                     }
                 }).into(binding.imgSticker)
 
             binding.root.setOnClickListener {
-                if (!isLoadError) onStickerSelected(sticker)
+                onStickerSelected(sticker)
             }
         }
     }

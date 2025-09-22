@@ -46,7 +46,7 @@ class NetworkReceiver(context: Context) : LiveData<Boolean>() {
 
     private fun checkNetworkStatus() {
         val activeNetwork = connectivityManager.activeNetwork
-        activeNetwork.let {
+        if (activeNetwork == null) {
             postValue(false)
             return
         }
@@ -55,8 +55,8 @@ class NetworkReceiver(context: Context) : LiveData<Boolean>() {
     }
 
     fun isConnected(): Boolean {
-        val network = connectivityManager.activeNetwork
+        val network = connectivityManager.activeNetwork ?: return false
         val capabilities = connectivityManager.getNetworkCapabilities(network)
-        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 }

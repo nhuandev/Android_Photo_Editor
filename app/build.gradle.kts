@@ -74,8 +74,10 @@ dependencies {
     val material_version = "1.11.0"
     val camerax_version = "1.4.2"
     val billing_version = "6.2.0"
+    val work_version = "2.10.4"
     val hilt_version = "2.50"
 
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     implementation("androidx.camera:camera-extensions:${camerax_version}")
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")

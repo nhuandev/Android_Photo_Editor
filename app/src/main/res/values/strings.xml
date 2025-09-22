@@ -117,7 +117,7 @@
     <string name="lb_toast_purchase_already_purchased">Already purchased</string>
     <string name="lb_toast_purchase_not_ready">Not ready</string>
     <string name="lb_toast_network_connected">Network connected</string>
-    <string name="lb_toast_network_error">Network error</string>
+    <string name="lb_toast_network_error">No network connection, please try again</string>
 
     <string name="lb_premium_celebration">Congratulations!</string>
     <string name="lb_upgrade_package_success">Upgrade package success</string>

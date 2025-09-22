@@ -16,9 +16,9 @@ import com.example.appphotointern.ui.edit.tools.sticker.StickerViewModel
 import com.example.appphotointern.ui.purchase.PurchaseActivity
 import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.common.LOAD_FAIL
-import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.RESULT_STICKER
 import com.example.appphotointern.extention.toast
+import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 
@@ -33,7 +33,7 @@ class BasicFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentStickerBasicBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,18 +57,29 @@ class BasicFragment : Fragment() {
                 }
 
                 if (file == null) {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    requireContext().toast(R.string.lb_error)
+                    return@downloadStickerToInternalStorage
                 }
 
                 val intent = Intent().apply {
-                    putExtra(FEATURE_STICKER, file?.absolutePath)
+                    putExtra(FEATURE_STICKER, file.absolutePath)
                 }
                 requireActivity().setResult(RESULT_STICKER, intent)
                 requireActivity().finish()
             }
         }
-        binding.recStickerBasic.layoutManager = GridLayoutManager(requireContext(), 4)
-        binding.recStickerBasic.adapter = stickerAdapter
+
+        binding.recStickerBasic.apply {
+            layoutManager = GridLayoutManager(requireContext(), 4)
+            adapter = stickerAdapter
+        }
+
+        networkReceiver.observe(viewLifecycleOwner) { hasNetwork ->
+            stickerAdapter.setNetworkAvailability(hasNetwork)
+            if (!hasNetwork) {
+                requireContext().toast(R.string.lb_toast_network_error)
+            }
+        }
     }
 
     private fun initObserver() {
@@ -81,16 +92,22 @@ class BasicFragment : Fragment() {
         }
 
         viewModel.notify.observe(viewLifecycleOwner) { notify ->
-            if(notify == LOAD_FAIL) binding.tvError.visibility = View.VISIBLE
+            if (notify == LOAD_FAIL) binding.tvError.visibility = View.VISIBLE
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
         }
 
         networkReceiver.observe(requireActivity()) { hasNetwork ->
-            if (hasNetwork) {
-                requireContext().toast(R.string.lb_toast_network_connected)
-            } else {
-                requireContext().toast(R.string.lb_toast_network_error)
-            }
             stickerAdapter.setNetworkAvailability(hasNetwork)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

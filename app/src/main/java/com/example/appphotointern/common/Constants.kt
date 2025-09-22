@@ -70,3 +70,4 @@ const val KEY_IS_PREMIUM = "key_is_premium"
 // Load fail/success
 const val LOAD_SUCCESS = "LOAD_SUCCESS"
 const val LOAD_FAIL = "LOAD_FAIL"
+const val DOWN_FAIL = "DOWN_FAIL"
