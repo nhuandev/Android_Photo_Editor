@@ -51,6 +51,7 @@
         <activity android:name=".ui.purchase.PurchaseActivity" />
         <activity android:name=".ui.language.LanguageActivity" />
         <activity android:name=".ui.analytics.AnalyticsActivity" />
+        <activity android:name=".ui.background.BackgroundActivity" />
         <activity android:name=".ui.edit.tools.text.TextActivity" />
         <activity android:name=".ui.edit.tools.sticker.StickerActivity" />
 
@@ -65,6 +66,14 @@
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="${analyticsCollectionEnabled}" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="subject_segmentation" />
 
     </application>
 

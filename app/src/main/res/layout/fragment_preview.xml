@@ -68,7 +68,7 @@
         android:layout_height="@dimen/dimen_56"
         android:orientation="horizontal"
         android:padding="@dimen/dimen_6"
-        android:weightSum="6"
+        android:weightSum="9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -89,9 +89,17 @@
             android:layout_gravity="center"
             android:layout_weight="3"
             android:src="@mipmap/ic_edit"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="ContentDescription,MissingConstraints,UseAppTint" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/btn_remove"
+            android:layout_width="@dimen/dimen_26"
+            android:layout_height="@dimen/dimen_26"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:src="@drawable/ic_background_replace"
+            android:tint="@color/black"
+            tools:ignore="ContentDescription,UseAppTint" />
 
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

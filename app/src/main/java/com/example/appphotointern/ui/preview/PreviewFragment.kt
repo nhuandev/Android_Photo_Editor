@@ -10,14 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.appphotointern.databinding.FragmentPreviewBinding
 import com.example.appphotointern.ui.edit.EditActivity
 import com.example.appphotointern.utils.AdManager
 import com.example.appphotointern.common.CustomDialog
 import com.example.appphotointern.common.IMAGE_URI
+import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
+import com.example.appphotointern.utils.removeBackground
+import kotlinx.coroutines.launch
 
 class PreviewFragment : Fragment() {
     private var _binding: FragmentPreviewBinding? = null
@@ -73,6 +77,20 @@ class PreviewFragment : Fragment() {
 
             btnShare.setOnClickListener {
                 imageUri?.let { uriString -> shareImage(uriString.toUri()) }
+            }
+
+            btnRemove.setOnClickListener {
+                lifecycleScope.launch {
+                    val bitmapImage = ImageOrientation.decodeRotated(
+                        requireContext().contentResolver,
+                        imageUri!!.toUri()
+                    )
+                    val resultBm = bitmapImage!!.removeBackground(
+                        context = requireContext(),
+                        trimEmptyPart = true,
+                    )
+                    binding.imgPreview.setImageBitmap(resultBm)
+                }
             }
         }
     }

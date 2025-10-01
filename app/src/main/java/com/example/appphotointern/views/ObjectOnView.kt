@@ -23,7 +23,6 @@ import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 import kotlin.sequences.forEach
-import kotlin.text.substringBeforeLast
 
 @SuppressLint("ClickableViewAccessibility", "UseKtx")
 class ObjectOnView @JvmOverloads constructor(

@@ -130,4 +130,6 @@ class EditAdapter(
             )
         )
     }
+
+    fun getToolAt(position: Int): ToolModel = listTool[position]
 }

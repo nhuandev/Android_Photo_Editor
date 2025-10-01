@@ -41,7 +41,9 @@ import com.example.appphotointern.common.TAG_FEATURE_ALBUM
 import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.common.TAG_FEATURE_CAMERA
 import com.example.appphotointern.common.TAG_FEATURE_EDIT
+import com.example.appphotointern.common.TAG_FEATURE_REMOVE
 import com.example.appphotointern.ui.analytics.AnalyticsActivity
+import com.example.appphotointern.ui.background.BackgroundActivity
 import com.example.appphotointern.utils.NetworkReceiver
 import com.example.appphotointern.utils.PurchasePrefs
 import com.google.android.gms.ads.AdRequest
@@ -94,12 +96,12 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         AdManager.loadAdReward(this)
         AdManager.loadNative(this, binding.flNativeBanner)
-        checkPremiumFlow()
+//        checkPremiumFlow()-
         initPermissionLaunchers()
         initUI()
         initEvent()
         initObserver()
-        checkShowBanner()
+//        checkShowBanner()
         checkPremium()
     }
 
@@ -178,6 +180,10 @@ class MainActivity : BaseActivity() {
                             toast(R.string.lb_toast_network_error)
                         }
                     }
+                }
+
+                TAG_FEATURE_REMOVE -> {
+                    startActivity(Intent(this@MainActivity, BackgroundActivity::class.java))
                 }
 
                 else -> {
@@ -382,7 +388,7 @@ class MainActivity : BaseActivity() {
             val isConnect = networkReceiver.isConnected()
             val menuItem = binding.drawerMain.menu.findItem(R.id.nav_menu_users)
             if (isConnect) {
-                if(status == LOAD_FAIL) {
+                if (status == LOAD_FAIL) {
                     menuItem.title = getString(R.string.lb_user_online, 0)
                 }
                 val count = onlineUsers.size

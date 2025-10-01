@@ -22,6 +22,7 @@ const val TAG_FEATURE_EDIT = 1
 const val TAG_FEATURE_CAMERA = 2
 const val TAG_FEATURE_ALBUM = 3
 const val TAG_FEATURE_ANALYTICS = 4
+const val TAG_FEATURE_REMOVE = 5
 const val FEATURE_STICKER = "Sticker"
 const val FEATURE_TEXT = "Text"
 

@@ -46,7 +46,7 @@
     <!--String tools-->
     <string name="lb_edit_photo">写真を編集</string>
     <string name="lb_make_collage">コラージュを作成</string>
-    <string name="lb_background">背景</string>
+    <string name="lb_background">背景を削除</string>
     <string name="lb_camera">カメラ</string>
     <string name="lb_album">アルバム</string>
     <string name="lb_premium">プレミアム</string>
@@ -123,4 +123,31 @@
     <string name="lb_policy">プライバシーポリシー</string>
     <string name="lb_terms">利用規約</string>
     <string name="lb_error">ダウンロード中にエラーが発生しました</string>
+
+    <!-- Tool titles -->
+    <string name="tool_crop">画像を切り抜く</string>
+    <string name="tool_frame">フレームを追加</string>
+    <string name="tool_sticker">ステッカー</string>
+    <string name="tool_filter">フィルター</string>
+    <string name="tool_text">テキスト</string>
+    <string name="tool_draw">描画</string>
+
+    <!-- Tool descriptions -->
+    <string name="desc_crop">好きなように画像を切り抜きます</string>
+    <string name="desc_frame">写真にフレームを追加します</string>
+    <string name="desc_sticker">楽しいステッカーを挿入します</string>
+    <string name="desc_filter">カラーフィルターを適用します</string>
+    <string name="desc_text">テキストを追加または編集します</string>
+    <string name="desc_draw">自由に画像に描きます</string>
+
+    <string name="lb_add_image">画像を追加</string>
+    <string name="lb_select_image">画像を選択してください</string>
+    <string name="lb_remove_background">背景を削除してください</string>
+    <string name="lb_error_remove_bgr">背景を削除中にエラーが発生しました</string>
+
+    <string name="lb_delete">削除</string>
+    <string name="lb_restore">元に戻す</string>
+    <string name="lb_zoom">ズーム</string>
+    <string name="lb_size_eraser">サイズ</string>
+    <string name="lb_compensate">補正</string>
 </resources>

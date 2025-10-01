@@ -12,6 +12,7 @@ import com.example.appphotointern.common.TAG_FEATURE_ALBUM
 import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.common.TAG_FEATURE_CAMERA
 import com.example.appphotointern.common.TAG_FEATURE_EDIT
+import com.example.appphotointern.common.TAG_FEATURE_REMOVE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,6 +52,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         R.drawable.ic_analytics,
                         TAG_FEATURE_ANALYTICS,
                         R.drawable.img_fea_3
+                    ),
+                    Feature(
+                        context.getString(R.string.lb_background),
+                        R.mipmap.ic_background,
+                        TAG_FEATURE_REMOVE,
+                        R.drawable.img_fea_2
                     )
                 )
                 withContext(Dispatchers.Main) {

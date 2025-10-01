@@ -74,7 +74,6 @@ dependencies {
     val material_version = "1.11.0"
     val camerax_version = "1.4.2"
     val billing_version = "6.2.0"
-    val work_version = "2.10.4"
     val hilt_version = "2.50"
 
     implementation("androidx.work:work-runtime-ktx:2.9.0")
@@ -140,4 +139,9 @@ dependencies {
 
     // --- Billing ---
     implementation("com.android.billingclient:billing:$billing_version")
+
+    implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
+
+    // Guideline
+    implementation("com.github.takusemba:spotlight:2.0.5")
 }

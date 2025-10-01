@@ -58,27 +58,27 @@
     <dimen name="dimen_640">640dp</dimen>
 
     <!--Font-->
-    <dimen name="font_10">10dp</dimen>
-    <dimen name="font_12">12dp</dimen>
-    <dimen name="font_14">14dp</dimen>
-    <dimen name="font_16">16dp</dimen>
-    <dimen name="font_18">18dp</dimen>
-    <dimen name="font_20">20dp</dimen>
-    <dimen name="font_24">24dp</dimen>
-    <dimen name="font_28">28dp</dimen>
-    <dimen name="font_32">32dp</dimen>
-    <dimen name="font_36">36dp</dimen>
-    <dimen name="font_40">40dp</dimen>
-    <dimen name="font_48">48dp</dimen>
-    <dimen name="font_56">56dp</dimen>
+    <dimen name="font_10">10sp</dimen>
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="font_14">14sp</dimen>
+    <dimen name="font_16">16sp</dimen>
+    <dimen name="font_18">18sp</dimen>
+    <dimen name="font_20">20sp</dimen>
+    <dimen name="font_24">24sp</dimen>
+    <dimen name="font_28">28sp</dimen>
+    <dimen name="font_32">32sp</dimen>
+    <dimen name="font_36">36sp</dimen>
+    <dimen name="font_40">40sp</dimen>
+    <dimen name="font_48">48sp</dimen>
+    <dimen name="font_56">56sp</dimen>
 
-    <dimen name="half_margin">4dp</dimen>
-    <dimen name="medium_margin">24dp</dimen>
-    <dimen name="double_margin">32dp</dimen>
+    <dimen name="half_margin">4sp</dimen>
+    <dimen name="medium_margin">24sp</dimen>
+    <dimen name="double_margin">32sp</dimen>
 
-    <dimen name="button_size_shutter">100dp</dimen>
-    <dimen name="button_size_big">56dp</dimen>
-    <dimen name="button_size_small">40dp</dimen>
+    <dimen name="button_size_shutter">100sp</dimen>
+    <dimen name="button_size_big">56sp</dimen>
+    <dimen name="button_size_small">40sp</dimen>
     <dimen name="count_down_text_size">72sp</dimen>
 
 </resources>

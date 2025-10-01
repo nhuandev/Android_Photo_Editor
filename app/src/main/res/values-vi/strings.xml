@@ -46,7 +46,7 @@
     <!--String tools-->
     <string name="lb_edit_photo">Chỉnh sửa ảnh</string>
     <string name="lb_make_collage">Tạo ảnh ghép</string>
-    <string name="lb_background">Hình nền</string>
+    <string name="lb_background">Xóa nền</string>
     <string name="lb_camera">Máy ảnh</string>
     <string name="lb_album">Album ảnh</string>
     <string name="lb_premium">Premium</string>
@@ -123,4 +123,31 @@
     <string name="lb_policy">Chính sách bảo mật</string>
     <string name="lb_terms">Điều khoản sử dụng</string>
     <string name="lb_error">Tải xuống gặp lỗi</string>
+
+    <!-- Tool titles -->
+    <string name="tool_crop">Cắt ảnh</string>
+    <string name="tool_frame">Thêm khung</string>
+    <string name="tool_sticker">Chèn nhãn dán</string>
+    <string name="tool_filter">Bộ lọc màu</string>
+    <string name="tool_text">Văn bản</string>
+    <string name="tool_draw">Vẽ tự do</string>
+
+    <!-- Tool descriptions -->
+    <string name="desc_crop">Cắt ảnh theo ý muốn</string>
+    <string name="desc_frame">Thêm khung cho ảnh</string>
+    <string name="desc_sticker">Chèn nhãn dán vui nhộn</string>
+    <string name="desc_filter">Thêm bộ lọc màu</string>
+    <string name="desc_text">Thêm hoặc chỉnh sửa chữ</string>
+    <string name="desc_draw">Vẽ tự do lên ảnh</string>
+
+    <string name="lb_add_image">Thêm ảnh</string>
+    <string name="lb_select_image">Vui lòng chọn ảnh</string>
+    <string name="lb_remove_background">Vui lòng xóa nền</string>
+    <string name="lb_error_remove_bgr">Xóa nền thất bại</string>
+
+    <string name="lb_delete">Xóa</string>
+    <string name="lb_restore">Khôi phục</string>
+    <string name="lb_zoom">Phóng to</string>
+    <string name="lb_size_eraser">Kích thước</string>
+    <string name="lb_compensate">Bù lại</string>
 </resources>

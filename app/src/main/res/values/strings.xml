@@ -45,7 +45,7 @@
     <!--String tools-->
     <string name="lb_edit_photo">Edit Photo</string>
     <string name="lb_make_collage">Make a Collage</string>
-    <string name="lb_background">Backgrounds</string>
+    <string name="lb_background">Remove Background</string>
     <string name="lb_premium">Premium</string>
     <string name="lb_camera">Camera</string>
     <string name="lb_album">Album Photo</string>
@@ -130,4 +130,31 @@
     <string name="lb_policy">Privacy Policy</string>
     <string name="lb_terms">Terms of Service</string>
     <string name="lb_error">Error while downloading</string>
+
+    <!-- Tool titles -->
+    <string name="tool_crop">Crop</string>
+    <string name="tool_frame">Add frame</string>
+    <string name="tool_sticker">Sticker</string>
+    <string name="tool_filter">Filter</string>
+    <string name="tool_text">Text</string>
+    <string name="tool_draw">Draw</string>
+
+    <!-- Tool descriptions -->
+    <string name="desc_crop">Crop the image as you like</string>
+    <string name="desc_frame">Add a frame to your photo</string>
+    <string name="desc_sticker">Insert funny stickers</string>
+    <string name="desc_filter">Apply color filters</string>
+    <string name="desc_text">Add or edit text</string>
+    <string name="desc_draw">Draw freely on the image</string>
+
+    <string name="lb_add_image">Select image</string>
+    <string name="lb_select_image">Please select image</string>
+    <string name="lb_remove_background">Please remove Background</string>
+    <string name="lb_error_remove_bgr">Error when removing background</string>
+
+    <string name="lb_delete">Delete</string>
+    <string name="lb_restore">Restore</string>
+    <string name="lb_zoom">Zoom</string>
+    <string name="lb_size_eraser">Size</string>
+    <string name="lb_compensate">Compensate</string>
 </resources>

@@ -5,9 +5,12 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
@@ -35,7 +38,6 @@ import com.example.appphotointern.common.FEATURE_STICKER
 import com.example.appphotointern.common.FEATURE_TEXT
 import com.example.appphotointern.utils.FireStoreManager
 import com.example.appphotointern.common.IMAGE_URI
-import com.example.appphotointern.common.LOAD_FAIL
 import com.example.appphotointern.utils.ImageOrientation
 import com.example.appphotointern.common.RESULT_STICKER
 import com.example.appphotointern.common.RESULT_TEXT
@@ -45,6 +47,9 @@ import com.example.appphotointern.views.ObjectOnView
 import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.takusemba.spotlight.Spotlight
+import com.takusemba.spotlight.Target
+import com.takusemba.spotlight.shape.Circle
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -72,6 +77,7 @@ class EditActivity : BaseActivity() {
         setUpToolBar()
         loadImage()
         initUI()
+        showToolGuide()
         initEvent()
         initObserver()
     }
@@ -427,6 +433,65 @@ class EditActivity : BaseActivity() {
                     toast(R.string.toast_save_fail)
                 }
             }
+        }
+    }
+
+    private fun showToolGuide() {
+        binding.recTools.post {
+            val targets = mutableListOf<Target>()
+            for (i in 0 until binding.recTools.childCount) {
+                val holder = binding.recTools.findViewHolderForAdapterPosition(i)
+                holder?.let {
+                    holder.itemView.isEnabled = false
+                    val tool = editAdapter.getToolAt(i)
+                    val overlayView = LayoutInflater.from(this).inflate(R.layout.layout_guideline_hint, null)
+                    val hintText = overlayView.findViewById<TextView>(R.id.hintText)
+                    val desc = overlayView.findViewById<TextView>(R.id.hintTitle)
+
+                    hintText.text = when (tool.mToolType) {
+                        ToolType.CROP -> getString(R.string.tool_crop)
+                        ToolType.FRAME -> getString(R.string.tool_frame)
+                        ToolType.STICKER -> getString(R.string.tool_sticker)
+                        ToolType.FILTER -> getString(R.string.tool_filter)
+                        ToolType.TEXT -> getString(R.string.tool_text)
+                        ToolType.DRAW -> getString(R.string.tool_draw)
+                    }
+
+                    desc.text = when (tool.mToolType) {
+                        ToolType.CROP -> getString(R.string.desc_crop)
+                        ToolType.FRAME -> getString(R.string.desc_frame)
+                        ToolType.STICKER -> getString(R.string.desc_sticker)
+                        ToolType.FILTER -> getString(R.string.desc_filter)
+                        ToolType.TEXT -> getString(R.string.desc_text)
+                        ToolType.DRAW -> getString(R.string.desc_draw)
+                    }
+
+                    val target = Target.Builder()
+                        .setAnchor(it.itemView)
+                        .setShape(Circle(100f))
+                        .setOverlay(overlayView)
+                        .build()
+                    targets.add(target)
+                }
+            }
+
+            val spotlight = Spotlight.Builder(this)
+                .setTargets(targets)
+                .setBackgroundColorRes(R.color.overlay_guideline)
+                .setDuration(800L)
+                .setAnimation(DecelerateInterpolator(2f))
+                .build()
+
+            targets.forEachIndexed { index, target ->
+                target.overlay?.setOnClickListener {
+                    if (index == targets.lastIndex) {
+                        spotlight.finish()
+                    } else {
+                        spotlight.next()
+                    }
+                }
+            }
+            spotlight.start()
         }
     }
 

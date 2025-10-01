@@ -15,6 +15,7 @@ import com.example.appphotointern.common.TAG_FEATURE_ALBUM
 import com.example.appphotointern.common.TAG_FEATURE_ANALYTICS
 import com.example.appphotointern.common.TAG_FEATURE_CAMERA
 import com.example.appphotointern.common.TAG_FEATURE_EDIT
+import com.example.appphotointern.common.TAG_FEATURE_REMOVE
 
 class MainAdapter(
     private var features: List<Feature>,
@@ -29,7 +30,7 @@ class MainAdapter(
                 bgImage.setImageResource(feature.featureBackgroundRes)
                 val layoutParams = itemView.layoutParams
                 if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-                    layoutParams.isFullSpan = feature.featureType in setOf(3, 4)
+                    layoutParams.isFullSpan = feature.featureType in setOf(3, 4, 5)
                     itemView.layoutParams = layoutParams
                 }
                 overlayView.setBackgroundColor(
@@ -40,6 +41,7 @@ class MainAdapter(
                             TAG_FEATURE_CAMERA -> R.color.feature_camera
                             TAG_FEATURE_ALBUM -> R.color.feature_collage
                             TAG_FEATURE_ANALYTICS -> R.color.feature_background
+                            TAG_FEATURE_REMOVE -> R.color.feature_collage
                             else -> R.color.sky_200
                         }
                     )
